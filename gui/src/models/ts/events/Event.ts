@@ -1,0 +1,4 @@
+
+type Event = {
+  eventGeneratedAt: number
+};

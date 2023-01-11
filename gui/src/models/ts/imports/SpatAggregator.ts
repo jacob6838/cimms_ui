@@ -1,3 +1,3 @@
-type SpatAggregator = {
-    spats: ProcessedSpat[]
-}
+// type SpatAggregator = {
+//     spats: ProcessedSpat[]
+// }

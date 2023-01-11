@@ -1,4 +1,4 @@
-type ProcessingTimePeriod = {
-    beginTimestamp: Date,
-    endTimestamp: Date,
-}
+// type ProcessingTimePeriod = {
+//     beginTimestamp: Date,
+//     endTimestamp: Date,
+// }

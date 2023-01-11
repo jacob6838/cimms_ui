@@ -1,0 +1,4 @@
+
+type Assessment = {
+  assessmentGeneratedAt: number
+};

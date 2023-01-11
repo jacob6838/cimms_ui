@@ -28,7 +28,7 @@ TYPE_MAPPINGS = {
 
 IMPORTS_PATH = "./ts/imports"
 TEMPLATE = """{imports}
-    type {class_name} = {{
+type {class_name} = {{
 {contents}
 }};"""
 
@@ -61,7 +61,7 @@ for file_path in files:
     ts_contents = TEMPLATE.format(
         imports="", class_name=CLASS_NAME, contents='\n'.join(lines))
 
-    if not os.path.exists(f"{TS_PATH}/{CLASS_NAME}.ts"):
+    if not os.path.exists(f"{TS_PATH}/"):
         os.makedirs(f"{TS_PATH}/")
     with open(f"{TS_PATH}/{CLASS_NAME}.ts", 'w') as f:
         f.write(ts_contents)
