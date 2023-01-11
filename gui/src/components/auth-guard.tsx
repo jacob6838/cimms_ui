@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-// import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession, signIn, signOut } from "next-auth/react"
 
 export const AuthGuard = (props) => {
   const { children } = props;
   const router = useRouter();
-//   const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const ignore = useRef(false);
   const [checked, setChecked] = useState(false);
+
+  const loading = status === "loading"
 
   // Only do authentication check on component mount.
   // This flow allows you to manually redirect the user after sign-out, otherwise this will be
@@ -16,19 +18,13 @@ export const AuthGuard = (props) => {
 
   useEffect(
     () => {
-      if (!router.isReady) {
+      if (loading) {
         return;
       }
 
-      // Prevent from calling twice in development mode with React.StrictMode enabled
-      if (ignore.current) {
-        return;
-      }
-
-      ignore.current = true;
-
-      if (false) { //!session
-        // signIn();
+      if (!session) { // session == null
+        console.log("Forcing Sign In")
+        signIn();
         // console.log('Not authenticated, redirecting');
         // router
         //   .replace({
@@ -37,10 +33,11 @@ export const AuthGuard = (props) => {
         //   })
         //   .catch(console.error);
       } else {
+        console.log("Logged In")
         setChecked(true);
       }
     },
-    [router.isReady]
+    [status]
   );
 
   if (!checked) {

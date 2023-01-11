@@ -7,16 +7,10 @@ import { useSession, signIn, signOut } from "next-auth/react"
 
 export const AccountPopover = (props) => {
   const { anchorEl, onClose, open, ...other } = props;
-//   const { data: session } = useSession()
+  const { data: session } = useSession()
 
   const handleSignOut = async () => {
     onClose?.();
-
-    // Check if authentication with Zalter is enabled
-    // If not enabled, then redirect is not required
-    if (!ENABLE_AUTH) {
-      return;
-    }
 
     try {
       // This can be call inside AuthProvider component, but we do it here for simplicity
@@ -60,7 +54,7 @@ export const AccountPopover = (props) => {
           color="text.secondary"
           variant="body2"
         >
-          John Doe
+          {session?.user?.name}
         </Typography>
       </Box>
       <MenuList

@@ -1,5 +1,5 @@
 
-type MapLaneConnection = {
+type LaneConnection = {
   ingressLane: Lane
   egressLane: Lane
   connectionId: number

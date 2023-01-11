@@ -63,5 +63,5 @@ for file_path in files:
 
     if not os.path.exists(f"{TS_PATH}/"):
         os.makedirs(f"{TS_PATH}/")
-    with open(f"{TS_PATH}/{CLASS_NAME}.ts", 'w') as f:
+    with open(f"{TS_PATH}/{CLASS_NAME}.d.ts", 'w') as f:
         f.write(ts_contents)

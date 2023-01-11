@@ -1,5 +1,5 @@
 
 type MapIntersection = {
   intersectionGeometry: J2735IntersectionGeometry
-  laneConnections: MapLaneConnection[]
+  laneConnections: LaneConnection[]
 };
