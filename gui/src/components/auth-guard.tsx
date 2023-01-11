@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { useSession, signIn, signOut } from "next-auth/react"
+// import { useSession, signIn, signOut } from "next-auth/react"
 
 export const AuthGuard = (props) => {
   const { children } = props;
   const router = useRouter();
-  const { data: session } = useSession()
+//   const { data: session } = useSession()
   const ignore = useRef(false);
   const [checked, setChecked] = useState(false);
 
@@ -27,8 +27,8 @@ export const AuthGuard = (props) => {
 
       ignore.current = true;
 
-      if (!session) { //
-        signIn();
+      if (false) { //!session
+        // signIn();
         // console.log('Not authenticated, redirecting');
         // router
         //   .replace({

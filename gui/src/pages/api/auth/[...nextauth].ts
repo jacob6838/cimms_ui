@@ -4,9 +4,9 @@ export const authOptions = {
   // Configure one or more authentication providers
   providers: [
     KeycloakProvider({
-        clientId: "React-auth",
-        clientSecret: "client-secret",
-        issuer: "http://localhost:8080/",
+        issuer: process.env.KEYCLOAK_BASE_URL!,
+        clientId: process.env.KEYCLOAK_CLIENT_ID!,
+        clientSecret: process.env.KEYCLOAK_CLIENT_SECRET!,
       }),
     // ...add more providers here
   ],

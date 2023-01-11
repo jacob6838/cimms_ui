@@ -4,7 +4,7 @@ import NextLink from 'next/link';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { Logo } from '../../components/logo';
 import { ENABLE_AUTH } from '../../lib/auth';
-import { useSession, signIn, signOut } from "next-auth/react"
+// import { useSession, signIn, signOut } from "next-auth/react"
 import React from 'react';
 
 
@@ -53,7 +53,7 @@ const Page = () => {
     //   await auth!.signInWithLink('finalize', { token });
 
       // Update Auth Context state
-        signIn();
+        // signIn();
 
       // Redirect to home page
       Router

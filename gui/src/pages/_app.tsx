@@ -9,6 +9,7 @@ import { registerChartJs } from '../utils/register-chart-js';
 import { theme } from '../theme';
 import React from 'react';
 import { SessionProvider } from "next-auth/react"
+import type { Session } from "next-auth"
 
 registerChartJs();
 
@@ -34,8 +35,8 @@ const App = (props) => {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <SessionProvider session={session}>
-          {getLayout(<Component {...pageProps} />)}
-            </SessionProvider>
+            {getLayout(<Component {...pageProps} />)}
+          </SessionProvider>
         </ThemeProvider>
       </LocalizationProvider>
     </CacheProvider>

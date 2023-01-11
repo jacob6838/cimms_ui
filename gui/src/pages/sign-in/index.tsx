@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { Box, Button, FormHelperText, Grid, Tab, Tabs, TextField, Typography } from '@mui/material';
 import { auth, ENABLE_AUTH } from '../../lib/auth';
 import { Logo } from '../../components/logo';
-import { useSession, signIn, signOut } from "next-auth/react"
+// import { useSession, signIn, signOut } from "next-auth/react"
 import Router from 'next/router';
 import React from 'react';
 
@@ -38,7 +38,7 @@ const Page = () => {
         const redirectUri = window.location.href + '/confirm';
 
         // This can be call inside AuthProvider component, but we do it here for simplicity
-        await signIn();
+        // await signIn();
         helpers.setSubmitting(false);
         setEmailSent(true);
       } catch (err: any) {
@@ -62,7 +62,7 @@ const Page = () => {
     const user = {};
 
     // Update Auth Context state
-    signIn();
+    // signIn();
 
     // Persist the skip for AuthProvider initialize call
     globalThis.sessionStorage.setItem('skip-auth', 'true');
