@@ -24,7 +24,7 @@ export const AuthGuard = (props) => {
 
       if (!session) { // session == null
         console.log("Forcing Sign In")
-        signIn();
+        // signIn();
         // console.log('Not authenticated, redirecting');
         // router
         //   .replace({
@@ -32,6 +32,7 @@ export const AuthGuard = (props) => {
         //     query: router.asPath !== '/' ? { continueUrl: router.asPath } : undefined
         //   })
         //   .catch(console.error);
+        setChecked(true);
       } else {
         console.log("Logged In")
         setChecked(true);
