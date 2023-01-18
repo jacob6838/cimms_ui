@@ -1,0 +1,3 @@
+[submodule "jpo-conflictvisualizer/jpo-conflictmonitor"]
+	path = jpo-conflictvisualizer/jpo-conflictmonitor
+	url = https://github.com/usdot-jpo-ode/jpo-conflictmonitor.git
