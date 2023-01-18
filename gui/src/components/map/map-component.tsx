@@ -73,6 +73,15 @@ const signalStateLayerYellow: LayerProps = {
   },
 };
 
+const bsmLayer: LayerProps = {
+  id: "bsm",
+  type: "circle",
+  paint: {
+    "circle-color": "#0000FF",
+    "circle-radius": 6,
+  },
+};
+
 type MyProps = {};
 
 const MapTab = (props: MyProps) => {
@@ -82,12 +91,12 @@ const MapTab = (props: MyProps) => {
   const [mapSignalGroups, setMapSignalGroups] = useState<SignalStateFeatureCollection>();
   const [signalStateData, setSignalStateData] = useState<SignalStateFeatureCollection[]>();
   const [spatSignalGroups, setSpatSignalGroups] = useState<SpatSignalGroups>();
-  const [bsmData, setBsmData] = useState<OdeBsmData[]>([]);
+  const [bsmData, setBsmData] = useState<BsmFeatureCollection>();
   const mapRef = useRef<mapboxgl.Map>();
   const [viewState, setViewState] = React.useState({
     latitude: 39.587905,
     longitude: -105.0907089,
-    zoom: 15,
+    zoom: 19,
   });
   const [sliderValue, setSliderValue] = React.useState<number>(30);
 
@@ -147,6 +156,25 @@ const MapTab = (props: MyProps) => {
     return timedSignalGroups;
   };
 
+  const parseBsmToGeojson = (bsmData: OdeBsmData[]): BsmFeatureCollection => {
+    return {
+      type: "FeatureCollection",
+      features: bsmData.map((bsm) => {
+        return {
+          type: "Feature",
+          properties: bsm.payload.data.coreData,
+          geometry: {
+            type: "Point",
+            coordinates: [
+              bsm.payload.data.coreData.position.longitude,
+              bsm.payload.data.coreData.position.latitude,
+            ],
+          },
+        };
+      }),
+    };
+  };
+
   const generateSignalStateFeatureCollection = (
     prevSignalStates: SignalStateFeatureCollection,
     signalGroups: SpatSignalGroup[]
@@ -163,10 +191,7 @@ const MapTab = (props: MyProps) => {
       if (feature.properties.color == RED_LIGHT) red.features.push(feature);
       if (feature.properties.color == YELLOW_LIGHT) yellow.features.push(feature);
       if (feature.properties.color == GREEN_LIGHT) green.features.push(feature);
-
-      console.log(feature, signalGroups, feature.properties.color);
     });
-    console.log(prevSignalStates);
     return [red, yellow, green];
   };
 
@@ -186,32 +211,27 @@ const MapTab = (props: MyProps) => {
     setSpatSignalGroups(spatSignalGroupsLocal);
     setSliderValue(Number(Object.keys(spatSignalGroupsLocal)?.[0] ?? 0));
 
-    setBsmData(MessageMonitorApi.getBsmMessages());
+    setBsmData(parseBsmToGeojson(MessageMonitorApi.getBsmMessages()));
   }, []);
 
   useEffect(() => {
     if (!mapSignalGroups || !spatSignalGroups) {
-      console.log(!mapSignalGroups, !spatSignalGroups, !spatSignalGroups?.[sliderValue]);
-      console.log(sliderValue);
-      console.log(spatSignalGroups);
       return;
     }
-    // const startTime = Number(Object.keys(spatSignalGroups ?? {})?.[0]);
-    const signalGroupsKey = Number(marks[sliderValue]?.label);
+    const keys: string[] = Object.keys(spatSignalGroups ?? {});
+    const signalGroupsKey = Number(keys[sliderValue]);
     setSignalStateData(
       generateSignalStateFeatureCollection(mapSignalGroups, spatSignalGroups?.[signalGroupsKey])
     );
-    const keys: string[] = Object.keys(spatSignalGroups ?? {});
     const marksLocal: { value: number; label: string }[] = [];
-    for (let i = 0; i < keys.length; i++) {
-      marksLocal.push({ value: i, label: keys[i] });
+    for (let i = 0; i < keys.length; i += parseInt((keys.length / 5).toString())) {
+      marksLocal.push({ value: i, label: new Date(Number(keys[i])).toISOString() });
     }
     setMarks(marksLocal);
   }, [sliderValue, mapSignalGroups, spatSignalGroups]);
 
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
     setSliderValue(newValue as number);
-    console.log(newValue);
   };
 
   return (
@@ -257,6 +277,11 @@ const MapTab = (props: MyProps) => {
           // onMouseEnter={() => this.setState({ cursor: "pointer" })}
           // onMouseLeave={() => this.setState({ cursor: "grab" })}
         >
+          {bsmData && (
+            <Source type="geojson" data={bsmData}>
+              <Layer {...bsmLayer} />
+            </Source>
+          )}
           {mapData && (
             <Source type="geojson" data={mapData?.mapFeatureCollection}>
               <Layer {...mapMessageLayer} />
