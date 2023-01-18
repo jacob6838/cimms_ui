@@ -254,7 +254,12 @@ const MapTab = (props: MyProps) => {
           }}
         ></div>
 
-        <ControlPanel slider={sliderValue} setSlider={handleSliderChange} marks={marks} />
+        <ControlPanel
+          sx={{ flex: 0 }}
+          slider={sliderValue}
+          setSlider={handleSliderChange}
+          marks={marks}
+        />
         <Map
           {...viewState}
           // ref={mapRef}

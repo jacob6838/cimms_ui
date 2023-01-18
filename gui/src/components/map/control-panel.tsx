@@ -3,7 +3,12 @@ import Slider from "@mui/material/Slider";
 
 function ControlPanel(props) {
   return (
-    <div className="control-panel">
+    <div
+      className="control-panel"
+      style={{
+        padding: "20px 120px 20px 120px",
+      }}
+    >
       <h3>Time Slider</h3>
       <Slider
         aria-label="Volume"
