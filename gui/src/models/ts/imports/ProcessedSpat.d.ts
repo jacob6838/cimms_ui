@@ -2,14 +2,14 @@ type ProcessedSpat = {
     messageType: string,
     odeReceivedAt: string,
     originIp: string,
-    name: string,
-    region: number,
+    name?: string,
+    region?: number,
     intersectionId: number,
     cti4501Conformant: boolean,
     validationMessages: ProcessedValidationMessage[],
     revision: number,
     status: IntersectionStatusObject,
-    utcTimeStamp: Date,
+    utcTimeStamp: string,
     enabledLanes: number[],
     states: MovementState[],
 }
@@ -18,7 +18,7 @@ type ProcessedValidationMessage = {
     message: string,
     jsonPath: string,
     schemaPath: string,
-    exception: string,
+    exception?: string,
 }
 
 type IntersectionStatusObject = {
@@ -39,22 +39,22 @@ type IntersectionStatusObject = {
 }
 
 type MovementState = {
-    movementName: string,
+    movementName?: string,
     signalGroup: number,
     stateTimeSpeed: MovementEvent[],
 }
 
 type MovementEvent = {
-    eventState: J2735MovementPhaseState,
+    eventState: J2735MovementPhaseState | string,
     timing: TimingChangeDetails,
-    speeds: J2735AdvisorySpeedList,
+    speeds?: J2735AdvisorySpeedList,
 }
 
 type TimingChangeDetails = {
-    startTime: Date,
-    minEndTime: Date,
-    maxEndTime: Date,
-    likelyTime: Date,
-    confidence: number,
-    nextTime: Date,
+    startTime: string | null,
+    minEndTime: string,
+    maxEndTime: string,
+    likelyTime: string | null,
+    confidence: number | null,
+    nextTime: string | null,
 }

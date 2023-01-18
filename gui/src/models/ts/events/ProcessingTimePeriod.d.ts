@@ -1,5 +1,5 @@
 
 type ProcessingTimePeriod = {
-  beginTimestamp: Date
-  endTimestamp: Date
+  beginTimestamp?: Date
+  endTimestamp?: Date
 };

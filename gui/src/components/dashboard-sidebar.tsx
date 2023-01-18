@@ -24,6 +24,11 @@ const items = [
     title: "Dashboard",
   },
   {
+    href: "/map",
+    icon: <ChartBarIcon fontSize="small" />,
+    title: "Map",
+  },
+  {
     href: "/customers",
     icon: <UsersIcon fontSize="small" />,
     title: "Customers",

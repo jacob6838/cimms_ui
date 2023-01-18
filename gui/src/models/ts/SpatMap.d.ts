@@ -1,5 +1,5 @@
 
 type SpatMap = {
-  spat: ProcessedSpat
-  map: ProcessedMap
+  spat?: ProcessedSpat
+  map?: ProcessedMap
 };

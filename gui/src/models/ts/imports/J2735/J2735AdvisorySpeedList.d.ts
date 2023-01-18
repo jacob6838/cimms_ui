@@ -1,13 +1,13 @@
 type J2735AdvisorySpeedList = {
-    advisorySpeedList: J2735AdvisorySpeed[]
+    advisorySpeedList?: J2735AdvisorySpeed[]
 }
 
 type J2735AdvisorySpeed = {
-    type: J2735AdvisorySpeedType,
-	speed: number,
-	confidence: J2735SpeedConfidence,
-	distance: number,
-	classId: number,
+    type?: J2735AdvisorySpeedType,
+    speed?: number,
+    confidence?: J2735SpeedConfidence,
+    distance?: number,
+    classId?: number,
 }
 
 type J2735AdvisorySpeedType = 

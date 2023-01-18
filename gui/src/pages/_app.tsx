@@ -11,6 +11,8 @@ import React from 'react';
 import { SessionProvider } from "next-auth/react"
 import type { Session } from "next-auth"
 
+import '../theme/index.css';
+
 registerChartJs();
 
 const clientSideEmotionCache = createEmotionCache();

@@ -1,19 +1,19 @@
 type OdeBsmData = {
-    metadata: OdeMsgMetadata,
-    payload: OdeMsgPayload,
+    metadata?: OdeMsgMetadata,
+    payload?: OdeMsgPayload,
 }
 
 type OdeMsgMetadata = {
-    payloadType: String,
-    serialId: SerialId,
-    odeReceivedAt: String,
-    schemaVersion: number,
-    maxDurationTime: number,
-    odePacketID: String,
-    odeTimStartDateTime: String,
-    recordGeneratedAt: String,
-    recordGeneratedBy: GeneratedBy,
-    sanitized: boolean,
+    payloadType?: String,
+    serialId?: SerialId,
+    odeReceivedAt?: String,
+    schemaVersion?: number,
+    maxDurationTime?: number,
+    odePacketID?: String,
+    odeTimStartDateTime?: String,
+    recordGeneratedAt?: String,
+    recordGeneratedBy?: GeneratedBy,
+    sanitized?: boolean,
 }
 
 type GeneratedBy = 
@@ -25,16 +25,16 @@ type GeneratedBy =
     "UNKNOWN";
 
 type SerialId = {
-    streamId: string,
-    bundleSize: number,
-    bundleId: number,
-    recordId: number,
-    serialNumber: number, 
+    streamId?: string,
+    bundleSize?: number,
+    bundleId?: number,
+    recordId?: number,
+    serialNumber?: number, 
 }
 
 type OdeMsgPayload = {
-    dataType: string,
-    data: OdeObject,
+    dataType?: string,
+    data?: OdeObject,
 }
 
 type OdeObject = any  // TODO: check
