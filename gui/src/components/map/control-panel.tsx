@@ -9,7 +9,7 @@ function ControlPanel(props) {
         padding: "20px 120px 20px 120px",
       }}
     >
-      <h3>Time Slider</h3>
+      <h3>Visualization Time</h3>
       <Slider
         aria-label="Volume"
         value={props.sliderValue}

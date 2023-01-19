@@ -4,7 +4,7 @@ type SpatSignalGroups = {
 
 type SpatSignalGroup = {
     signalGroup: number,
-    state: SignalState
+    state: SignalState,
 }
 
 type SignalState = 'STOP_AND_REMAIN' | 'PROTECTED_CLEARANCE' | 'PROTECTED_MOVEMENT_ALLOWED';

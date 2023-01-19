@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Controller
 @RequestMapping("/")
 public class GuiController {
-    
+
     Logger logger = LoggerFactory.getLogger(GuiController.class);
 
-    
-    @Autowired TestMessageSenderConfiguration config;
-    
-     @GetMapping("/")
+    @Autowired
+    TestMessageSenderConfiguration config;
+
+    @GetMapping("/")
     public String viewMap(Model model) {
         logger.info("viewMap");
         model.addAttribute("mapboxTileEndpoint", config.getMapboxTileEndpoint());
