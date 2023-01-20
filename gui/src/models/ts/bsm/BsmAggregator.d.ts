@@ -1,5 +1,5 @@
 
 type BsmAggregator = {
-  bsms: OdeBsmData[]
-  bsmComparator: Comparator<OdeBsmData>
+  bsms?: OdeBsmData[]
+  bsmComparator?: Comparator<OdeBsmData>
 };

@@ -37,4 +37,6 @@ type OdeMsgPayload = {
     data: OdeObject,
 }
 
-type OdeObject = any  // TODO: check
+type OdeObject = {
+    coreData: J2735BsmCoreData
+}  // TODO: check
