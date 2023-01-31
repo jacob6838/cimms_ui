@@ -1,20 +1,16 @@
-import React, { useRef, useState, useEffect } from "react";
-import Map, { Source, Layer, useMap } from "react-map-gl";
+import React, { useState, useEffect } from "react";
+import Map, { Source, Layer } from "react-map-gl";
 
 import { Container, Col } from "reactstrap";
 
-import { Divider, Checkbox, Typography, Tooltip, Paper, Box } from "@mui/material";
+import { Paper, Box } from "@mui/material";
 
-import mapboxgl from "mapbox-gl";
 import mapMessageData from "./processed_map_v4.json";
 import type { LayerProps } from "react-map-gl";
 import ControlPanel from "./control-panel";
-import MessageMonitorApi from "../../apis/mm-api";
+import MessageMonitorApi from "../../apis/fake-mm-api";
 
-import traffic_light_icon_green from "../../icons/traffic-light-green.svg";
-
-const MAPBOX_TOKEN =
-  "pk.eyJ1IjoidG9ueWVuZ2xpc2giLCJhIjoiY2tzajQwcDJvMGQ3bjJucW0yaDMxbThwYSJ9.ff26IdP_Y9hiE82AGx_wCg";
+const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN!;
 
 const emptyFeatureCollection = {
   type: "FeatureCollection",
@@ -138,7 +134,6 @@ const MapTab = (props: MyProps) => {
     zoom: 19,
   });
   const [sliderValue, setSliderValue] = React.useState<number>(30);
-  //   const mapRef = React.useRef();
   const mapRef = React.useRef<any>(null);
 
   const parseMapSignalGroups = (mapMessage: ProcessedMap): SignalStateFeatureCollection => {
@@ -352,11 +347,7 @@ const MapTab = (props: MyProps) => {
           mapStyle="mapbox://styles/tonyenglish/cld2bdrk3000201qmx2jb95kf"
           mapboxAccessToken={MAPBOX_TOKEN}
           attributionControl={true}
-          customAttribution={[
-            '<a href="https://www.transurban.com/" target="_blank">© Transurban</a>',
-            '<a href="https://www.vtti.vt.edu/" target="_blank">© VTTI</a>',
-            '<a href="https://www.tomtom.com/" target="_blank">© TomTom</a>',
-          ]}
+          customAttribution={['<a href="https://www.cotrip.com/" target="_blank">© CDOT</a>']}
           styleDiffing
           style={{ width: "100%", height: "100%" }}
           onMove={(evt) => setViewState(evt.viewState)}
