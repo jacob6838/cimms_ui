@@ -1,7 +1,7 @@
 
 type BroadcastRateEvent = {
-  topicName?: str
-  sourceDeviceId?: str
-  timePeriod?: ProcessingTimePeriod
-  numberOfMessages?: number
+  topicName: str
+  sourceDeviceId: str
+  timePeriod: ProcessingTimePeriod
+  numberOfMessages: number
 };

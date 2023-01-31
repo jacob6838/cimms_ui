@@ -1,5 +1,5 @@
 
 type SpatTimeChangeDetailPair = {
-  first?: SpatTimeChangeDetail
-  second?: SpatTimeChangeDetail
+  first: SpatTimeChangeDetail
+  second: SpatTimeChangeDetail
 };

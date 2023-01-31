@@ -1,7 +1,7 @@
 
-type LaneDirectionOfTravelAssessment = {
-  timestamp?: number
-  roadRegulatorID?: number
-  intersectionID?: number
-  laneDirectionOfTravelAssessmentGroup?: LaneDirectionOfTravelAssessmentGroup[]
+type LaneDirectionOfTravelAssessment = Assessment & {
+  timestamp: number
+  roadRegulatorID: number
+  intersectionID: number
+  laneDirectionOfTravelAssessmentGroup: LaneDirectionOfTravelAssessmentGroup[]
 };

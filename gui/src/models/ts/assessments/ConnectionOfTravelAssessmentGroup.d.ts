@@ -1,7 +1,7 @@
 
 type ConnectionOfTravelAssessmentGroup = {
-  ingressLaneID?: number
-  egressLaneID?: number
-  connectionID?: number
-  eventCount?: number
+  ingressLaneID: number
+  egressLaneID: number
+  connectionID: number
+  eventCount: number
 };

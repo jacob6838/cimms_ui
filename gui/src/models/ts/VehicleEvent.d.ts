@@ -1,6 +1,6 @@
 
 type VehicleEvent = {
-  bsms?: BsmAggregator
-  spats?: SpatAggregator
-  intersection?: Intersection
+  bsms: BsmAggregator
+  spats: SpatAggregator
+  intersection: Intersection
 };

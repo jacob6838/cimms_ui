@@ -1,5 +1,5 @@
 
-type SignalStateEventAssessment = {
-  timestamp?: number
-  signalStateEventAssessmentGroup?: SignalStateEventAssessmentGroup[]
+type SignalStateEventAssessment = Assessment & {
+  timestamp: number
+  signalStateEventAssessmentGroup: SignalStateEventAssessmentGroup[]
 };

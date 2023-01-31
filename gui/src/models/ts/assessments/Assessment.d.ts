@@ -1,4 +1,4 @@
 
 type Assessment = {
-  assessmentGeneratedAt?: number
+  assessmentGeneratedAt: number
 };

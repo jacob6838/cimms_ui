@@ -1,7 +1,7 @@
 
 type LaneDirectionOfTravelAggregator = {
-  events?: LaneDirectionOfTravelEvent[]
-  aggregatorCreationTime?: number
-  tolerance?: number
-  messageDurationDays?: number
+  events: LaneDirectionOfTravelEvent[]
+  aggregatorCreationTime: number
+  tolerance: number
+  messageDurationDays: number
 };

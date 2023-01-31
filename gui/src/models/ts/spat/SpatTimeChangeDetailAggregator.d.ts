@@ -1,6 +1,6 @@
 
 type SpatTimeChangeDetailAggregator = {
-  spatTimeChangeDetails?: SpatTimeChangeDetail[]
-  messageBufferSize?: number
-  spatTimeChangeDetailsComparator?: Comparator<SpatTimeChangeDetail>
+  spatTimeChangeDetails: SpatTimeChangeDetail[]
+  messageBufferSize: number
+  spatTimeChangeDetailsComparator: Comparator<SpatTimeChangeDetail>
 };

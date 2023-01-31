@@ -1,5 +1,5 @@
 
 type SpatAggregator = {
-  spats?: ProcessedSpat[]
-  spatComparator?: Comparator<ProcessedSpat>
+  spats: ProcessedSpat[]
+  spatComparator: Comparator<ProcessedSpat>
 };

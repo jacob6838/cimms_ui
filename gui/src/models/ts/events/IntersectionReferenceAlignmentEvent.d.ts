@@ -1,5 +1,5 @@
 
-type IntersectionReferenceAlignmentEvent = Event & Event & {
+type IntersectionReferenceAlignmentEvent = Event & {
   sourceID: str
   timestamp: number
   spatRoadRegulatorIds: Set<Integer>

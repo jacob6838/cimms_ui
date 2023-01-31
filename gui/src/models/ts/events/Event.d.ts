@@ -1,5 +1,4 @@
 
 type Event = {
-    eventGeneratedAt: number;
-    eventType: string;
+  eventGeneratedAt: number
 };

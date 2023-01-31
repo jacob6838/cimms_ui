@@ -1,5 +1,5 @@
 
 type LineVehicleIntersection = {
-  lane?: Lane
-  bsm?: OdeBsmData
+  lane: Lane
+  bsm: OdeBsmData
 };
