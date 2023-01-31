@@ -1,4 +1,0 @@
-
-type Assessment = {
-  assessmentGeneratedAt: number
-};

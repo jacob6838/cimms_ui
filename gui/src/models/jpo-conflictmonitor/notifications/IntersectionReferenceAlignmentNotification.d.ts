@@ -1,0 +1,4 @@
+
+type IntersectionReferenceAlignmentNotification = Notification  & {
+
+};
