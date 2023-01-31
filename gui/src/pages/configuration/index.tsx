@@ -24,45 +24,34 @@ import { Search as SearchIcon } from "../../icons/search";
 
 const tabs = [
   {
-    label: "Query Intervals",
-    value: "interval",
-    description:
-      "Query Interval parameters will vary the period that data will be processed by the odd\
-        for the specified data feed. These are all in seconds and will change the rate of raw data gathering.",
+    label: "General",
+    value: "gen",
+    description: "General Configuration Parameters",
   },
   {
-    label: "SH/CADS-IFM",
-    value: "cads_distance",
-    description:
-      "These parameters control how and when Speed Harmonization events are generated, as well as filtering\
-        CADS-IFM recommendations",
+    label: "Lane Direction of Travel",
+    value: "ldot",
+    description: "Lane Direction of Travel Configuration Parameters",
   },
   {
-    label: "Data Sources",
-    value: "source",
-    description:
-      "This page displays the current state of all the switchable data feeds in the ODD. Do not \
-        manually change these variables to simulated or historical as they will not automatically start simulations\
-        or replays without using the simulation page to start them. Setting a data feed back to realtime will stop any\
-        current historic replay or simulation and allow for realtime data to be ingested again.",
+    label: "Signal State",
+    value: "ss",
+    description: "Signal State Configuration Parameters",
   },
   {
-    label: "Ksqldb",
-    value: "ksqldb",
-    description:
-      "Ksqldb query windows parameters varies how long data can be queried from the ODD. After\
-        data reaches the age specified in the window it will be removed from queryable tables to make room for\
-        newer data. This should only be changed if there is a change to the period of data input into the ODD.",
+    label: "Connection of Travel",
+    value: "cot",
+    description: "Connection of Travel Configuration Parameters",
   },
 ];
 
-const applyFilters = (parameters, filters) =>
+const applyFilters = (parameters, filter) =>
   parameters.filter((parameter) => {
-    if (filters.query) {
+    if (filter.query) {
       let queryMatched = false;
       const properties = ["name", "description"];
       properties.forEach((property) => {
-        if (parameter[property].toLowerCase().includes(filters.query.toLowerCase())) {
+        if (parameter[property].toLowerCase().includes(filter.query.toLowerCase())) {
           queryMatched = true;
         }
       });
@@ -72,46 +61,22 @@ const applyFilters = (parameters, filters) =>
       }
     }
 
-    if (filters.interval && !parameter["name"].includes("interval")) {
-      return false;
-    }
-
-    if (filters.ksqldb && !parameter["name"].includes("ksqldb")) {
-      return false;
-    }
-
-    if (
-      filters.cads_distance &&
-      !parameter["name"].includes("cads_distance") &&
-      !parameter["name"].includes("sh-")
-    ) {
-      return false;
-    }
-
-    if (filters.source && !parameter["name"].includes("source")) {
-      return false;
-    }
-
-    return true;
+    return parameter["name"].split("-")[0] == filter.tab;
   });
 
 const applyPagination = (parameters, page, rowsPerPage) =>
   parameters.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
 const Page = () => {
-  const isMounted = useMounted();
   const queryRef = useRef<TextFieldProps>(null);
   const [parameters, setParameters] = useState(Array<ConfigurationParameter>());
-  const [currentTab, setCurrentTab] = useState("interval");
+  const [currentTab, setCurrentTab] = useState("gen");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentDescription, setCurrentDescription] = useState("");
-  const [filters, setFilters] = useState({
+  const [filter, setFilter] = useState({
     query: "",
-    interval: true,
-    ksqldb: false,
-    cads_distance: false,
-    source: false,
+    tab: currentTab,
   });
 
   useEffect(() => {
@@ -120,7 +85,7 @@ const Page = () => {
 
   const getParameters = async () => {
     try {
-      const data = await configParamApi.getParameters();
+      const data = await configParamApi.getParameters("token");
       console.log(data);
 
       setParameters(data);
@@ -134,26 +99,18 @@ const Page = () => {
   }, []);
 
   const handleTabsChange = (event, value) => {
-    const updatedFilters = {
-      ...filters,
-      interval: false,
-      ksqldb: false,
-      cads_distance: false,
-      source: false,
-    };
-
-    updatedFilters[value] = true;
+    const updatedFilter = { ...filter, tab: value };
     setCurrentTab(value);
-    setFilters(updatedFilters);
+    setFilter(updatedFilter);
     setPage(0);
     setCurrentTab(value);
   };
 
   const handleQueryChange = (event) => {
     event.preventDefault();
-    setFilters((prevState) => ({
+    setFilter((prevState) => ({
       ...prevState,
-      query: queryRef.current?.value,
+      query: queryRef.current?.value as string,
     }));
   };
 
@@ -174,7 +131,7 @@ const Page = () => {
   };
 
   // Usually query is done on backend with indexing solutions
-  const filteredParameters = applyFilters(parameters, filters);
+  const filteredParameters = applyFilters(parameters, filter);
   const paginatedParameters = applyPagination(filteredParameters, page, rowsPerPage);
 
   return (
@@ -189,11 +146,21 @@ const Page = () => {
           py: 8,
         }}
       >
-        <Container maxWidth="xl">
-          <Box sx={{ mb: 4 }}>
+        <Container maxWidth={false}>
+          <Box
+            sx={{
+              alignItems: "center",
+              display: "flex",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              m: -1,
+            }}
+          >
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Configuration Parameters</Typography>
+                <Typography sx={{ m: 1 }} variant="h4">
+                  Configuration Parameters
+                </Typography>
               </Grid>
             </Grid>
             <Box
@@ -211,6 +178,8 @@ const Page = () => {
             }}
           >
             <Button
+              color="primary"
+              variant="contained"
               onClick={getParameters}
               startIcon={<RefreshIcon fontSize="small" />}
               sx={{ m: 1 }}

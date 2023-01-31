@@ -1,17 +1,17 @@
 [
   {
     "id": "4ec7f963-f557-4f0a-b07f-dc2f74ffabea",
-    "name": "ssa-maximum-distance-from-stopbar",
+    "name": "ss-maximum-distance-from-stopbar",
     "value": 1,
     "unit": "seconds",
-    "description": "maximum distance from stopbar (ssa)"
+    "description": "maximum distance from stopbar (ss)"
   },
   {
     "id": "d499bdd0-a7c7-4626-90e0-300f7362a4fd",
-    "name": "ssa-heading-tolerance",
+    "name": "ss-heading-tolerance",
     "value": 1,
     "unit": "seconds",
-    "description": "heading tolerance (ssa)"
+    "description": "heading tolerance (ss)"
   },
   {
     "id": "24c33a36-5cbf-44d7-890e-eae48043f966",
@@ -36,24 +36,24 @@
   },
   {
     "id": "a4e027da-74f7-4d37-bac8-94a1c8898582",
-    "name": "ssa-look-back-period",
+    "name": "ss-look-back-period",
     "value": 1,
     "unit": "seconds",
-    "description": "look-back period (ssa)"
+    "description": "look-back period (ss)"
   },
   {
     "id": "92f52f36-055b-4acf-b70e-c1ade8ae9b7d",
-    "name": "ssa-minimum-red-light-percentage-threshold",
+    "name": "ss-minimum-red-light-percentage-threshold",
     "value": 1,
     "unit": "seconds",
-    "description": "minimum red light percentage threshold (ssa)"
+    "description": "minimum red light percentage threshold (ss)"
   },
   {
     "id": "13cc6531-d9a8-4f1a-8b88-f1fee9047506",
-    "name": "ssa-minimum-number-of-events",
+    "name": "ss-minimum-number-of-events",
     "value": 1,
     "unit": "seconds",
-    "description": "minimum number of events (ssa)"
+    "description": "minimum number of events (ss)"
   },
   {
     "id": "5c1ab1c9-0e6f-459f-8a21-1d4583de5e86",
@@ -92,49 +92,49 @@
   },
   {
     "id": "d69a99d5-2e45-4980-a861-c7adfcd2f78a",
-    "name": "ssa-red-light-running-minimum-speed",
+    "name": "ss-red-light-running-minimum-speed",
     "value": 1,
     "unit": "seconds",
-    "description": "red light running minimum speed (ssa)"
+    "description": "red light running minimum speed (ss)"
   },
   {
     "id": "7668ae67-a403-46f6-826d-d40883c4cba2",
-    "name": "gen-v2X-message processing frequency",
+    "name": "gen-v2X-messge-processing-frequency",
     "value": 1,
     "unit": "seconds",
-    "description": "V2X message processing frequency (gen)"
+    "description": "V2X messge processing frequency (gen)"
   },
   {
     "id": "1eae9caa-05a5-4143-b680-219a7f5693e0",
-    "name": "gen-message-storage-period",
+    "name": "gen-messge-storage-period",
     "value": 1,
     "unit": "seconds",
-    "description": "message storage period (gen)"
+    "description": "messge storage period (gen)"
   },
   {
     "id": "00d97420-8b45-4423-acf3-c46551b0b508",
-    "name": "gen-spat-minimum-10-second Reception",
+    "name": "gen-spat-minimum-10-second-Reception",
     "value": 1,
     "unit": "seconds",
     "description": "SPaT Minimum 10-second Reception (gen)"
   },
   {
     "id": "0723b1f3-cb42-495e-b898-05d2468c086f",
-    "name": "gen-spat-maximum-10-second Reception",
+    "name": "gen-spat-maximum-10-second-Reception",
     "value": 1,
     "unit": "seconds",
     "description": "SPaT Maximum 10-second Reception (gen)"
   },
   {
     "id": "9c121621-b41e-4382-b93c-233e256e54d7",
-    "name": "gen-map-minimum-10-second Reception",
+    "name": "gen-map-minimum-10-second-Reception",
     "value": 1,
     "unit": "seconds",
     "description": "MAP Minimum 10-second Reception (gen)"
   },
   {
     "id": "834a3427-afe1-4cbf-a09f-cca6e7327ec9",
-    "name": "gen-map-maximum-10-second Reception",
+    "name": "gen-map-maximum-10-second-Reception",
     "value": 1,
     "unit": "seconds",
     "description": "MAP Maximum 10-second Reception (gen)"
@@ -155,9 +155,9 @@
   },
   {
     "id": "d0da6d0c-9345-496e-b00a-3afc7915882a",
-    "name": "ssa-minimum-red-light-percentage-threshold",
+    "name": "ss-minimum-red-light-percentage-threshold",
     "value": 1,
     "unit": "seconds",
-    "description": "minimum red light percentage threshold (ssa)"
+    "description": "minimum red light percentage threshold (ss)"
   }
 ]

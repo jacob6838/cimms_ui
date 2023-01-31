@@ -1,9 +1,9 @@
 
 import processed_map_data from './fake_data/ProcessedMap.json';
-import all_spat_data from './fake_data/ProcessedSpat.ts';
+import all_spat_data from './fake_data/ProcessedSpat';
 // import processed_spat_data from './fake_data/ProcessedSpatSingle.json';
 // import bsm_data from './fake_data/BsmSingle.json';
-import all_bsm_data from './fake_data/10.11.81.12_BSMlist.ts';
+import all_bsm_data from './fake_data/10.11.81.12_BSMlist';
 
 class MessageMonitorApi {
     getMapMessage(): ProcessedMap {

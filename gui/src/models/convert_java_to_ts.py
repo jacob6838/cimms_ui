@@ -2,6 +2,7 @@ import re
 import os
 
 matching_expr = r"    private ([a-zA-Z0-9_<>]*?) ([a-zA-Z_]*)"
+matching_expr_extends = r"private class ([a-zA-Z0-9_<>]*?) extends ([a-zA-Z_]*)\{"
 
 TYPE_MAPPINGS = {
     # Simple types
@@ -28,7 +29,7 @@ TYPE_MAPPINGS = {
 
 IMPORTS_PATH = "./ts/imports"
 TEMPLATE = """{imports}
-type {class_name} = {{
+type {class_name} = {extension}{{
 {contents}
 }};"""
 
@@ -47,7 +48,8 @@ for file_path in files:
     CLASS_NAME = file_path.split('/')[-1]
 
     file_contents = open(f"{JAVA_PATH}/{CLASS_NAME}.java", 'r').read()
-
+    extension = re.findall(matching_expr_extends, file_contents)
+    extension = f"{extension[0][1]} &" if extension else ""
     matches = re.findall(matching_expr, file_contents)
     print(matches)
     lines = []
@@ -59,7 +61,7 @@ for file_path in files:
         lines.append(f"  {ts_name}?: {ts_type}")
 
     ts_contents = TEMPLATE.format(
-        imports="", class_name=CLASS_NAME, contents='\n'.join(lines))
+        imports="", class_name=CLASS_NAME, extension=extension, contents='\n'.join(lines))
 
     if not os.path.exists(f"{TS_PATH}/"):
         os.makedirs(f"{TS_PATH}/")

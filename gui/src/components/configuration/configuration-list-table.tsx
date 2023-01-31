@@ -1,38 +1,26 @@
-import { useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import PropTypes from "prop-types";
-import { format } from "date-fns";
+import NextLink from "next/link";
 import {
-  Avatar,
   Box,
   Card,
-  Checkbox,
+  IconButton,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
-  Typography,
 } from "@mui/material";
-import { getInitials } from "../../utils/get-initials";
 import React from "react";
-import { v4 as uuid } from "uuid";
+import { PencilAlt as PencilAltIcon } from "../../icons/pencil-alt";
 
-export const ConfigParamListTable = ({ parameters, ...rest }) => {
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
-
-  const handleLimitChange = (event) => {
-    setLimit(event.target.value);
-  };
-
-  const handlePageChange = (event, newPage) => {
-    setPage(newPage);
-  };
+export const ConfigParamListTable = (props) => {
+  const { parameters, parametersCount, onPageChange, onRowsPerPageChange, page, rowsPerPage } =
+    props;
 
   return (
-    <Card {...rest}>
+    <Card>
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
@@ -42,15 +30,23 @@ export const ConfigParamListTable = ({ parameters, ...rest }) => {
                 <TableCell>Value</TableCell>
                 <TableCell>Unit</TableCell>
                 <TableCell>Description</TableCell>
+                <TableCell align="right">Edit</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {parameters.slice(0, limit).map((param) => (
+              {parameters.map((param) => (
                 <TableRow hover key={param.id}>
                   <TableCell>{param.name}</TableCell>
                   <TableCell>{param.value}</TableCell>
                   <TableCell>{param.unit}</TableCell>
                   <TableCell>{param.description}</TableCell>
+                  <TableCell align="right">
+                    <NextLink href={"/configuration/" + param.name + "/edit"} passHref>
+                      <IconButton component="a">
+                        <PencilAltIcon fontSize="small" />
+                      </IconButton>
+                    </NextLink>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -59,11 +55,11 @@ export const ConfigParamListTable = ({ parameters, ...rest }) => {
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={parameters.length}
-        onPageChange={handlePageChange}
-        onRowsPerPageChange={handleLimitChange}
+        count={parametersCount}
+        onPageChange={onPageChange}
+        onRowsPerPageChange={onRowsPerPageChange}
         page={page}
-        rowsPerPage={limit}
+        rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
       />
     </Card>
@@ -71,5 +67,10 @@ export const ConfigParamListTable = ({ parameters, ...rest }) => {
 };
 
 ConfigParamListTable.propTypes = {
-  customers: PropTypes.array.isRequired,
+  parameters: PropTypes.array.isRequired,
+  parametersCount: PropTypes.number.isRequired,
+  onPageChange: PropTypes.func.isRequired,
+  onRowsPerPageChange: PropTypes.func,
+  page: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
 };

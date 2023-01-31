@@ -1,5 +1,5 @@
 
-type ProcessingTimePeriod = {
-  beginTimestamp?: Date
-  endTimestamp?: Date
+type ProcessingTimePeriod = Event & {
+  beginTimestamp: Date
+  endTimestamp: Date
 };

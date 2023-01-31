@@ -8,9 +8,7 @@ import { Paper, Box } from "@mui/material";
 import mapMessageData from "./processed_map_v4.json";
 import type { LayerProps } from "react-map-gl";
 import ControlPanel from "./control-panel";
-import MessageMonitorApi from "../../apis/fake-mm-api";
-
-const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN!;
+import MessageMonitorApi from "../../apis/mm-api";
 
 const emptyFeatureCollection = {
   type: "FeatureCollection",
@@ -118,6 +116,9 @@ const bsmLayer: LayerProps = {
 type MyProps = {};
 
 const MapTab = (props: MyProps) => {
+  const MAPBOX_TOKEN =
+    "pk.eyJ1IjoidG9ueWVuZ2xpc2giLCJhIjoiY2tzajQwcDJvMGQ3bjJucW0yaDMxbThwYSJ9.ff26IdP_Y9hiE82AGx_wCg"; //process.env.MAPBOX_TOKEN!;
+
   const [pointData, setPointData] = useState<any>(null);
   const [marks, setMarks] = useState<{ value: number; label: string }[]>([]);
   const [mapData, setMapData] = useState<ProcessedMap>();
@@ -336,9 +337,9 @@ const MapTab = (props: MyProps) => {
           {...viewState}
           ref={mapRef}
           onLoad={() => {
-            const image = new Image(35, 35);
-            image.src = "./icons/traffic-light-green.svg";
-            mapRef.current.addImage("traffic_light_icon_green", image);
+            // const image = new Image(35, 35);
+            // image.src = "./icons/traffic-light-green.svg";
+            // mapRef.current.addImage("traffic_light_icon_green", image);
             // mapRef.current.loadImage(traffic_light_icon_green, (error, image) => {
             //   if (error) throw error;
             // });
