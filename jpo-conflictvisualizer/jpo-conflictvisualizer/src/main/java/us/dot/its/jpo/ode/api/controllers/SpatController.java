@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import us.dot.its.jpo.geojsonconverter.pojos.spat.ProcessedSpat;
-import us.dot.its.jpo.ode.mockdata.MockBsmGenerator;
 import us.dot.its.jpo.ode.mockdata.MockSpatGenerator;
-import us.dot.its.jpo.ode.model.OdeBsmData;
 
 @RestController
 public class SpatController {
@@ -42,6 +40,9 @@ public class SpatController {
         }else{
 
         }
+
+        logger.debug(String.format("Returning %i results for SPAT JSON Request.", list.size()));
+
 		return list;
 	}
 }

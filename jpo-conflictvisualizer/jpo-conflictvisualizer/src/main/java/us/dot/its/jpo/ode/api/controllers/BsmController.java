@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import us.dot.its.jpo.conflictmonitor.monitor.models.events.Event;
 import us.dot.its.jpo.ode.mockdata.MockBsmGenerator;
-import us.dot.its.jpo.ode.mockdata.MockEventGenerator;
 import us.dot.its.jpo.ode.model.OdeBsmData;
 
 @RestController
@@ -41,6 +39,8 @@ public class BsmController {
         }else{
 
         }
+
+        logger.debug(String.format("Returning %i results for BSM JSON Request.", list.size()));
 		return list;
 	}
 }

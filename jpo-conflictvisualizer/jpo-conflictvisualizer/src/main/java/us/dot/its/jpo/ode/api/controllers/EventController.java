@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import us.dot.its.jpo.conflictmonitor.monitor.models.events.ConnectionOfTravelEvent;
-import us.dot.its.jpo.conflictmonitor.monitor.models.events.Event;
 import us.dot.its.jpo.conflictmonitor.monitor.models.events.IntersectionReferenceAlignmentEvent;
 import us.dot.its.jpo.conflictmonitor.monitor.models.events.LaneDirectionOfTravelEvent;
 import us.dot.its.jpo.conflictmonitor.monitor.models.events.SignalGroupAlignmentEvent;
@@ -20,10 +20,14 @@ import us.dot.its.jpo.conflictmonitor.monitor.models.events.SignalStateConflictE
 import us.dot.its.jpo.conflictmonitor.monitor.models.events.SignalStateEvent;
 import us.dot.its.jpo.conflictmonitor.monitor.models.events.SignalStateStopEvent;
 import us.dot.its.jpo.conflictmonitor.monitor.models.events.TimeChangeDetailsEvent;
+import us.dot.its.jpo.ode.api.accessors.events.LaneDirectionOfTravelEventRepo;
 import us.dot.its.jpo.ode.mockdata.MockEventGenerator;
 
 @RestController
 public class EventController {
+
+    @Autowired
+	LaneDirectionOfTravelEventRepo laneDirectionOfTravelEventRepo;
 
     private static final Logger logger = LoggerFactory.getLogger(EventController.class);
 
@@ -48,6 +52,8 @@ public class EventController {
         }else{
 
         }
+
+        logger.debug(String.format("Returning %i results for Intersection Reference Alignment Event Request.", list.size()));
 		return list;
 	}
 
@@ -66,6 +72,9 @@ public class EventController {
         }else{
 
         }
+
+        logger.debug(String.format("Returning %i results for Connection of Travel Event Request.", list.size()));
+
 		return list;
 	}
 
@@ -76,14 +85,21 @@ public class EventController {
             @RequestParam(name="End Time (UTC Millis)", required = false) Long endTime,
             @RequestParam(name="Test Data", required = false, defaultValue = "false") boolean testData
             ) {
+
         
-        ArrayList<LaneDirectionOfTravelEvent> list = new ArrayList<>();
+        
+        List<LaneDirectionOfTravelEvent> list = new ArrayList<>();
         
         if(testData){
             list.add(MockEventGenerator.getLaneDirectionOfTravelEvent());
         }else{
-
+            list = laneDirectionOfTravelEventRepo.findAll();
+            list.forEach(item -> System.out.println(item));
+            System.out.println("Lane Direction Of Travel Events List: " + list);
         }
+
+        logger.debug(String.format("Returning %i results for Lane Direction of Travel Event Request.", list.size()));
+
 		return list;
 	}
 
@@ -102,6 +118,9 @@ public class EventController {
         }else{
 
         }
+
+        logger.debug(String.format("Returning %i results for Signal group Alignment Event Request.", list.size()));
+
 		return list;
 	}
 
@@ -120,6 +139,9 @@ public class EventController {
         }else{
 
         }
+
+        logger.debug(String.format("Returning %i results for Signal state Conflict Event Request", list.size()));
+
 		return list;
 	}
 
@@ -138,6 +160,9 @@ public class EventController {
         }else{
 
         }
+
+        logger.debug(String.format("Returning %i results for Signal State Event Request", list.size()));
+
 		return list;
 	}
 
@@ -156,6 +181,9 @@ public class EventController {
         }else{
 
         }
+
+        logger.debug(String.format("Returning %i results for Signal State Stop Event Request.", list.size()));
+
 		return list;
 	}
 
@@ -174,6 +202,9 @@ public class EventController {
         }else{
 
         }
+
+        logger.debug(String.format("Returning %i results for Time Change Details Request.", list.size()));
+
 		return list;
 	}
 }
