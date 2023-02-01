@@ -19,7 +19,7 @@ class MessageMonitorApi {
                 assessmentStartTime: new Date(),
                 assessmentEndTime: new Date(),
                 assessmentResult: "",
-                invalidAssessmentData: string,
+                invalidAssessmentData: "",
             }
         ]
     }

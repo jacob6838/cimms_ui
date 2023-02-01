@@ -1,4 +1,4 @@
-import { authApigHelper } from './api-helper';
+import { authApiHelper } from './api-helper';
 import ConfigParams from './fake_data/configParams.json';
 import toast from 'react-hot-toast';
 
@@ -8,7 +8,7 @@ class ConfigParamsApi {
   async getParameters(token: string): Promise<ConfigurationParameter[]> {
     return ConfigParams;
     try {
-      var response = await authApigHelper.invokeApi({
+      var response = await authApiHelper.invokeApi({
         path: "/config",
         token: token,
       });
@@ -22,7 +22,7 @@ class ConfigParamsApi {
   async getParameter(token: string, name: string): Promise<ConfigurationParameter | null> {
     return ConfigParams.find(c => c.name === name)!;
     try {
-      var response = await authApigHelper.invokeApi({
+      var response = await authApiHelper.invokeApi({
         path: `/config/${name}`,
         token: token,
         failureMessage: "Failed to Retrieve Configuration Parameter " + name,
@@ -38,7 +38,7 @@ class ConfigParamsApi {
     toast.success(`Successfully Update Configuration Parameter ${name}`);
     return null;
     try {
-      var response = await authApigHelper.invokeApi({
+      var response = await authApiHelper.invokeApi({
         path: "/config/" + name,
         token: token,
         method: "PUT",

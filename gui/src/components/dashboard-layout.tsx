@@ -7,6 +7,7 @@ import { DashboardSidebar } from "./dashboard-sidebar";
 import React from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import MessageMonitorApi from "../apis/mm-api";
+import EventsApi from "../apis/events-api";
 
 const DashboardLayoutRoot = styled("div")(({ theme }) => ({
   display: "flex",
@@ -35,6 +36,7 @@ export const DashboardLayout = (props) => {
         };
       })
     );
+    EventsApi.getTimeChangeDetails("token", intersectionId, new Date(), new Date());
   }, []);
 
   return (

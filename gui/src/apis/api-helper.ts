@@ -1,8 +1,18 @@
 import toast from 'react-hot-toast';
 
-const MESSAGE_MONITOR_ENDPOINT = process.env.MESSAGE_MONITOR_API_ENDPOINT;
+const MESSAGE_MONITOR_ENDPOINT = "http://localhost:8081" //process.env.MESSAGE_MONITOR_API_ENDPOINT;
 
-class AuthApigHelper {
+class AuthApiHelper {
+  formatQueryParams(query_params: { [key: string]: string }) {
+    if (!query_params) return;
+    const params: string[] = [];
+    for (const key in query_params) {
+      if (query_params[key] !== "" && query_params[key] !== null) {
+        params.push(`${key}=${query_params[key].replace(" ", "%20")}`);
+      }
+    }
+    return !query_params ? "" : "?" + params.join("&");
+  }
 
   async invokeApi({
     path,
@@ -27,8 +37,12 @@ class AuthApigHelper {
     successMessage?: string,
     failureMessage?: string,
   }) {
-        console.log("MAKING REQUEST TO", MESSAGE_MONITOR_ENDPOINT! + "/" + path + new URLSearchParams(queryParams))
-          const results = await fetch(MESSAGE_MONITOR_ENDPOINT! + "/" + path + new URLSearchParams(queryParams), {
+    const url = MESSAGE_MONITOR_ENDPOINT! + path + this.formatQueryParams(queryParams)
+        console.log("MAKING REQUEST TO", url)
+        const results = method === "GET" ? await fetch(url, {
+            method,
+            headers,
+          }) : await fetch(url, {
             method,
             headers,
             body: JSON.stringify(body),
@@ -51,4 +65,4 @@ class AuthApigHelper {
   }
 }
 
-export const authApigHelper = new AuthApigHelper();
+export const authApiHelper = new AuthApiHelper();
