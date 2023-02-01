@@ -12,14 +12,11 @@ class MessageMonitorApi {
         return intersectionsList;
     }
 
-    getNotifications(): MessageMonitorNotification[] {
+    getNotifications(): SpatBroadcastRateNotification[] {
         return [
             {
-                notificationExpiresAt: new Date(),
-                assessmentStartTime: new Date(),
-                assessmentEndTime: new Date(),
-                assessmentResult: "",
-                invalidAssessmentData: "",
+                date: new Date(),
+                message: "SPAT Broadcast rate of 20 messages per hour is lower than the threshold of 50/hour"
             }
         ]
     }
