@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +20,6 @@ import us.dot.its.jpo.conflictmonitor.monitor.models.assessments.SignalStateEven
 import us.dot.its.jpo.conflictmonitor.monitor.models.events.Event;
 import us.dot.its.jpo.ode.mockdata.MockAssessmentGenerator;
 
-
 @RestController
 public class AssessmentController {
 
@@ -27,84 +27,77 @@ public class AssessmentController {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
-    public String getCurrentTime(){
+    public String getCurrentTime() {
         return ZonedDateTime.now().toInstant().toEpochMilli() + "";
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/assessments/connection_of_travel", method = RequestMethod.GET, produces = "application/json")
-	public List<ConnectionOfTravelAssessment> findConnectionOfTravelAssessment(
-            @RequestParam(name="Intersection ID", required = false) Integer intersectionID,
-            @RequestParam(name="Start Time (UTC Millis)", required = false) Long startTime,
-            @RequestParam(name="End Time (UTC Millis)", required = false) Long endTime,
-            @RequestParam(name="Test Data", required = false, defaultValue = "false") boolean testData
-            ) {
-        
+    public List<ConnectionOfTravelAssessment> findConnectionOfTravelAssessment(
+            @RequestParam(name = "Intersection ID", required = false) Integer intersectionID,
+            @RequestParam(name = "Start Time (UTC Millis)", required = false) Long startTime,
+            @RequestParam(name = "End Time (UTC Millis)", required = false) Long endTime,
+            @RequestParam(name = "Test Data", required = false, defaultValue = "false") boolean testData) {
+
         ArrayList<ConnectionOfTravelAssessment> list = new ArrayList<>();
-        
-        if(testData){
+
+        if (testData) {
             list.add(MockAssessmentGenerator.getConnectionOfTravelAssessment());
-        }else{
+        } else {
 
         }
-		return list;
-	}
-
+        return list;
+    }
 
     @RequestMapping(value = "/assessments/lane_direction_of_travel", method = RequestMethod.GET, produces = "application/json")
-	public List<LaneDirectionOfTravelAssessment> findLaneDirectionOfTravelAssessment(
-            @RequestParam(name="Intersection ID", required = false) Integer intersectionID,
-            @RequestParam(name="Start Time (UTC Millis)", required = false) Long startTime,
-            @RequestParam(name="End Time (UTC Millis)", required = false) Long endTime,
-            @RequestParam(name="Test Data", required = false, defaultValue = "false") boolean testData
-            ) {
-        
+    public List<LaneDirectionOfTravelAssessment> findLaneDirectionOfTravelAssessment(
+            @RequestParam(name = "Intersection ID", required = false) Integer intersectionID,
+            @RequestParam(name = "Start Time (UTC Millis)", required = false) Long startTime,
+            @RequestParam(name = "End Time (UTC Millis)", required = false) Long endTime,
+            @RequestParam(name = "Test Data", required = false, defaultValue = "false") boolean testData) {
+
         ArrayList<LaneDirectionOfTravelAssessment> list = new ArrayList<>();
-        
-        if(testData){
+
+        if (testData) {
             list.add(MockAssessmentGenerator.getLaneDirectionOfTravelAssessment());
-        }else{
+        } else {
 
         }
-		return list;
-	}
+        return list;
+    }
 
     @RequestMapping(value = "/assessments/signal_state_assessment", method = RequestMethod.GET, produces = "application/json")
-	public List<SignalStateAssessment> findSignalStateAssessment(
-            @RequestParam(name="Intersection ID", required = false) Integer intersectionID,
-            @RequestParam(name="Start Time (UTC Millis)", required = false) Long startTime,
-            @RequestParam(name="End Time (UTC Millis)", required = false) Long endTime,
-            @RequestParam(name="Test Data", required = false, defaultValue = "false") boolean testData
-            ) {
-        
+    public List<SignalStateAssessment> findSignalStateAssessment(
+            @RequestParam(name = "Intersection ID", required = false) Integer intersectionID,
+            @RequestParam(name = "Start Time (UTC Millis)", required = false) Long startTime,
+            @RequestParam(name = "End Time (UTC Millis)", required = false) Long endTime,
+            @RequestParam(name = "Test Data", required = false, defaultValue = "false") boolean testData) {
+
         ArrayList<SignalStateAssessment> list = new ArrayList<>();
-        
-        if(testData){
+
+        if (testData) {
             list.add(MockAssessmentGenerator.getSignalStateAssessment());
-        }else{
+        } else {
 
         }
-		return list;
-	}
+        return list;
+    }
 
     @RequestMapping(value = "/assessments/signal_state_event_assessment", method = RequestMethod.GET, produces = "application/json")
-	public List<SignalStateEventAssessment> findSignalStateEventAssessment(
-            @RequestParam(name="Intersection ID", required = false) Integer intersectionID,
-            @RequestParam(name="Start Time (UTC Millis)", required = false) Long startTime,
-            @RequestParam(name="End Time (UTC Millis)", required = false) Long endTime,
-            @RequestParam(name="Test Data", required = false, defaultValue = "false") boolean testData
-            ) {
-        
+    public List<SignalStateEventAssessment> findSignalStateEventAssessment(
+            @RequestParam(name = "Intersection ID", required = false) Integer intersectionID,
+            @RequestParam(name = "Start Time (UTC Millis)", required = false) Long startTime,
+            @RequestParam(name = "End Time (UTC Millis)", required = false) Long endTime,
+            @RequestParam(name = "Test Data", required = false, defaultValue = "false") boolean testData) {
+
         ArrayList<SignalStateEventAssessment> list = new ArrayList<>();
-        
-        if(testData){
+
+        if (testData) {
             list.add(MockAssessmentGenerator.getSignalStateEventAssessment());
-        }else{
+        } else {
 
         }
-		return list;
-	}
+        return list;
+    }
 
-
-
-    
 }

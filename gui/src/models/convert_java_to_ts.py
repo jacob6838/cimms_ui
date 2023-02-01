@@ -27,29 +27,47 @@ TYPE_MAPPINGS = {
     # '(Set<(.*?)>)': r'Set<\1>',
 }
 
-IMPORTS_PATH = "./ts/imports"
+# IMPORTS_PATH = "./ts/imports"
 TEMPLATE = """{imports}
 type {class_name} = {extension}{{
 {contents}
-}};"""
+}}"""
 
-if not os.path.exists(IMPORTS_PATH):
-    os.mkdir(IMPORTS_PATH)
+# if not os.path.exists(IMPORTS_PATH):
+#     os.mkdir(IMPORTS_PATH)
 
-
-files = [os.path.join(dp, f) for dp, dn, filenames in os.walk('./java/')
+INITIAL_PATH = "java/jpo-conflictmonitor/jpo-conflictmonitor/src/main/java/us/dot/its/jpo/conflictmonitor/monitor/models"
+files = [os.path.join(dp, f) for dp, dn, filenames in os.walk("./" + INITIAL_PATH)
          for f in filenames if os.path.splitext(f)[1] == '.java']
 
+DIRECTORIES_TO_IGNORE = ["test", "jpo-s3-deposit", "jpo-ode-consumer-example",
+                         "jpo-ode-svcs", "jpo-sdw-depositor", "jpo-security-scvs", "asn1_codec", "jpo-geojsonconverter"]
+
 for file_path in files:
+    imports = ""
 
     file_path = '.'.join(file_path.replace('\\', '/').split('.')[:-1])
     JAVA_PATH = '/'.join(file_path.split('/')[:-1])
-    TS_PATH = JAVA_PATH.replace('java', 'ts')
+    TS_PATH = JAVA_PATH.replace(INITIAL_PATH, 'jpo-conflictmonitor/')
     CLASS_NAME = file_path.split('/')[-1]
 
+    ignored = False
+    directories = file_path.split('/')
+    for ignored_dir in DIRECTORIES_TO_IGNORE:
+        if ignored_dir in directories:
+            ignored = True
+    if ignored:
+        continue
+
     file_contents = open(f"{JAVA_PATH}/{CLASS_NAME}.java", 'r').read()
-    extension = re.findall(matching_expr_extends, file_contents)
-    extension = f"{extension[0][1]} & " if extension else ""
+    extension_match = re.findall(matching_expr_extends, file_contents)
+    extension = ""
+    if extension_match and extension_match[0][1]:
+        if extension_match[0][1].strip() == "Notification":
+            imports = '/// <reference path="Notification.d.ts" />'
+            extension = f"MessageMonitor.{extension_match[0][1]} & " if extension_match else ""
+        else:
+            extension = f"{extension_match[0][1]} & " if extension_match else ""
     matches = re.findall(matching_expr, file_contents)
     print(matches)
     lines = []
@@ -60,8 +78,13 @@ for file_path in files:
             ts_type = re.sub(k, v, ts_type)
         lines.append(f"  {ts_name}: {ts_type}")
 
+    contents = '\n'.join(lines)
+    if CLASS_NAME == "Notification":
+        imports = "declare namespace MessageMonitor {"
+        contents += "\n}"
+
     ts_contents = TEMPLATE.format(
-        imports="", class_name=CLASS_NAME, extension=extension, contents='\n'.join(lines))
+        imports=imports, class_name=CLASS_NAME, extension=extension, contents=contents)
 
     if not os.path.exists(f"{TS_PATH}/"):
         os.makedirs(f"{TS_PATH}/")
