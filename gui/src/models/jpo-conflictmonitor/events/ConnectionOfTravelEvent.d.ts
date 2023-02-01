@@ -6,4 +6,4 @@ type ConnectionOfTravelEvent = Event & {
   ingressLaneId: number
   egressLaneId: number
   connectionId: number
-};
+}

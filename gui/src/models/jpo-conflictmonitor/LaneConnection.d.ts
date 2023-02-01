@@ -9,4 +9,4 @@ type LaneConnection = {
   geometryFactory: GeometryFactory
   signalGroup: number
   interpolationPoints: number
-};
+}

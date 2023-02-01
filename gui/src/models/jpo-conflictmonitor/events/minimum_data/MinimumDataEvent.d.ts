@@ -4,4 +4,4 @@ type MinimumDataEvent = {
   intersectionId: number
   timePeriod: ProcessingTimePeriod
   missingDataElements: String[]
-};
+}

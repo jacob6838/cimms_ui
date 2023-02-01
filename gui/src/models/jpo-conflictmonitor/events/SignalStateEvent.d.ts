@@ -12,4 +12,4 @@ type SignalStateEvent = Event & {
   heading: number
   speed: number
   signalGroup: number
-};
+}

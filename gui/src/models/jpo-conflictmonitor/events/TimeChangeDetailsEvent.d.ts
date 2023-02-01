@@ -9,4 +9,4 @@ type TimeChangeDetailsEvent = Event & {
   secondTimeMarkType: number
   firstConflictingTimemark: number
   secondConflictingTimemark: number
-};
+}

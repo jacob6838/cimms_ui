@@ -5,4 +5,4 @@ type LaneConnection = {
   connectionId: number
   signalGroup: number
   connectingLineString: number[][]
-};
+}

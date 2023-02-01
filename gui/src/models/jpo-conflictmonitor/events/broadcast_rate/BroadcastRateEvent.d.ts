@@ -5,4 +5,4 @@ type BroadcastRateEvent = {
   intersectionId: number
   timePeriod: ProcessingTimePeriod
   numberOfMessages: number
-};
+}

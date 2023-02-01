@@ -6,4 +6,4 @@ type LaneSegment = {
   centerLine: number[][]
   heading: number
   laneWidth: number
-};
+}

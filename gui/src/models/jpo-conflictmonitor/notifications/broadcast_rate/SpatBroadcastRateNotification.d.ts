@@ -1,4 +1,4 @@
 
 type SpatBroadcastRateNotification = BroadcastRateNotification<SpatBroadcastRateEvent>  & {
 
-};
+}

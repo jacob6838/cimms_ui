@@ -1,4 +1,4 @@
 
 type BsmIntersectionKey = {
   rsuId: str
-};
+}

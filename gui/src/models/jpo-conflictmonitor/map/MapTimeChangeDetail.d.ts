@@ -5,4 +5,4 @@ type MapTimeChangeDetail = {
   intersectionID: number
   timestamp: number
   states: MapTimeChangeDetailState[]
-};
+}

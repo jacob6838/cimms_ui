@@ -5,4 +5,4 @@ type SpatTimeChangeDetail = {
   intersectionID: number
   timestamp: number
   states: SpatTimeChangeDetailState[]
-};
+}

@@ -8,4 +8,4 @@ type VehiclePath = {
   egressLane: Lane
   ingressBsm: OdeBsmData
   egressBsm: OdeBsmData
-};
+}

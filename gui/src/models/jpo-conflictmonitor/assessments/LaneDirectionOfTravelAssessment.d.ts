@@ -4,4 +4,4 @@ type LaneDirectionOfTravelAssessment = Assessment & {
   roadRegulatorID: number
   intersectionID: number
   laneDirectionOfTravelAssessmentGroup: LaneDirectionOfTravelAssessmentGroup[]
-};
+}

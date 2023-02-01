@@ -7,7 +7,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { createEmotionCache } from "../utils/create-emotion-cache";
 import { registerChartJs } from "../utils/register-chart-js";
 import { theme } from "../theme";
-import React from "react";
+import React, { useState } from "react";
 import { SessionProvider } from "next-auth/react";
 import type { Session } from "next-auth";
 
@@ -18,7 +18,6 @@ registerChartJs();
 const clientSideEmotionCache = createEmotionCache();
 
 const App = (props) => {
-  const [selectedNotification, setSelectedNotification] = useState(10);
   const {
     Component,
     emotionCache = clientSideEmotionCache,

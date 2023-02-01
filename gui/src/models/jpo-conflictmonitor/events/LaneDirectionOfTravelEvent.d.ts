@@ -13,4 +13,4 @@ type LaneDirectionOfTravelEvent = Event & {
   medianVehicleHeading: number
   medianDistanceFromCenterline: number
   aggregateBSMCount: number
-};
+}

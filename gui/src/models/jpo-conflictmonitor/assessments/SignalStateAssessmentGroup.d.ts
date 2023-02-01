@@ -4,4 +4,4 @@ type SignalStateAssessmentGroup = {
   redEvents: number
   yellowEvents: number
   greenEvents: number
-};
+}

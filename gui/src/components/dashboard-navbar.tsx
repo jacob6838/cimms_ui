@@ -28,13 +28,17 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }: { theme: Theme }) => ({
   boxShadow: theme.shadows[3],
 }));
 
-export const DashboardNavbar = (props) => {
-  const { onSidebarOpen, ...other } = props;
+interface Props {
+  onSidebarOpen: () => void;
+  intersections: IntersectionSummary[];
+  intersectionId: number;
+  setIntersectionId: (val: number) => void;
+}
+
+export const DashboardNavbar = (props: Props) => {
+  const { onSidebarOpen, intersections, intersectionId, setIntersectionId, ...other } = props;
   const settingsRef = useRef(null);
   const [openAccountPopover, setOpenAccountPopover] = useState(false);
-  const [intersectionId, setIntersectionId] = useState(12109);
-
-  const intersections: number[] = [12109, 12110, 12111, 12112, 12113];
 
   return (
     <>
@@ -76,15 +80,15 @@ export const DashboardNavbar = (props) => {
                 id="demo-simple-select"
                 value={intersectionId}
                 label="Age"
-                onChange={(e) => setIntersectionId(e.target.value)}
+                onChange={(e) => setIntersectionId(e.target.value as number)}
               >
-                {intersections.map((id) => {
-                  return <MenuItem value={id}>{id}</MenuItem>;
+                {intersections.map((intersection) => {
+                  return <MenuItem value={intersection.id}>{intersection.id}</MenuItem>;
                 })}
               </Select>
             </FormControl>
           </Tooltip>
-          <IconButton sx={{ ml: 0.5 }} onClick={}>
+          <IconButton sx={{ ml: 0.5 }} onClick={() => {}}>
             <MapRoundedIcon fontSize="large" />
           </IconButton>
           <Box sx={{ flexGrow: 1 }} />
@@ -124,6 +128,4 @@ export const DashboardNavbar = (props) => {
   );
 };
 
-DashboardNavbar.propTypes = {
-  onSidebarOpen: PropTypes.func,
-};
+DashboardNavbar.propTypes = {};

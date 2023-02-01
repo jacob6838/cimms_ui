@@ -6,4 +6,4 @@ type Lane = {
   geometryFactory: GeometryFactory
   laneWidthCm: number
   region: number
-};
+}

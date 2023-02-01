@@ -11,4 +11,4 @@ type SignalStateStopEvent = Event & {
   longitude: number
   heading: number
   speed: number
-};
+}

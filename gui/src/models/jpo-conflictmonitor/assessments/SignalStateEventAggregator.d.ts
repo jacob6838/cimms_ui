@@ -4,4 +4,4 @@ type SignalStateEventAggregator = {
   aggregatorCreationTime: number
   tolerance: number
   messageDurationDays: number
-};
+}

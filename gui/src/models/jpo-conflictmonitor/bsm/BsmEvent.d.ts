@@ -4,4 +4,4 @@ type BsmEvent = {
   endingBsm: OdeBsmData
   startingBsmTimestamp: number
   endingBsmTimestamp: number
-};
+}

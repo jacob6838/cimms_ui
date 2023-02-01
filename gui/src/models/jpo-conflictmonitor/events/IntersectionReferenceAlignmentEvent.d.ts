@@ -6,4 +6,4 @@ type IntersectionReferenceAlignmentEvent = Event & {
   mapRoadRegulatorIds: Set<Integer>
   spatIntersectionIds: Set<Integer>
   mapIntersectionIds: Set<Integer>
-};
+}
