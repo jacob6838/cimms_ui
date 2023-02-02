@@ -1,6 +1,5 @@
 package us.dot.its.jpo.ode.mockdata;
 
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,8 +8,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import us.dot.its.jpo.geojsonconverter.pojos.geojson.map.MapFeatureCollection;
-import us.dot.its.jpo.geojsonconverter.pojos.geojson.map.MapSharedProperties;
 import us.dot.its.jpo.geojsonconverter.pojos.geojson.map.ProcessedMap;
 
 public class MockMapGenerator {

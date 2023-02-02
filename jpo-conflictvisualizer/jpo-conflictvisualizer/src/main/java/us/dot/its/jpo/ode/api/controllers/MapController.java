@@ -40,7 +40,7 @@ public class MapController {
 
         }
 
-        logger.debug(String.format("Returning %i results for MAP JSON Request.", list.size()));
+        logger.debug(String.format("Returning %d results for MAP JSON Request.", list.size()));
 
 		return list;
 	}

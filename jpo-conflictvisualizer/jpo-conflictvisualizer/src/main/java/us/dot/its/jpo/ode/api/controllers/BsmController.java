@@ -24,6 +24,7 @@ public class BsmController {
         return ZonedDateTime.now().toInstant().toEpochMilli() + "";
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/bsm/json", method = RequestMethod.GET, produces = "application/json")
 	public List<OdeBsmData> findBSMs(
             @RequestParam(name="Intersection ID", required = false) Integer intersectionID,
@@ -40,7 +41,7 @@ public class BsmController {
 
         }
 
-        logger.debug(String.format("Returning %i results for BSM JSON Request.", list.size()));
+        logger.debug(String.format("Returning %d results for BSM JSON Request.", list.size()));
 		return list;
 	}
 }

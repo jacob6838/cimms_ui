@@ -53,7 +53,7 @@ public class EventController {
 
         }
 
-        logger.debug(String.format("Returning %i results for Intersection Reference Alignment Event Request.", list.size()));
+        logger.debug(String.format("Returning %d results for Intersection Reference Alignment Event Request.", list.size()));
 		return list;
 	}
 
@@ -73,7 +73,7 @@ public class EventController {
 
         }
 
-        logger.debug(String.format("Returning %i results for Connection of Travel Event Request.", list.size()));
+        logger.debug(String.format("Returning %d results for Connection of Travel Event Request.", list.size()));
 
 		return list;
 	}
@@ -98,7 +98,7 @@ public class EventController {
             System.out.println("Lane Direction Of Travel Events List: " + list);
         }
 
-        logger.debug(String.format("Returning %i results for Lane Direction of Travel Event Request.", list.size()));
+        logger.debug(String.format("Returning %d results for Lane Direction of Travel Event Request.", list.size()));
 
 		return list;
 	}
@@ -119,7 +119,7 @@ public class EventController {
 
         }
 
-        logger.debug(String.format("Returning %i results for Signal group Alignment Event Request.", list.size()));
+        logger.debug(String.format("Returning %d results for Signal group Alignment Event Request.", list.size()));
 
 		return list;
 	}
@@ -140,7 +140,7 @@ public class EventController {
 
         }
 
-        logger.debug(String.format("Returning %i results for Signal state Conflict Event Request", list.size()));
+        logger.debug(String.format("Returning %d results for Signal state Conflict Event Request", list.size()));
 
 		return list;
 	}
@@ -161,7 +161,7 @@ public class EventController {
 
         }
 
-        logger.debug(String.format("Returning %i results for Signal State Event Request", list.size()));
+        logger.debug(String.format("Returning %d results for Signal State Event Request", list.size()));
 
 		return list;
 	}
@@ -182,7 +182,7 @@ public class EventController {
 
         }
 
-        logger.debug(String.format("Returning %i results for Signal State Stop Event Request.", list.size()));
+        logger.debug(String.format("Returning %d results for Signal State Stop Event Request.", list.size()));
 
 		return list;
 	}
@@ -203,7 +203,7 @@ public class EventController {
 
         }
 
-        logger.debug(String.format("Returning %i results for Time Change Details Request.", list.size()));
+        logger.debug(String.format("Returning %d results for Time Change Details Request.", list.size()));
 
 		return list;
 	}

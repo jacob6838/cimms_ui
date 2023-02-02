@@ -7,18 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import us.dot.its.jpo.ode.model.OdeBsmData;
 
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
-import us.dot.its.jpo.geojsonconverter.pojos.geojson.map.MapFeatureCollection;
-import us.dot.its.jpo.geojsonconverter.pojos.geojson.map.MapSharedProperties;
-import us.dot.its.jpo.geojsonconverter.pojos.geojson.map.ProcessedMap;
 
 public class MockBsmGenerator {
 

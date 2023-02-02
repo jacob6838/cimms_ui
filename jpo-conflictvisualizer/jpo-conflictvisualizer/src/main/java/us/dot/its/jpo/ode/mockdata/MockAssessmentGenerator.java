@@ -1,9 +1,5 @@
 package us.dot.its.jpo.ode.mockdata;
 
-import java.time.ZonedDateTime;
-
-import kafka.controller.MockEvent;
-import us.dot.its.jpo.conflictmonitor.monitor.models.assessments.Assessment;
 import us.dot.its.jpo.conflictmonitor.monitor.models.assessments.ConnectionOfTravelAggregator;
 import us.dot.its.jpo.conflictmonitor.monitor.models.assessments.ConnectionOfTravelAssessment;
 import us.dot.its.jpo.conflictmonitor.monitor.models.assessments.LaneDirectionOfTravelAggregator;
@@ -11,8 +7,6 @@ import us.dot.its.jpo.conflictmonitor.monitor.models.assessments.LaneDirectionOf
 import us.dot.its.jpo.conflictmonitor.monitor.models.assessments.SignalStateAssessment;
 import us.dot.its.jpo.conflictmonitor.monitor.models.assessments.SignalStateEventAggregator;
 import us.dot.its.jpo.conflictmonitor.monitor.models.assessments.SignalStateEventAssessment;
-import us.dot.its.jpo.conflictmonitor.monitor.models.events.ConnectionOfTravelEvent;
-import us.dot.its.jpo.conflictmonitor.monitor.models.events.LaneDirectionOfTravelEvent;
 import us.dot.its.jpo.conflictmonitor.monitor.models.events.SignalStateEvent;
 
 public class MockAssessmentGenerator {
