@@ -29,10 +29,10 @@ public class SpatController {
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/spat/json", method = RequestMethod.GET, produces = "application/json")
 	public List<ProcessedSpat> findSpats(
-            @RequestParam(name="Intersection ID", required = false) Integer intersectionID,
-            @RequestParam(name="Start Time (UTC Millis)", required = false) Long startTime,
-            @RequestParam(name="End Time (UTC Millis)", required = false) Long endTime,
-            @RequestParam(name="Test Data", required = false, defaultValue = "false") boolean testData
+            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
             ) {
         
         List<ProcessedSpat> list = new ArrayList<>();

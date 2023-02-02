@@ -54,11 +54,11 @@ public class AssessmentController {
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/assessments/connection_of_travel", method = RequestMethod.GET, produces = "application/json")
 	public List<ConnectionOfTravelAssessment> findConnectionOfTravelAssessment(
-            @RequestParam(name="Road Regulator ID", required = false) Integer roadRegulatorID,
-            @RequestParam(name="Intersection ID", required = false) Integer intersectionID,
-            @RequestParam(name="Start Time (UTC Millis)", required = false) Long startTime,
-            @RequestParam(name="End Time (UTC Millis)", required = false) Long endTime,
-            @RequestParam(name="Test Data", required = false, defaultValue = "false") boolean testData
+            @RequestParam(name="road_regulator_id", required = false) Integer roadRegulatorID,
+            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
             ) {
         
         
@@ -95,11 +95,11 @@ public class AssessmentController {
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/assessments/lane_direction_of_travel", method = RequestMethod.GET, produces = "application/json")
 	public List<LaneDirectionOfTravelAssessment> findLaneDirectionOfTravelAssessment(
-            @RequestParam(name="Road Regulator ID", required = false) Integer roadRegulatorID,
-            @RequestParam(name="Intersection ID", required = false) Integer intersectionID,
-            @RequestParam(name="Start Time (UTC Millis)", required = false) Long startTime,
-            @RequestParam(name="End Time (UTC Millis)", required = false) Long endTime,
-            @RequestParam(name="Test Data", required = false, defaultValue = "false") boolean testData
+            @RequestParam(name="road_regulator_id", required = false) Integer roadRegulatorID,
+            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
             ) {
         
                 List<LaneDirectionOfTravelAssessment> list = new ArrayList<>();
@@ -138,11 +138,11 @@ public class AssessmentController {
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/assessments/signal_state_assessment", method = RequestMethod.GET, produces = "application/json")
 	public List<SignalStateAssessment> findSignalStateAssessment(
-            @RequestParam(name="Road Regulator ID", required = false) Integer roadRegulatorID,
-            @RequestParam(name="Intersection ID", required = false) Integer intersectionID,
-            @RequestParam(name="Start Time (UTC Millis)", required = false) Long startTime,
-            @RequestParam(name="End Time (UTC Millis)", required = false) Long endTime,
-            @RequestParam(name="Test Data", required = false, defaultValue = "false") boolean testData
+            @RequestParam(name="road_regulator_id", required = false) Integer roadRegulatorID,
+            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
             ) {
         
         List<SignalStateAssessment> list = new ArrayList<>();
@@ -179,11 +179,11 @@ public class AssessmentController {
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/assessments/signal_state_event_assessment", method = RequestMethod.GET, produces = "application/json")
 	public List<SignalStateEventAssessment> findSignalStateEventAssessment(
-            @RequestParam(name="Road Regulator ID", required = false) Integer roadRegulatorID,
-            @RequestParam(name="Intersection ID", required = false) Integer intersectionID,
-            @RequestParam(name="Start Time (UTC Millis)", required = false) Long startTime,
-            @RequestParam(name="End Time (UTC Millis)", required = false) Long endTime,
-            @RequestParam(name="Test Data", required = false, defaultValue = "false") boolean testData
+            @RequestParam(name="road_regulator_id", required = false) Integer roadRegulatorID,
+            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
             ) {
         
         List<SignalStateEventAssessment> list = new ArrayList<>();
