@@ -1,5 +1,5 @@
 
 type ConnectionOfTravelAssessment = {
-  timestamp: number
-  connectionOfTravelAssessmentGroups: ConnectionOfTravelAssessmentGroup[]
+  timestamp?: number
+  connectionOfTravelAssessmentGroups?: ConnectionOfTravelAssessmentGroup[]
 };

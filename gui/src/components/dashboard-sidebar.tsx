@@ -15,7 +15,7 @@ import { Users as UsersIcon } from "../icons/users";
 import { XCircle as XCircleIcon } from "../icons/x-circle";
 import { Logo } from "./logo";
 import { NavItem } from "./nav-item";
-import React from 'react';
+import React from "react";
 
 const items = [
   {
@@ -24,40 +24,40 @@ const items = [
     title: "Dashboard",
   },
   {
-    href: "/customers",
+    href: "/map",
+    icon: <ChartBarIcon fontSize="small" />,
+    title: "Map",
+  },
+  {
+    href: "/users",
     icon: <UsersIcon fontSize="small" />,
-    title: "Customers",
+    title: "Users",
   },
   {
-    href: "/products",
-    icon: <ShoppingBagIcon fontSize="small" />,
-    title: "Products",
-  },
-  {
-    href: "/account",
-    icon: <UserIcon fontSize="small" />,
-    title: "Account",
+    href: "/configuration",
+    icon: <CogIcon fontSize="small" />,
+    title: "Configuration",
   },
   {
     href: "/settings",
     icon: <CogIcon fontSize="small" />,
     title: "Settings",
   },
-  {
-    href: "/login",
-    icon: <LockIcon fontSize="small" />,
-    title: "Login",
-  },
-  {
-    href: "/register",
-    icon: <UserAddIcon fontSize="small" />,
-    title: "Register",
-  },
-  {
-    href: "/404",
-    icon: <XCircleIcon fontSize="small" />,
-    title: "Error",
-  },
+  //   {
+  //     href: "/login",
+  //     icon: <LockIcon fontSize="small" />,
+  //     title: "Login",
+  //   },
+  //   {
+  //     href: "/register",
+  //     icon: <UserAddIcon fontSize="small" />,
+  //     title: "Register",
+  //   },
+  //   {
+  //     href: "/404",
+  //     icon: <XCircleIcon fontSize="small" />,
+  //     title: "Error",
+  //   },
 ];
 
 export const DashboardSidebar = (props) => {
@@ -107,18 +107,13 @@ export const DashboardSidebar = (props) => {
         </div>
         <Divider
           sx={{
-            borderColor: '#2D3748',
-            my: 3
+            borderColor: "#2D3748",
+            my: 3,
           }}
         />
         <Box sx={{ flexGrow: 1 }}>
           {items.map((item) => (
-            <NavItem
-              key={item.title}
-              icon={item.icon}
-              href={item.href}
-              title={item.title}
-            />
+            <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
           ))}
         </Box>
       </Box>

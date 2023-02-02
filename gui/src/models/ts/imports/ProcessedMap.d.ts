@@ -6,10 +6,10 @@ type ProcessedMap = {
 
 type MapSharedProperties = {
     messageType: string,
-    odeReceivedAt: Date,
+    odeReceivedAt: string,
     originIp: string,
-    intersectionName: string,
-    region: number,
+    intersectionName?: string,
+    region?: number,
     intersectionId: number,
     msgIssueRevision: number,
     revision: number,
@@ -17,9 +17,9 @@ type MapSharedProperties = {
     cti4501Conformant: Boolean,
     validationMessages: ProcessedValidationMessage[],
     laneWidth: number,
-    speedLimits: J2735RegulatorySpeedLimit[],
-    mapSource: MapSource, //import us.dot.its.jpo.ode.model.OdeMapMetadata.MapSource;
-    timeStamp: Date,
+    speedLimits?: J2735RegulatorySpeedLimit[],
+    mapSource: MapSource | string, //import us.dot.its.jpo.ode.model.OdeMapMetadata.MapSource;
+    timeStamp: string,
 }
 
 type MapSource = 
@@ -28,44 +28,62 @@ type MapSource =
     "MMITSS" |
     "unknown";
 
-type MapFeatureCollection = MapFeature[];
+// enum MapSource {
+//     RSU,
+//     V2X,
+//     MMITSS,
+//     unknown,
+// };
+
+type MapFeatureCollection = {
+    type: 'FeatureCollection',
+    features: MapFeature[],
+}
 
 type MapFeature = {
     id: number,
-    geometry: number[][],
+    geometry: Geometry,
     properties: MapProperties
+}
+
+type Geometry = {
+    type: string,
+    coordinates: number[][]
 }
 
 type MapProperties = {
     nodes: MapNode[],
     laneId: number,
-    laneName: string,
-    sharedWith: J2735BitString,
+    laneName?: string,
+    sharedWith: J2735LaneSharing,
     egressApproach: number,
     ingressApproach: number,
     ingressPath: boolean,
     egressPath: boolean,
-    maneuvers: J2735BitString,
-    connectsTo: J2735Connection[],
+    maneuvers?: J2735AllowedManeuvers,
+    connectsTo?: J2735Connection[],
 }
 
 type MapNode = {
     delta: number[],
-    dWidth: number,
-    dElevation: number,
-    stopLine: boolean,
+    dWidth?: number,
+    dElevation?: number,
+    stopLine: boolean | null,
 }
 
-type ConnectingLanesFeatureCollection = ConnectingLanesFeature[];
+type ConnectingLanesFeatureCollection = {
+    type: string,
+    features: ConnectingLanesFeature[],
+}
 
 type ConnectingLanesFeature = {
-    id: number,
-    geometry: number[][],
+    id: number | string,
+    geometry: Geometry,
     properties: ConnectingLanesProperties
 }
 
 type ConnectingLanesProperties = {
-    signalGroupId: number,
+    signalGroupId: number | null,
     ingressLaneId: number,
     egressLaneId: number,
 }

@@ -1,5 +1,5 @@
 
 type SignalStateAssessment = {
-  timestamp: number
-  signalStateAssessmentGroup: SignalStateAssessmentGroup[]
+  timestamp?: number
+  signalStateAssessmentGroup?: SignalStateAssessmentGroup[]
 };

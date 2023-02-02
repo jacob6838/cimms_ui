@@ -56,7 +56,7 @@ for file_path in files:
         ts_name = var[1]
         for k, v in TYPE_MAPPINGS.items():
             ts_type = re.sub(k, v, ts_type)
-        lines.append(f"  {ts_name}: {ts_type}")
+        lines.append(f"  {ts_name}?: {ts_type}")
 
     ts_contents = TEMPLATE.format(
         imports="", class_name=CLASS_NAME, contents='\n'.join(lines))
