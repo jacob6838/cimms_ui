@@ -1,10 +1,8 @@
-import { authApiHelper } from './api-helper';
-import ConfigParams from './fake_data/configParams.json';
-import toast from 'react-hot-toast';
-
+import { authApiHelper } from "./api-helper";
+import ConfigParams from "./fake_data/configParams.json";
+import toast from "react-hot-toast";
 
 class ConfigParamsApi {
-
   async getParameters(token: string): Promise<ConfigurationParameter[]> {
     return ConfigParams;
     try {
@@ -20,7 +18,7 @@ class ConfigParamsApi {
   }
 
   async getParameter(token: string, name: string): Promise<ConfigurationParameter | null> {
-    return ConfigParams.find(c => c.name === name)!;
+    return ConfigParams.find((c) => c.name === name)!;
     try {
       var response = await authApiHelper.invokeApi({
         path: `/config/${name}`,
@@ -34,7 +32,11 @@ class ConfigParamsApi {
     }
   }
 
-  async updateParameter(token: string, name: string, value: number | string): Promise<ConfigurationParameter | null> {
+  async updateParameter(
+    token: string,
+    name: string,
+    value: number | string
+  ): Promise<ConfigurationParameter | null> {
     toast.success(`Successfully Update Configuration Parameter ${name}`);
     return null;
     try {
@@ -42,8 +44,8 @@ class ConfigParamsApi {
         path: "/config/" + name,
         token: token,
         method: "PUT",
-        headers: { 'Content-Type': 'application/json' },
-        body: { "value": value },
+        headers: { "Content-Type": "application/json" },
+        body: { value: value },
         toastOnSuccess: true,
         successMessage: `Successfully Update Configuration Parameter ${name}`,
         failureMessage: `Failed to Update Configuration Parameter ${name}`,

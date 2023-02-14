@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import PropTypes from 'prop-types';
-import { format } from 'date-fns';
+import { useState } from "react";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import PropTypes from "prop-types";
+import { format } from "date-fns";
 import {
   Avatar,
   Box,
@@ -13,10 +13,10 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography
-} from '@mui/material';
-import { getInitials } from '../../utils/get-initials';
-import React from 'react';
+  Typography,
+} from "@mui/material";
+import { getInitials } from "../../utils/get-initials";
+import React from "react";
 import { v4 as uuid } from "uuid";
 
 export const CustomerListResults = ({ customers, ...rest }) => {
@@ -76,27 +76,17 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                     checked={selectedCustomerIds.length === customers.length}
                     color="primary"
                     indeterminate={
-                      selectedCustomerIds.length > 0
-                      && selectedCustomerIds.length < customers.length
+                      selectedCustomerIds.length > 0 &&
+                      selectedCustomerIds.length < customers.length
                     }
                     onChange={handleSelectAll}
                   />
                 </TableCell>
-                <TableCell>
-                  Name
-                </TableCell>
-                <TableCell>
-                  Email
-                </TableCell>
-                <TableCell>
-                  Location
-                </TableCell>
-                <TableCell>
-                  Phone
-                </TableCell>
-                <TableCell>
-                  Registration date
-                </TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Location</TableCell>
+                <TableCell>Phone</TableCell>
+                <TableCell>Registration date</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -116,36 +106,24 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                   <TableCell>
                     <Box
                       sx={{
-                        alignItems: 'center',
-                        display: 'flex'
+                        alignItems: "center",
+                        display: "flex",
                       }}
                     >
-                      <Avatar
-                        src={customer.avatarUrl}
-                        sx={{ mr: 2 }}
-                      >
+                      <Avatar src={customer.avatarUrl} sx={{ mr: 2 }}>
                         {getInitials(customer.name)}
                       </Avatar>
-                      <Typography
-                        color="textPrimary"
-                        variant="body1"
-                      >
+                      <Typography color="textPrimary" variant="body1">
                         {customer.name}
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell>
-                    {customer.email}
-                  </TableCell>
+                  <TableCell>{customer.email}</TableCell>
                   <TableCell>
                     {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
                   </TableCell>
-                  <TableCell>
-                    {customer.phone}
-                  </TableCell>
-                  <TableCell>
-                    {format(customer.createdAt, 'dd/MM/yyyy')}
-                  </TableCell>
+                  <TableCell>{customer.phone}</TableCell>
+                  <TableCell>{format(customer.createdAt, "dd/MM/yyyy")}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -166,5 +144,5 @@ export const CustomerListResults = ({ customers, ...rest }) => {
 };
 
 CustomerListResults.propTypes = {
-  customers: PropTypes.array.isRequired
+  customers: PropTypes.array.isRequired,
 };

@@ -1,4 +1,4 @@
 type IntersectionSummary = {
-    id: number,
-    location: number[],
-}
+  id: number;
+  location: number[];
+};

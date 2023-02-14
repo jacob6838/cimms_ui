@@ -29,13 +29,13 @@ We also have a pro version of this product which bundles even more pages and com
 to save more time and design efforts :)
 
 | Free Version (this one)          | [Material Kit Pro - React](https://material-ui.com/store/items/devias-kit-pro/) |
-|----------------------------------| :----------------------------------------------------------- |
-| **9** Demo Pages                 | **40+** demo pages
-| ✔ Authentication with **Zalter** | ✔ Authentication with **Amplify**, **Auth0**, **JWT** and **Firebase**
-| -                                | ✔ Dark & light mode
-| -                                | ✔ TypeScript version - for Standard Plus and Extended license
-| -                                | ✔ Design files (sketch & figma) - for Standard Plus and Extended license
-| -                                | ✔ Complete users flows
+| -------------------------------- | :------------------------------------------------------------------------------ |
+| **9** Demo Pages                 | **40+** demo pages                                                              |
+| ✔ Authentication with **Zalter** | ✔ Authentication with **Amplify**, **Auth0**, **JWT** and **Firebase**          |
+| -                                | ✔ Dark & light mode                                                             |
+| -                                | ✔ TypeScript version - for Standard Plus and Extended license                   |
+| -                                | ✔ Design files (sketch & figma) - for Standard Plus and Extended license        |
+| -                                | ✔ Complete users flows                                                          |
 
 ## Quick start
 
@@ -56,8 +56,8 @@ to save more time and design efforts :)
 1. Sign in on **Zalter Dashboard** (https://dashboard.zalter.com) and create your **Zalter project**.
 
 2. Open your project settings and activate **Email Magic Link** authentication.
-This authentication method requires `redirect URIs` setup, so while in development you need to add `http://localhost:3000/sign-in/confirm`.
-For production replace `localhost:3000` with your own domain.
+   This authentication method requires `redirect URIs` setup, so while in development you need to add `http://localhost:3000/sign-in/confirm`.
+   For production replace `localhost:3000` with your own domain.
 
 3. Copy `.env.example` file and rename it to `.env`
 

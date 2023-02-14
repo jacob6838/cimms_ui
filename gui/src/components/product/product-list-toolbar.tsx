@@ -6,47 +6,35 @@ import {
   TextField,
   InputAdornment,
   SvgIcon,
-  Typography
-} from '@mui/material';
-import { Download as DownloadIcon } from '../../icons/download';
-import { Search as SearchIcon } from '../../icons/search';
-import { Upload as UploadIcon } from '../../icons/upload';
-import React from 'react';
+  Typography,
+} from "@mui/material";
+import { Download as DownloadIcon } from "../../icons/download";
+import { Search as SearchIcon } from "../../icons/search";
+import { Upload as UploadIcon } from "../../icons/upload";
+import React from "react";
 
 export const ProductListToolbar = (props) => (
   <Box {...props}>
     <Box
       sx={{
-        alignItems: 'center',
-        display: 'flex',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        m: -1
+        alignItems: "center",
+        display: "flex",
+        justifyContent: "space-between",
+        flexWrap: "wrap",
+        m: -1,
       }}
     >
-      <Typography
-        sx={{ m: 1 }}
-        variant="h4"
-      >
+      <Typography sx={{ m: 1 }} variant="h4">
         Products
       </Typography>
       <Box sx={{ m: 1 }}>
-        <Button
-          startIcon={(<UploadIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
+        <Button startIcon={<UploadIcon fontSize="small" />} sx={{ mr: 1 }}>
           Import
         </Button>
-        <Button
-          startIcon={(<DownloadIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
+        <Button startIcon={<DownloadIcon fontSize="small" />} sx={{ mr: 1 }}>
           Export
         </Button>
-        <Button
-          color="primary"
-          variant="contained"
-        >
+        <Button color="primary" variant="contained">
           Add products
         </Button>
       </Box>
@@ -60,14 +48,11 @@ export const ProductListToolbar = (props) => (
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SvgIcon
-                      fontSize="small"
-                      color="action"
-                    >
+                    <SvgIcon fontSize="small" color="action">
                       <SearchIcon />
                     </SvgIcon>
                   </InputAdornment>
-                )
+                ),
               }}
               placeholder="Search product"
               variant="outlined"
