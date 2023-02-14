@@ -8,7 +8,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -66,7 +65,7 @@ public class NotificationController {
         return ZonedDateTime.now().toInstant().toEpochMilli() + "";
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/notifications/connection_of_travel", method = RequestMethod.GET, produces = "application/json")
 	public List<ConnectionOfTravelNotification> findConnectionOfTravelNotification(
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
@@ -97,7 +96,7 @@ public class NotificationController {
 		return list;
 	}
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/notifications/intersection_reference_alignment", method = RequestMethod.GET, produces = "application/json")
 	public List<IntersectionReferenceAlignmentNotification> findIntersectionReferenceAlignmentNotification(
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
@@ -128,7 +127,7 @@ public class NotificationController {
 		return list;
 	}
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/notifications/lane_direction_of_travel", method = RequestMethod.GET, produces = "application/json")
 	public List<LaneDirectionOfTravelNotification> findLaneDirectionOfTravelNotification(
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
@@ -159,7 +158,7 @@ public class NotificationController {
 		return list;
 	}
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/notifications/map_broadcast_rate_notification", method = RequestMethod.GET, produces = "application/json")
 	public List<MapBroadcastRateNotification> findMapBroadcastRateNotification(
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
@@ -190,7 +189,7 @@ public class NotificationController {
 		return list;
 	}
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/notifications/signal_group_alignment_notification", method = RequestMethod.GET, produces = "application/json")
 	public List<SignalGroupAlignmentNotification> findSignalGroupAlignmentNotification(
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
@@ -221,7 +220,7 @@ public class NotificationController {
 		return list;
 	}
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/notifications/signal_state_conflict_notification", method = RequestMethod.GET, produces = "application/json")
 	public List<SignalStateConflictNotification> findSignalStateConflictNotification(
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
@@ -252,7 +251,7 @@ public class NotificationController {
 		return list;
 	}
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/notifications/spat_broadcast_rate_notification", method = RequestMethod.GET, produces = "application/json")
 	public List<SpatBroadcastRateNotification> findSpatBroadcastRateNotification(
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,

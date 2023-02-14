@@ -7,7 +7,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,7 +50,7 @@ public class AssessmentController {
         return ZonedDateTime.now().toInstant().toEpochMilli() + "";
     }
     
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/assessments/connection_of_travel", method = RequestMethod.GET, produces = "application/json")
 	public List<ConnectionOfTravelAssessment> findConnectionOfTravelAssessment(
             @RequestParam(name="road_regulator_id", required = false) Integer roadRegulatorID,
@@ -92,7 +91,7 @@ public class AssessmentController {
 		return list;
 	}
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/assessments/lane_direction_of_travel", method = RequestMethod.GET, produces = "application/json")
 	public List<LaneDirectionOfTravelAssessment> findLaneDirectionOfTravelAssessment(
             @RequestParam(name="road_regulator_id", required = false) Integer roadRegulatorID,
@@ -135,7 +134,7 @@ public class AssessmentController {
 		
 	}
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/assessments/signal_state_assessment", method = RequestMethod.GET, produces = "application/json")
 	public List<SignalStateAssessment> findSignalStateAssessment(
             @RequestParam(name="road_regulator_id", required = false) Integer roadRegulatorID,
@@ -176,7 +175,7 @@ public class AssessmentController {
 		return list;
 	}
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/assessments/signal_state_event_assessment", method = RequestMethod.GET, produces = "application/json")
 	public List<SignalStateEventAssessment> findSignalStateEventAssessment(
             @RequestParam(name="road_regulator_id", required = false) Integer roadRegulatorID,

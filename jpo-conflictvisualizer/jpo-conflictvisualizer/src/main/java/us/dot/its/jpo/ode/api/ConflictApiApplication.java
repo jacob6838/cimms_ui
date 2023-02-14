@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Bean;
 @EnableMongoRepositories
 public class ConflictApiApplication extends SpringBootServletInitializer {
 
+	
+
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
 		return builder.sources(ConflictApiApplication.class);
@@ -21,14 +23,17 @@ public class ConflictApiApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		SpringApplication.run(ConflictApiApplication.class, args);
 		System.out.println("Started Conflict Monitor API");
+		System.out.println("Conflict Monitor API docs page found here: http://localhost:8081/swagger-ui/index.html");
 	}
 
 	@Bean
+
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/greeting-javaconfig").allowedOrigins("http://localhost:9000");
+				Properties props = new Properties();
+                registry.addMapping("/**").allowedOrigins(props.getCors());
             }
         };
     }

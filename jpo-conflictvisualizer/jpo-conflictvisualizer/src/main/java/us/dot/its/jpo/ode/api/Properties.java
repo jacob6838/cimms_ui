@@ -6,14 +6,12 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Configuration;
 
 
-// @ConfigurationProperties
 @Configuration
-// @PropertySource("classpath:application.properties")
 @ConfigurationProperties()
 public class Properties {
 
-    private int maximumResponseSize;
-
+    private static int maximumResponseSize;
+    private static String cors;
 
     public int getMaximumResponseSize() {
         return maximumResponseSize;
@@ -22,5 +20,14 @@ public class Properties {
     @Value("${maximumResponseSize}")
     public void setMaximumResponseSize(int maximumResponseSize) {
         this.maximumResponseSize = maximumResponseSize;
+    }
+
+    public String getCors() {
+        return cors;
+    }
+
+    @Value("${cors}")
+    public void setCors(String cors) {
+        this.cors = cors;
     }
 }

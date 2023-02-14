@@ -6,7 +6,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,7 +37,7 @@ public class EventController {
         return ZonedDateTime.now().toInstant().toEpochMilli() + "";
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/events/intersection_reference_alignment", method = RequestMethod.GET, produces = "application/json")
 	public List<IntersectionReferenceAlignmentEvent> findIntersectionReferenceAlignmentEvents(
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,
@@ -59,7 +58,7 @@ public class EventController {
 		return list;
 	}
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/events/connection_of_travel", method = RequestMethod.GET, produces = "application/json")
 	public List<ConnectionOfTravelEvent> findConnectionOfTravelEvents(
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,
@@ -81,7 +80,7 @@ public class EventController {
 		return list;
 	}
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/events/lane_direction_of_travel", method = RequestMethod.GET, produces = "application/json")
 	public List<LaneDirectionOfTravelEvent> findLaneDirectionOfTravelEvent(
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,
@@ -107,7 +106,7 @@ public class EventController {
 		return list;
 	}
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/events/signal_group_alignment", method = RequestMethod.GET, produces = "application/json")
 	public List<SignalGroupAlignmentEvent> findSignalGroupAlignmentEvent(
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,
@@ -129,7 +128,7 @@ public class EventController {
 		return list;
 	}
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/events/signal_state_conflict", method = RequestMethod.GET, produces = "application/json")
 	public List<SignalStateConflictEvent> findSignalStateConflictEvent(
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,
@@ -151,7 +150,7 @@ public class EventController {
 		return list;
 	}
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/events/signal_state", method = RequestMethod.GET, produces = "application/json")
 	public List<SignalStateEvent> findSignalStateEvent(
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,
@@ -173,7 +172,7 @@ public class EventController {
 		return list;
 	}
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/events/signal_state_stop", method = RequestMethod.GET, produces = "application/json")
 	public List<SignalStateStopEvent> findSignalStateStopEvent(
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,
@@ -195,7 +194,7 @@ public class EventController {
 		return list;
 	}
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/events/time_change_details", method = RequestMethod.GET, produces = "application/json")
 	public List<TimeChangeDetailsEvent> findTimeChangeDetailsEvent(
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,

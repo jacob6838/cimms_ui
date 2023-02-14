@@ -1,7 +1,5 @@
 package us.dot.its.jpo.ode.api.controllers;
 
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,23 +7,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import us.dot.its.jpo.ode.mockdata.MockBsmGenerator;
-import us.dot.its.jpo.ode.model.OdeBsmData;
 import us.dot.its.jpo.conflictmonitor.monitor.models.config.DefaultConfig;
 import us.dot.its.jpo.conflictmonitor.monitor.models.config.IntersectionConfig;
 import us.dot.its.jpo.ode.api.accessors.config.DefaultConfigRepo;
 import us.dot.its.jpo.ode.api.accessors.config.IntersectionConfigRepo;
-import us.dot.its.jpo.ode.api.query.QueryBuilder;
-
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.MediaType;
 
@@ -46,7 +37,7 @@ public class ConfigController {
     
     
     
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/lane_direction_of_travel/minimum_speed_threshold", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<DefaultConfig<Double>> default_lane_direction_of_travel_minimum_speed_threshold() {
         List<DefaultConfig<Double>> list = defaultConfigRepo.getConfig("ldot-minimum-speed-threshold");
@@ -58,7 +49,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/lane_direction_of_travel/minimum_speed_threshold", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Double>> intersection_lane_direction_of_travel_minimum_speed_threshold(
             @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
@@ -74,7 +65,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/lane_direction_of_travel/minimum_speed_threshold", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_lane_direction_of_travel_minimum_speed_threshold(
             @RequestParam(name = "lane_direction_of_travel", required = true) double minimumSpeedThreshold) {
@@ -89,7 +80,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/lane_direction_of_travel/minimum_speed_threshold", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_lane_direction_of_travel_minimum_speed_threshold(
             @RequestParam int intersectionID, @RequestParam String roadRegulatorId, @RequestParam double minimumSpeedThreshold) {
@@ -107,7 +98,7 @@ public class ConfigController {
 
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/lane_direction_of_travel/minimum_number_of_points", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<DefaultConfig<Integer>> default_lane_direction_of_travel_minimum_number_of_points() {
         List<DefaultConfig<Integer>> list = defaultConfigRepo.getConfig("ldot-minimum-number-of-points");
@@ -119,7 +110,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/lane_direction_of_travel/minimum_number_of_points", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Integer>> intersection_lane_direction_of_travel_minimum_number_of_points(
             @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
@@ -135,7 +126,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/lane_direction_of_travel/minimum_number_of_points", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_lane_direction_of_travel_minimum_number_of_points(
             @RequestParam(name = "lane_direction_of_travel", required = true) int minimumNumberOfPoints) {
@@ -150,7 +141,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/lane_direction_of_travel/minimum_number_of_points", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_lane_direction_of_travel_minimum_number_of_points(
             @RequestParam int intersectionID, @RequestParam String roadRegulatorId, @RequestParam int minimumNumberOfPoints) {
@@ -168,7 +159,7 @@ public class ConfigController {
 
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/lane_direction_of_travel/look_back_period", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<DefaultConfig<Long>> default_lane_direction_of_travel_look_back_period() {
         List<DefaultConfig<Long>> list = defaultConfigRepo.getConfig("ldot-look-back-period");
@@ -180,7 +171,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/lane_direction_of_travel/look_back_period", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Long>> intersection_lane_direction_of_travel_look_back_period(
             @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
@@ -196,7 +187,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/lane_direction_of_travel/look_back_period", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_lane_direction_of_travel_look_back_period(
             @RequestParam(name = "lane_direction_of_travel", required = true) long lookBackPeriod) {
@@ -211,7 +202,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/lane_direction_of_travel/look_back_period", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_lane_direction_of_travel_look_back_period(
             @RequestParam int intersectionID, @RequestParam String roadRegulatorId, @RequestParam long lookBackPeriod) {
@@ -229,7 +220,7 @@ public class ConfigController {
 
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/lane_direction_of_travel/heading_tolerance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<DefaultConfig<Double>> default_lane_direction_of_travel_heading_tolerance() {
         List<DefaultConfig<Double>> list = defaultConfigRepo.getConfig("ldot-heading-tolerance");
@@ -241,7 +232,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/lane_direction_of_travel/heading_tolerance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Double>> intersection_lane_direction_of_travel_heading_tolerance(
             @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
@@ -257,7 +248,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/lane_direction_of_travel/heading_tolerance", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_lane_direction_of_travel_heading_tolerance(
             @RequestParam(name = "lane_direction_of_travel", required = true) double headingTolerance) {
@@ -272,7 +263,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/lane_direction_of_travel/heading_tolerance", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_lane_direction_of_travel_heading_tolerance(
             @RequestParam int intersectionID, @RequestParam String roadRegulatorId, @RequestParam double headingTolerance) {
@@ -290,7 +281,7 @@ public class ConfigController {
 
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/lane_direction_of_travel/minimum_number_of_events", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<DefaultConfig<Integer>> default_lane_direction_of_travel_minimum_number_of_events() {
         List<DefaultConfig<Integer>> list = defaultConfigRepo.getConfig("ldot-minimum-number-of-events");
@@ -302,7 +293,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/lane_direction_of_travel/minimum_number_of_events", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Integer>> intersection_lane_direction_of_travel_minimum_number_of_events(
             @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
@@ -318,7 +309,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/lane_direction_of_travel/minimum_number_of_events", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_lane_direction_of_travel_minimum_number_of_events(
             @RequestParam(name = "lane_direction_of_travel", required = true) int minimumNumberOfEvents) {
@@ -333,7 +324,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/lane_direction_of_travel/minimum_number_of_events", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_lane_direction_of_travel_minimum_number_of_events(
             @RequestParam int intersectionID, @RequestParam String roadRegulatorId, @RequestParam int minimumNumberOfEvents) {
@@ -351,7 +342,7 @@ public class ConfigController {
 
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/signal_state/maximum_distance_from_stopbar", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<DefaultConfig<Double>> default_signal_state_maximum_distance_from_stopbar() {
         List<DefaultConfig<Double>> list = defaultConfigRepo.getConfig("ss-maximum-distance-from-stopbar");
@@ -363,7 +354,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/signal_state/maximum_distance_from_stopbar", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Double>> intersection_signal_state_maximum_distance_from_stopbar(
             @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
@@ -379,7 +370,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/signal_state/maximum_distance_from_stopbar", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_signal_state_maximum_distance_from_stopbar(
             @RequestParam(name = "signal_state", required = true) double maximumDistanceFromStopbar) {
@@ -394,7 +385,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/signal_state/maximum_distance_from_stopbar", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_signal_state_maximum_distance_from_stopbar(
             @RequestParam int intersectionID, @RequestParam String roadRegulatorId, @RequestParam double maximumDistanceFromStopbar) {
@@ -412,7 +403,7 @@ public class ConfigController {
 
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/signal_state/heading_tolerance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<DefaultConfig<Double>> default_signal_state_heading_tolerance() {
         List<DefaultConfig<Double>> list = defaultConfigRepo.getConfig("ss-heading-tolerance");
@@ -424,7 +415,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/signal_state/heading_tolerance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Double>> intersection_signal_state_heading_tolerance(
             @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
@@ -440,7 +431,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/signal_state/heading_tolerance", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_signal_state_heading_tolerance(
             @RequestParam(name = "signal_state", required = true) double headingTolerance) {
@@ -455,7 +446,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/signal_state/heading_tolerance", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_signal_state_heading_tolerance(
             @RequestParam int intersectionID, @RequestParam String roadRegulatorId, @RequestParam double headingTolerance) {
@@ -473,7 +464,7 @@ public class ConfigController {
 
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/signal_state/look_back_period", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<DefaultConfig<Long>> default_signal_state_look_back_period() {
         List<DefaultConfig<Long>> list = defaultConfigRepo.getConfig("ss-look-back-period");
@@ -485,7 +476,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/signal_state/look_back_period", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Long>> intersection_signal_state_look_back_period(
             @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
@@ -501,7 +492,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/signal_state/look_back_period", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_signal_state_look_back_period(
             @RequestParam(name = "signal_state", required = true) long lookBackPeriod) {
@@ -516,7 +507,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/signal_state/look_back_period", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_signal_state_look_back_period(
             @RequestParam int intersectionID, @RequestParam String roadRegulatorId, @RequestParam long lookBackPeriod) {
@@ -534,7 +525,7 @@ public class ConfigController {
 
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/signal_state/minimum_red_light_percentage_threshold", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<DefaultConfig<Double>> default_signal_state_minimum_red_light_percentage_threshold() {
         List<DefaultConfig<Double>> list = defaultConfigRepo.getConfig("ss-minimum-red-light-percentage-threshold");
@@ -546,7 +537,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/signal_state/minimum_red_light_percentage_threshold", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Double>> intersection_signal_state_minimum_red_light_percentage_threshold(
             @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
@@ -562,7 +553,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/signal_state/minimum_red_light_percentage_threshold", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_signal_state_minimum_red_light_percentage_threshold(
             @RequestParam(name = "signal_state", required = true) double minimumRedLightPercentageThreshold) {
@@ -577,7 +568,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/signal_state/minimum_red_light_percentage_threshold", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_signal_state_minimum_red_light_percentage_threshold(
             @RequestParam int intersectionID, @RequestParam String roadRegulatorId, @RequestParam double minimumRedLightPercentageThreshold) {
@@ -595,7 +586,7 @@ public class ConfigController {
 
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/signal_state/minimum_number_of_events", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<DefaultConfig<Integer>> default_signal_state_minimum_number_of_events() {
         List<DefaultConfig<Integer>> list = defaultConfigRepo.getConfig("ss-minimum-number-of-events");
@@ -607,7 +598,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/signal_state/minimum_number_of_events", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Integer>> intersection_signal_state_minimum_number_of_events(
             @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
@@ -623,7 +614,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/signal_state/minimum_number_of_events", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_signal_state_minimum_number_of_events(
             @RequestParam(name = "signal_state", required = true) int minimumNumberOfEvents) {
@@ -638,7 +629,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/signal_state/minimum_number_of_events", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_signal_state_minimum_number_of_events(
             @RequestParam int intersectionID, @RequestParam String roadRegulatorId, @RequestParam int minimumNumberOfEvents) {
@@ -656,7 +647,7 @@ public class ConfigController {
 
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/signal_state/red_light_running_minimum_speed", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<DefaultConfig<Double>> default_signal_state_red_light_running_minimum_speed() {
         List<DefaultConfig<Double>> list = defaultConfigRepo.getConfig("ss-red-light-running-minimum-speed");
@@ -668,7 +659,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/signal_state/red_light_running_minimum_speed", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Double>> intersection_signal_state_red_light_running_minimum_speed(
             @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
@@ -684,7 +675,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/signal_state/red_light_running_minimum_speed", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_signal_state_red_light_running_minimum_speed(
             @RequestParam(name = "signal_state", required = true) double redLightRunningMinimumSpeed) {
@@ -699,7 +690,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/signal_state/red_light_running_minimum_speed", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_signal_state_red_light_running_minimum_speed(
             @RequestParam int intersectionID, @RequestParam String roadRegulatorId, @RequestParam double redLightRunningMinimumSpeed) {
@@ -717,7 +708,7 @@ public class ConfigController {
 
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/connection_of_travel/look_back_period", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<DefaultConfig<Long>> default_connection_of_travel_look_back_period() {
         List<DefaultConfig<Long>> list = defaultConfigRepo.getConfig("cot-look-back-period");
@@ -729,7 +720,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/connection_of_travel/look_back_period", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Long>> intersection_connection_of_travel_look_back_period(
             @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
@@ -745,7 +736,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/connection_of_travel/look_back_period", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_connection_of_travel_look_back_period(
             @RequestParam(name = "connection_of_travel", required = true) long lookBackPeriod) {
@@ -760,7 +751,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/connection_of_travel/look_back_period", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_connection_of_travel_look_back_period(
             @RequestParam int intersectionID, @RequestParam String roadRegulatorId, @RequestParam long lookBackPeriod) {
@@ -778,7 +769,7 @@ public class ConfigController {
 
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/connection_of_travel/minimum_number_of_events", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<DefaultConfig<Integer>> default_connection_of_travel_minimum_number_of_events() {
         List<DefaultConfig<Integer>> list = defaultConfigRepo.getConfig("cot-minimum-number-of-events");
@@ -790,7 +781,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/connection_of_travel/minimum_number_of_events", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Integer>> intersection_connection_of_travel_minimum_number_of_events(
             @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
@@ -806,7 +797,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/connection_of_travel/minimum_number_of_events", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_connection_of_travel_minimum_number_of_events(
             @RequestParam(name = "connection_of_travel", required = true) int minimumNumberOfEvents) {
@@ -821,7 +812,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/connection_of_travel/minimum_number_of_events", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_connection_of_travel_minimum_number_of_events(
             @RequestParam int intersectionID, @RequestParam String roadRegulatorId, @RequestParam int minimumNumberOfEvents) {
@@ -839,7 +830,7 @@ public class ConfigController {
 
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/general/v2x_message_processing_frequency", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<DefaultConfig<Integer>> default_general_v2x_message_processing_frequency() {
         List<DefaultConfig<Integer>> list = defaultConfigRepo.getConfig("g-v2x-message-processing-frequency");
@@ -851,7 +842,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/general/v2x_message_processing_frequency", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Integer>> intersection_general_v2x_message_processing_frequency(
             @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
@@ -867,7 +858,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/general/v2x_message_processing_frequency", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_general_v2x_message_processing_frequency(
             @RequestParam(name = "general", required = true) int v2xMessageProcessingFrequency) {
@@ -882,7 +873,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/general/v2x_message_processing_frequency", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_general_v2x_message_processing_frequency(
             @RequestParam int intersectionID, @RequestParam String roadRegulatorId, @RequestParam int v2xMessageProcessingFrequency) {
@@ -900,7 +891,7 @@ public class ConfigController {
 
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/general/message_storage_period", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<DefaultConfig<Long>> default_general_message_storage_period() {
         List<DefaultConfig<Long>> list = defaultConfigRepo.getConfig("g-message-storage-period");
@@ -912,7 +903,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/general/message_storage_period", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Long>> intersection_general_message_storage_period(
             @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
@@ -928,7 +919,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/general/message_storage_period", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_general_message_storage_period(
             @RequestParam(name = "general", required = true) long messageStoragePeriod) {
@@ -943,7 +934,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/general/message_storage_period", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_general_message_storage_period(
             @RequestParam int intersectionID, @RequestParam String roadRegulatorId, @RequestParam long messageStoragePeriod) {
@@ -961,7 +952,7 @@ public class ConfigController {
 
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/general/spat_minimum_10_second_reception", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<DefaultConfig<Integer>> default_general_spat_minimum_10_second_reception() {
         List<DefaultConfig<Integer>> list = defaultConfigRepo.getConfig("g-spat-minimum-10-second-reception");
@@ -973,7 +964,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/general/spat_minimum_10_second_reception", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Integer>> intersection_general_spat_minimum_10_second_reception(
             @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
@@ -989,7 +980,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/general/spat_minimum_10_second_reception", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_general_spat_minimum_10_second_reception(
             @RequestParam(name = "general", required = true) int spatMinimum10SecondReception) {
@@ -1004,7 +995,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/general/spat_minimum_10_second_reception", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_general_spat_minimum_10_second_reception(
             @RequestParam int intersectionID, @RequestParam String roadRegulatorId, @RequestParam int spatMinimum10SecondReception) {
@@ -1022,7 +1013,7 @@ public class ConfigController {
 
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/general/spat_maximum_10_second_reception", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<DefaultConfig<Integer>> default_general_spat_maximum_10_second_reception() {
         List<DefaultConfig<Integer>> list = defaultConfigRepo.getConfig("g-spat-maximum-10-second-reception");
@@ -1034,7 +1025,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/general/spat_maximum_10_second_reception", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Integer>> intersection_general_spat_maximum_10_second_reception(
             @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
@@ -1050,7 +1041,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/general/spat_maximum_10_second_reception", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_general_spat_maximum_10_second_reception(
             @RequestParam(name = "general", required = true) int spatMaximum10SecondReception) {
@@ -1065,7 +1056,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/general/spat_maximum_10_second_reception", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_general_spat_maximum_10_second_reception(
             @RequestParam int intersectionID, @RequestParam String roadRegulatorId, @RequestParam int spatMaximum10SecondReception) {
@@ -1083,7 +1074,7 @@ public class ConfigController {
 
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/general/map_minimum_10_second_reception", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<DefaultConfig<Integer>> default_general_map_minimum_10_second_reception() {
         List<DefaultConfig<Integer>> list = defaultConfigRepo.getConfig("g-map-minimum-10-second-reception");
@@ -1095,7 +1086,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/general/map_minimum_10_second_reception", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Integer>> intersection_general_map_minimum_10_second_reception(
             @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
@@ -1111,7 +1102,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/general/map_minimum_10_second_reception", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_general_map_minimum_10_second_reception(
             @RequestParam(name = "general", required = true) int mapMinimum10SecondReception) {
@@ -1126,7 +1117,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/general/map_minimum_10_second_reception", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_general_map_minimum_10_second_reception(
             @RequestParam int intersectionID, @RequestParam String roadRegulatorId, @RequestParam int mapMinimum10SecondReception) {
@@ -1144,7 +1135,7 @@ public class ConfigController {
 
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/general/map_maximum_10_second_reception", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<DefaultConfig<Integer>> default_general_map_maximum_10_second_reception() {
         List<DefaultConfig<Integer>> list = defaultConfigRepo.getConfig("g-map-maximum-10-second-reception");
@@ -1156,7 +1147,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/general/map_maximum_10_second_reception", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Integer>> intersection_general_map_maximum_10_second_reception(
             @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
@@ -1172,7 +1163,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/default/general/map_maximum_10_second_reception", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_general_map_maximum_10_second_reception(
             @RequestParam(name = "general", required = true) int mapMaximum10SecondReception) {
@@ -1187,7 +1178,7 @@ public class ConfigController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @RequestMapping(value = "/config/intersection/general/map_maximum_10_second_reception", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody ResponseEntity<String> default_general_map_maximum_10_second_reception(
             @RequestParam int intersectionID, @RequestParam String roadRegulatorId, @RequestParam int mapMaximum10SecondReception) {
@@ -1215,7 +1206,7 @@ public class ConfigController {
 
 
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    // 
     // @RequestMapping(value =
     // "/config/default/lane_direction_of_travel/minimum_speed_threshold", method =
     // RequestMethod.GET, produces = "application/json")
@@ -1234,7 +1225,7 @@ public class ConfigController {
     // }
     // }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    // 
     // @RequestMapping(value =
     // "/config/intersection/lane_direction_of_travel/minimum_speed_threshold",
     // method = RequestMethod.GET, produces = "application/json")
@@ -1255,7 +1246,7 @@ public class ConfigController {
     // }
     // }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    // 
     // @RequestMapping(value =
     // "/config/default/lane_direction_of_travel/minimum_speed_threshold", method =
     // RequestMethod.POST, produces = "application/json")
@@ -1276,7 +1267,7 @@ public class ConfigController {
     // }
     // }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    // 
     // @RequestMapping(value =
     // "/config/intersection/lane_direction_of_travel/minimum_speed_threshold",
     // method = RequestMethod.POST, produces = "application/json")
@@ -1297,7 +1288,7 @@ public class ConfigController {
     // }
     // }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    // 
     // @RequestMapping(value =
     // "/config/default/lane_direction_of_travel/minimum_number_of_points", method =
     // RequestMethod.GET, produces = "application/json")
@@ -1316,7 +1307,7 @@ public class ConfigController {
     // }
     // }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    // 
     // @RequestMapping(value =
     // "/config/intersection/lane_direction_of_travel/minimum_number_of_points",
     // method = RequestMethod.GET, produces = "application/json")
@@ -1337,7 +1328,7 @@ public class ConfigController {
     // }
     // }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    // 
     // @RequestMapping(value =
     // "/config/default/lane_direction_of_travel/minimum_number_of_points", method =
     // RequestMethod.POST, produces = "application/json")
@@ -1358,7 +1349,7 @@ public class ConfigController {
     // }
     // }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    // 
     // @RequestMapping(value =
     // "/config/intersection/lane_direction_of_travel/minimum_number_of_points",
     // method = RequestMethod.POST, produces = "application/json")
@@ -1379,7 +1370,7 @@ public class ConfigController {
     // }
     // }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    // 
     // @RequestMapping(value =
     // "/config/default/lane_direction_of_travel/look_back_period", method =
     // RequestMethod.GET, produces = "application/json")
@@ -1398,7 +1389,7 @@ public class ConfigController {
     // }
     // }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    // 
     // @RequestMapping(value =
     // "/config/intersection/lane_direction_of_travel/look_back_period", method =
     // RequestMethod.GET, produces = "application/json")
@@ -1419,7 +1410,7 @@ public class ConfigController {
     // }
     // }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    // 
     // @RequestMapping(value =
     // "/config/default/lane_direction_of_travel/look_back_period", method =
     // RequestMethod.POST, produces = "application/json")
@@ -1440,7 +1431,7 @@ public class ConfigController {
     // }
     // }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    // 
     // @RequestMapping(value =
     // "/config/intersection/lane_direction_of_travel/look_back_period", method =
     // RequestMethod.POST, produces = "application/json")
@@ -1461,7 +1452,7 @@ public class ConfigController {
     // }
     // }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    // 
     // @RequestMapping(value =
     // "/config/default/lane_direction_of_travel/heading_tolerance", method =
     // RequestMethod.GET, produces = "application/json")
@@ -1480,7 +1471,7 @@ public class ConfigController {
     // }
     // }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    // 
     // @RequestMapping(value =
     // "/config/intersection/lane_direction_of_travel/heading_tolerance", method =
     // RequestMethod.GET, produces = "application/json")
@@ -1501,7 +1492,7 @@ public class ConfigController {
     // }
     // }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    // 
     // @RequestMapping(value =
     // "/config/default/lane_direction_of_travel/heading_tolerance", method =
     // RequestMethod.POST, produces = "application/json")
@@ -1522,7 +1513,7 @@ public class ConfigController {
     // }
     // }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    // 
     // @RequestMapping(value =
     // "/config/intersection/lane_direction_of_travel/heading_tolerance", method =
     // RequestMethod.POST, produces = "application/json")
@@ -1543,7 +1534,7 @@ public class ConfigController {
     // }
     // }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    // 
     // @RequestMapping(value =
     // "/config/default/lane_direction_of_travel/minimum_number_of_events", method =
     // RequestMethod.GET, produces = "application/json")
@@ -1562,7 +1553,7 @@ public class ConfigController {
     // }
     // }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    // 
     // @RequestMapping(value =
     // "/config/intersection/lane_direction_of_travel/minimum_number_of_events",
     // method = RequestMethod.GET, produces = "application/json")
@@ -1583,7 +1574,7 @@ public class ConfigController {
     // }
     // }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    // 
     // @RequestMapping(value =
     // "/config/default/lane_direction_of_travel/minimum_number_of_events", method =
     // RequestMethod.POST, produces = "application/json")
@@ -1604,7 +1595,7 @@ public class ConfigController {
     // }
     // }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    // 
     // @RequestMapping(value =
     // "/config/intersection/lane_direction_of_travel/minimum_number_of_events",
     // method = RequestMethod.POST, produces = "application/json")
