@@ -22,54 +22,46 @@ import React from "react";
 import { v4 as uuid } from "uuid";
 import { PencilAlt as PencilAltIcon } from "../../icons/pencil-alt";
 import MapRoundedIcon from "@mui/icons-material/MapRounded";
+import { ConstructionOutlined } from "@mui/icons-material";
 
-export const CustomerListResults = ({ customers, ...rest }) => {
-  const [selectedCustomerIds, setSelectedCustomerIds] = useState<uuid[]>([]);
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
-
+export const CustomerListResults = ({
+  customers,
+  allTabNotifications,
+  notificationsCount,
+  selectedNotifications,
+  onSelectedItemsChanged,
+  onPageChange,
+  onRowsPerPageChange,
+  page,
+  rowsPerPage,
+}) => {
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds: uuid[] = [];
 
+    console.log(event.target.indeterminate);
+    console.log(event.target["indeterminate"]);
+    console.log(event.target["checked"]);
+
     if (event.target.checked) {
-      newSelectedCustomerIds = customers.map((customer) => customer.id);
+      newSelectedCustomerIds = allTabNotifications.map((customer) => customer.id);
     } else {
       newSelectedCustomerIds = [];
     }
 
-    setSelectedCustomerIds(newSelectedCustomerIds);
+    onSelectedItemsChanged(newSelectedCustomerIds);
+    console.log(newSelectedCustomerIds);
   };
 
-  const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedCustomerIds.indexOf(id);
-    let newSelectedCustomerIds: uuid[] = [];
-
-    if (selectedIndex === -1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds, id);
-    } else if (selectedIndex === 0) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(1));
-    } else if (selectedIndex === selectedCustomerIds.length - 1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(
-        selectedCustomerIds.slice(0, selectedIndex),
-        selectedCustomerIds.slice(selectedIndex + 1)
-      );
+  const handleSelectOne = (event, notificationId) => {
+    if (!selectedNotifications.includes(notificationId)) {
+      onSelectedItemsChanged((prevSelected) => [...prevSelected, notificationId]);
+    } else {
+      onSelectedItemsChanged((prevSelected) => prevSelected.filter((id) => id !== notificationId));
     }
-
-    setSelectedCustomerIds(newSelectedCustomerIds);
-  };
-
-  const handleLimitChange = (event) => {
-    setLimit(event.target.value);
-  };
-
-  const handlePageChange = (event, newPage) => {
-    setPage(newPage);
   };
 
   return (
-    <Card {...rest}>
+    <Card>
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
@@ -77,11 +69,11 @@ export const CustomerListResults = ({ customers, ...rest }) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedCustomerIds.length === customers.length}
+                    checked={selectedNotifications.length === notificationsCount}
                     color="primary"
                     indeterminate={
-                      selectedCustomerIds.length > 0 &&
-                      selectedCustomerIds.length < customers.length
+                      selectedNotifications.length > 0 &&
+                      selectedNotifications.length < notificationsCount
                     }
                     onChange={handleSelectAll}
                   />
@@ -93,53 +85,58 @@ export const CustomerListResults = ({ customers, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.slice(0, limit).map((customer) => (
-                <TableRow
-                  hover
-                  key={customer.message}
-                  selected={[...selectedCustomerIds].indexOf(customer.message) !== -1}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={[...selectedCustomerIds].indexOf(customer.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, customer.id)}
-                      value="true"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Box
-                      sx={{
-                        alignItems: "center",
-                        display: "flex",
-                      }}
-                    >
-                      <Typography color="textPrimary" variant="body1">
-                        {"SpatBroadcastRateNotification"}
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                  <TableCell>{format(customer.date, "dd/MM/yyyy")}</TableCell>
-                  <TableCell>{customer.message}</TableCell>
-                  <TableCell align="right">
-                    <NextLink href={"/notifications"} passHref>
-                      <IconButton component="a">
-                        <MapRoundedIcon fontSize="medium" />
-                      </IconButton>
-                    </NextLink>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {customers.map((customer) => {
+                const isNotificationSelected =
+                  [...selectedNotifications].indexOf(customer.id) !== -1;
+
+                return (
+                  <TableRow
+                    hover
+                    key={customer.id}
+                    selected={[...selectedNotifications].indexOf(customer.message) !== -1}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        checked={isNotificationSelected}
+                        onChange={(event) => handleSelectOne(event, customer.id)}
+                        value="true"
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Box
+                        sx={{
+                          alignItems: "center",
+                          display: "flex",
+                        }}
+                      >
+                        <Typography color="textPrimary" variant="body1">
+                          {customer.notificationType}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell>{format(customer.notificationGeneratedAt, "dd/MM/yyyy")}</TableCell>
+                    <TableCell>{customer.notificationText}</TableCell>
+                    <TableCell align="right">
+                      <NextLink href={`/map/notification/${customer.id}`} passHref>
+                        <IconButton component="a">
+                          <MapRoundedIcon fontSize="medium" />
+                        </IconButton>
+                      </NextLink>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </Box>
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={customers.length}
-        onPageChange={handlePageChange}
-        onRowsPerPageChange={handleLimitChange}
+        count={notificationsCount}
+        onPageChange={onPageChange}
+        onRowsPerPageChange={onRowsPerPageChange}
         page={page}
-        rowsPerPage={limit}
+        rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
       />
     </Card>
@@ -148,4 +145,5 @@ export const CustomerListResults = ({ customers, ...rest }) => {
 
 CustomerListResults.propTypes = {
   customers: PropTypes.array.isRequired,
+  onSelectedItemsChanged: PropTypes.func,
 };

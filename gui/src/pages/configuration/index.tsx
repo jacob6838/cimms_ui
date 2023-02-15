@@ -24,6 +24,11 @@ import { Search as SearchIcon } from "../../icons/search";
 
 const tabs = [
   {
+    label: "All",
+    value: "all",
+    description: "All Configuration Parameters",
+  },
+  {
     label: "General",
     value: "gen",
     description: "General Configuration Parameters",
@@ -59,6 +64,10 @@ const applyFilters = (parameters, filter) =>
       if (!queryMatched) {
         return false;
       }
+    }
+
+    if (filter.tab === "all") {
+      return true;
     }
 
     return parameter["name"].split("-")[0] == filter.tab;

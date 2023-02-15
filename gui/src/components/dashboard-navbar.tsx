@@ -22,6 +22,8 @@ import { UserCircle as UserCircleIcon } from "../icons/user-circle";
 import { Users as UsersIcon } from "../icons/users";
 import { AccountPopover } from "./account-popover";
 import React from "react";
+import { useSession } from "next-auth/react";
+import { getInitials } from "../utils/get-initials";
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }: { theme: Theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -35,10 +37,47 @@ interface Props {
   setIntersectionId: (val: number) => void;
 }
 
+function stringToColor(string?: string) {
+  if (!string) {
+    return "#4d4d4d";
+  }
+  let hash = 0;
+  let i;
+
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < string.length; i += 1) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  let color = "#";
+
+  for (i = 0; i < 3; i += 1) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += `00${value.toString(16)}`.slice(-2);
+  }
+  /* eslint-enable no-bitwise */
+
+  return color;
+}
+
+function stringAvatar(name?: string) {
+  return {
+    sx: {
+      bgcolor: stringToColor(name),
+      //   cursor: "pointer",
+      height: 40,
+      width: 40,
+      ml: 1,
+    },
+    children: `${!name ? "" : name.split(" ")[0][0]}${!name ? "" : name.split(" ")[1][0]}`,
+  };
+}
+
 export const DashboardNavbar = (props: Props) => {
   const { onSidebarOpen, intersections, intersectionId, setIntersectionId, ...other } = props;
   const settingsRef = useRef(null);
   const [openAccountPopover, setOpenAccountPopover] = useState(false);
+  const { data: session } = useSession();
 
   return (
     <>
@@ -92,30 +131,12 @@ export const DashboardNavbar = (props: Props) => {
             <MapRoundedIcon fontSize="large" />
           </IconButton>
           <Box sx={{ flexGrow: 1 }} />
-          <Tooltip title="Contacts">
-            <IconButton sx={{ ml: 1 }}>
-              <UsersIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Notifications">
-            <IconButton sx={{ ml: 1 }}>
-              <Badge badgeContent={4} color="primary" variant="dot">
-                <BellIcon fontSize="small" />
-              </Badge>
-            </IconButton>
-          </Tooltip>
           <Avatar
             onClick={() => setOpenAccountPopover(true)}
             ref={settingsRef}
-            sx={{
-              cursor: "pointer",
-              height: 40,
-              width: 40,
-              ml: 1,
-            }}
-            src="/static/images/avatars/avatar_1.png"
+            {...stringAvatar("Jacob Frye" ?? "")}
           >
-            <UserCircleIcon fontSize="small" />
+            {getInitials("Jacob Frye" ?? "")}
           </Avatar>
         </Toolbar>
       </DashboardNavbarRoot>

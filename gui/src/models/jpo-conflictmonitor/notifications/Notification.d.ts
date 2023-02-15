@@ -1,7 +1,9 @@
 declare namespace MessageMonitor {
-type Notification = {
-  final: static
-  long: final
-  notificationExpiresAt: Date
-}
+  type Notification = {
+    notificationGeneratedAt: Date;
+    notificationType: string;
+    notificationText: string;
+    notificationDate: Date;
+    id: string;
+  };
 }
