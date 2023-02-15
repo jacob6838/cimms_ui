@@ -99,17 +99,17 @@
   },
   {
     "id": "7668ae67-a403-46f6-826d-d40883c4cba2",
-    "name": "gen-v2X-messge-processing-frequency",
+    "name": "gen-v2X-message-processing-frequency",
     "value": 1,
     "unit": "seconds",
-    "description": "V2X messge processing frequency (gen)"
+    "description": "V2X message processing frequency (gen)"
   },
   {
     "id": "1eae9caa-05a5-4143-b680-219a7f5693e0",
-    "name": "gen-messge-storage-period",
+    "name": "gen-message-storage-period",
     "value": 1,
     "unit": "seconds",
-    "description": "messge storage period (gen)"
+    "description": "message storage period (gen)"
   },
   {
     "id": "00d97420-8b45-4423-acf3-c46551b0b508",

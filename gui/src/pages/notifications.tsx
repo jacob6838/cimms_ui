@@ -29,60 +29,60 @@ const tabs = [
     description: "All Notifications",
   },
   {
-    label: "SpatBroadcastRateNotification",
+    label: "Spat_Broadcast_Rate",
     value: "SpatBroadcastRateNotification",
     description:
       "SPAT Broadcast rate of 20 messages per hour is lower than the threshold of 50/hour",
   },
   {
-    label: "IntersectionReferenceAlignmentNotification",
+    label: "Intersection_Reference_Alignment",
     value: "IntersectionReferenceAlignmentNotification",
     description: "MAP and SPAT messages do not align for intersection",
   },
   {
-    label: "SignalGroupAlignmentNotification",
+    label: "Signal_Group_Alignment",
     value: "SignalGroupAlignmentNotification",
     description: "A signal group alignment event was generated",
   },
   {
-    label: "SpatMinimumDataNotification",
+    label: "Spat_Minimum_Data",
     value: "SpatMinimumDataNotification",
     description: "SPAT messages do not contain the minimum required data",
   },
   {
-    label: "MapMinimumDataNotification",
+    label: "Map_Minimum_Data",
     value: "MapMinimumDataNotification",
     description: "MAP messages do not contain the minimum required data",
   },
   {
-    label: "MapBroadcastRateNotification",
+    label: "Map_Broadcast_Rate",
     value: "MapBroadcastRateNotification",
     description:
       "MAP message broadcast rate of 15 messages per hour is lower than the threshold of 50/hour",
   },
   {
-    label: "SignalStateAssessmentNotification",
+    label: "Signal_State_Assessment",
     value: "SignalStateAssessmentNotification",
     description: "Percentage of stop-And-Remain assessed events exceeds the threshold of 10%",
   },
   {
-    label: "LaneDirectionOfTravelAssessmentNotification",
+    label: "Lane_Direction_Of_Travel_Assessment",
     value: "LaneDirectionOfTravelAssessmentNotification",
     description:
       "The lane direction of travel assessment found the median distance from centerline to be greater than the threshold of 0.25 meters",
   },
   {
-    label: "ConnectionOfTravelNotification",
+    label: "Connection_Of_Travel",
     value: "ConnectionOfTravelNotification",
     description: "MAP message contains 5 ingress-egress pairs with no connections",
   },
   {
-    label: "SignalStateConflictNotification",
+    label: "Signal_State_Conflict",
     value: "SignalStateConflictNotification",
     description: "The signal state conflict algorithm found 2 conflicts",
   },
   {
-    label: "TimeChangeDetailsNotification",
+    label: "Time_Change_Details",
     value: "TimeChangeDetailsNotification",
     description: "The time change details algorithm found 2 invalid time changes",
   },
@@ -291,6 +291,27 @@ const Page = () => {
               page={page}
             />
           </Card>
+          <Box sx={{ mb: 4 }}>
+            <Box
+              sx={{
+                m: -1,
+                mt: 3,
+              }}
+            >
+              <Grid container justifyContent="left" spacing={3}>
+                <Grid item>
+                  <Button
+                    sx={{ m: 1 }}
+                    variant="contained"
+                    onClick={() => {}}
+                    disabled={acceptedNotifications.length <= 0 ? true : false}
+                  >
+                    Dismiss Notifications
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
         </Container>
       </Box>
     </>

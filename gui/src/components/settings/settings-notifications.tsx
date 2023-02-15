@@ -8,13 +8,14 @@ import {
   Divider,
   FormControlLabel,
   Grid,
+  Radio,
   Typography,
 } from "@mui/material";
 
 export const SettingsNotifications = (props) => (
   <form {...props}>
     <Card>
-      <CardHeader subheader="Manage the notifications" title="Notifications" />
+      <CardHeader subheader="Manage Notification Settings" title="Notifications" />
       <Divider />
       <CardContent>
         <Grid container spacing={6} wrap="wrap">
@@ -29,18 +30,15 @@ export const SettingsNotifications = (props) => (
             xs={12}
           >
             <Typography color="textPrimary" gutterBottom variant="h6">
-              Notifications
+              Notification Message Rate
             </Typography>
-            <FormControlLabel control={<Checkbox color="primary" defaultChecked />} label="Email" />
+            <FormControlLabel control={<Radio color="primary" />} label="All" />
+            <FormControlLabel control={<Radio />} label="Once Per Hour" />
             <FormControlLabel
-              control={<Checkbox color="primary" defaultChecked />}
-              label="Push Notifications"
+              control={<Radio color="primary" defaultChecked />}
+              label="Once Per Day"
             />
-            <FormControlLabel control={<Checkbox />} label="Text Messages" />
-            <FormControlLabel
-              control={<Checkbox color="primary" defaultChecked />}
-              label="Phone calls"
-            />
+            <FormControlLabel control={<Radio color="primary" />} label="Never" />
           </Grid>
           <Grid
             item
@@ -53,14 +51,12 @@ export const SettingsNotifications = (props) => (
             xs={12}
           >
             <Typography color="textPrimary" gutterBottom variant="h6">
-              Messages
+              Cease Broadcast Recommendation Rate
             </Typography>
-            <FormControlLabel control={<Checkbox color="primary" defaultChecked />} label="Email" />
-            <FormControlLabel control={<Checkbox />} label="Push Notifications" />
-            <FormControlLabel
-              control={<Checkbox color="primary" defaultChecked />}
-              label="Phone calls"
-            />
+            <FormControlLabel control={<Radio color="primary" />} label="All" />
+            <FormControlLabel control={<Radio />} label="Once Per Hour" defaultChecked />
+            <FormControlLabel control={<Radio color="primary" />} label="Once Per Day" />
+            <FormControlLabel control={<Radio color="primary" />} label="Never" />
           </Grid>
         </Grid>
       </CardContent>
