@@ -1,90 +1,142 @@
-import { useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import styled from '@emotion/styled';
-import { AppBar, Avatar, Badge, Box, IconButton, Toolbar, Tooltip, Theme } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import { Bell as BellIcon } from '../icons/bell';
-import { UserCircle as UserCircleIcon } from '../icons/user-circle';
-import { Users as UsersIcon } from '../icons/users';
-import { AccountPopover } from './account-popover';
-import React from 'react';
+import { useRef, useState } from "react";
+import PropTypes from "prop-types";
+import styled from "@emotion/styled";
+import {
+  AppBar,
+  Avatar,
+  Badge,
+  Box,
+  IconButton,
+  Toolbar,
+  Tooltip,
+  Theme,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import MapRoundedIcon from "@mui/icons-material/MapRounded";
+import { Bell as BellIcon } from "../icons/bell";
+import { UserCircle as UserCircleIcon } from "../icons/user-circle";
+import { Users as UsersIcon } from "../icons/users";
+import { AccountPopover } from "./account-popover";
+import React from "react";
+import { useSession } from "next-auth/react";
+import { getInitials } from "../utils/get-initials";
 
-const DashboardNavbarRoot = styled(AppBar)(({ theme }: {theme: Theme}) => ({
+const DashboardNavbarRoot = styled(AppBar)(({ theme }: { theme: Theme }) => ({
   backgroundColor: theme.palette.background.paper,
-  boxShadow: theme.shadows[3]
+  boxShadow: theme.shadows[3],
 }));
 
-export const DashboardNavbar = (props) => {
-  const { onSidebarOpen, ...other } = props;
+interface Props {
+  onSidebarOpen: () => void;
+  intersections: IntersectionSummary[];
+  intersectionId: number;
+  setIntersectionId: (val: number) => void;
+}
+
+function stringToColor(string?: string) {
+  if (!string) {
+    return "#4d4d4d";
+  }
+  let hash = 0;
+  let i;
+
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < string.length; i += 1) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  let color = "#";
+
+  for (i = 0; i < 3; i += 1) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += `00${value.toString(16)}`.slice(-2);
+  }
+  /* eslint-enable no-bitwise */
+
+  return color;
+}
+
+function stringAvatar(name?: string) {
+  return {
+    sx: {
+      bgcolor: stringToColor(name),
+      //   cursor: "pointer",
+      height: 40,
+      width: 40,
+      ml: 1,
+    },
+    children: `${!name ? "" : name.split(" ")[0][0]}${!name ? "" : name.split(" ")[1][0]}`,
+  };
+}
+
+export const DashboardNavbar = (props: Props) => {
+  const { onSidebarOpen, intersections, intersectionId, setIntersectionId, ...other } = props;
   const settingsRef = useRef(null);
   const [openAccountPopover, setOpenAccountPopover] = useState(false);
+  const { data: session } = useSession();
 
   return (
     <>
       <DashboardNavbarRoot
         sx={{
           left: {
-            lg: 280
+            lg: 280,
           },
           width: {
-            lg: 'calc(100% - 280px)'
-          }
+            lg: "calc(100% - 280px)",
+          },
         }}
-        {...other}>
+        {...other}
+      >
         <Toolbar
           disableGutters
           sx={{
             minHeight: 64,
             left: 0,
-            px: 2
+            px: 2,
           }}
         >
           <IconButton
             onClick={onSidebarOpen}
             sx={{
               display: {
-                xs: 'inline-flex',
-                lg: 'none'
-              }
+                xs: "inline-flex",
+                lg: "none",
+              },
             }}
           >
             <MenuIcon fontSize="small" />
           </IconButton>
-          <Tooltip title="Search">
-            <IconButton sx={{ ml: 1 }}>
-              <SearchIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-          <Box sx={{ flexGrow: 1 }} />
-          <Tooltip title="Contacts">
-            <IconButton sx={{ ml: 1 }}>
-              <UsersIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Notifications">
-            <IconButton sx={{ ml: 1 }}>
-              <Badge
-                badgeContent={4}
-                color="primary"
-                variant="dot"
+          <Tooltip title="Select Intersection">
+            <FormControl sx={{ width: 400, ml: 1, mt: 1 }} variant="filled">
+              <InputLabel id="demo-simple-select-label">Intersection ID</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={intersectionId}
+                label="Age"
+                onChange={(e) => setIntersectionId(e.target.value as number)}
               >
-                <BellIcon fontSize="small" />
-              </Badge>
-            </IconButton>
+                {intersections.map((intersection) => {
+                  return <MenuItem value={intersection.id}>{intersection.id}</MenuItem>;
+                })}
+              </Select>
+            </FormControl>
           </Tooltip>
+          <IconButton sx={{ ml: 0.5 }} onClick={() => {}}>
+            <MapRoundedIcon fontSize="large" />
+          </IconButton>
+          <Box sx={{ flexGrow: 1 }} />
           <Avatar
             onClick={() => setOpenAccountPopover(true)}
             ref={settingsRef}
-            sx={{
-              cursor: 'pointer',
-              height: 40,
-              width: 40,
-              ml: 1
-            }}
-            src="/static/images/avatars/avatar_1.png"
+            {...stringAvatar("Jacob Frye" ?? "")}
           >
-            <UserCircleIcon fontSize="small" />
+            {getInitials("Jacob Frye" ?? "")}
           </Avatar>
         </Toolbar>
       </DashboardNavbarRoot>
@@ -97,6 +149,4 @@ export const DashboardNavbar = (props) => {
   );
 };
 
-DashboardNavbar.propTypes = {
-  onSidebarOpen: PropTypes.func
-};
+DashboardNavbar.propTypes = {};

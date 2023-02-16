@@ -1,18 +1,18 @@
 import { v4 as uuid } from "uuid";
 
 export type Customer = {
-  id: uuid,
+  id: uuid;
   address: {
-    country: string,
-    state: string,
-    city: string,
-    street: string,
-  },
-  avatarUrl: string,
-  createdAt: number,
-  email: string,
-  name: string,
-  phone: string,
+    country: string;
+    state: string;
+    city: string;
+    street: string;
+  };
+  avatarUrl: string;
+  createdAt: number;
+  email: string;
+  name: string;
+  phone: string;
 };
 
 export const customers: Customer[] = [

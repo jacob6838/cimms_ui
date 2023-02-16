@@ -1,0 +1,163 @@
+[
+  {
+    "id": "4ec7f963-f557-4f0a-b07f-dc2f74ffabea",
+    "name": "ss-maximum-distance-from-stopbar",
+    "value": 1,
+    "unit": "seconds",
+    "description": "maximum distance from stopbar (ss)"
+  },
+  {
+    "id": "d499bdd0-a7c7-4626-90e0-300f7362a4fd",
+    "name": "ss-heading-tolerance",
+    "value": 1,
+    "unit": "seconds",
+    "description": "heading tolerance (ss)"
+  },
+  {
+    "id": "24c33a36-5cbf-44d7-890e-eae48043f966",
+    "name": "ldot-minimum-speed-threshold",
+    "value": 1,
+    "unit": "seconds",
+    "description": "minimum speed threshold (ldot)"
+  },
+  {
+    "id": "82f61992-3639-4ee0-9fc1-72440267bdfc",
+    "name": "ldot-minimum-number-of-points",
+    "value": 1,
+    "unit": "seconds",
+    "description": "minimum number of points (ldot)"
+  },
+  {
+    "id": "e0d5ff3f-4c67-458a-826e-240696eaa4e5",
+    "name": "ss-allowed-concurrent-permissive-movements",
+    "value": 1,
+    "unit": "seconds",
+    "description": "allowed concurrent permissive movements (ss)"
+  },
+  {
+    "id": "a4e027da-74f7-4d37-bac8-94a1c8898582",
+    "name": "ss-look-back-period",
+    "value": 1,
+    "unit": "seconds",
+    "description": "look-back period (ss)"
+  },
+  {
+    "id": "92f52f36-055b-4acf-b70e-c1ade8ae9b7d",
+    "name": "ss-minimum-red-light-percentage-threshold",
+    "value": 1,
+    "unit": "seconds",
+    "description": "minimum red light percentage threshold (ss)"
+  },
+  {
+    "id": "13cc6531-d9a8-4f1a-8b88-f1fee9047506",
+    "name": "ss-minimum-number-of-events",
+    "value": 1,
+    "unit": "seconds",
+    "description": "minimum number of events (ss)"
+  },
+  {
+    "id": "5c1ab1c9-0e6f-459f-8a21-1d4583de5e86",
+    "name": "ldot-look-back-period",
+    "value": 1,
+    "unit": "seconds",
+    "description": "look-back period (ldot)"
+  },
+  {
+    "id": "9737b0f7-2efe-4259-a22c-399e6a7f806f",
+    "name": "ldot-heading-tolerance",
+    "value": 1,
+    "unit": "seconds",
+    "description": "heading tolerance (ldot)"
+  },
+  {
+    "id": "06c84a2c-c273-4f00-bf70-dab5de94d024",
+    "name": "ldot-minimum-number-of-events",
+    "value": 1,
+    "unit": "seconds",
+    "description": "minimum number of events (ldot)"
+  },
+  {
+    "id": "94f66587-27b1-4a15-98f8-29b81574bd3a",
+    "name": "cot-look-back-period",
+    "value": 1,
+    "unit": "seconds",
+    "description": "look-back period (cot)"
+  },
+  {
+    "id": "41639a3a-5cf9-4999-8a91-c7679de30812",
+    "name": "cot-minimum-number-of-events",
+    "value": 1,
+    "unit": "seconds",
+    "description": "minimum number of events (cot)"
+  },
+  {
+    "id": "d69a99d5-2e45-4980-a861-c7adfcd2f78a",
+    "name": "ss-red-light-running-minimum-speed",
+    "value": 1,
+    "unit": "seconds",
+    "description": "red light running minimum speed (ss)"
+  },
+  {
+    "id": "7668ae67-a403-46f6-826d-d40883c4cba2",
+    "name": "gen-v2X-message-processing-frequency",
+    "value": 1,
+    "unit": "seconds",
+    "description": "V2X message processing frequency (gen)"
+  },
+  {
+    "id": "1eae9caa-05a5-4143-b680-219a7f5693e0",
+    "name": "gen-message-storage-period",
+    "value": 1,
+    "unit": "seconds",
+    "description": "message storage period (gen)"
+  },
+  {
+    "id": "00d97420-8b45-4423-acf3-c46551b0b508",
+    "name": "gen-spat-minimum-10-second-Reception",
+    "value": 1,
+    "unit": "seconds",
+    "description": "SPaT Minimum 10-second Reception (gen)"
+  },
+  {
+    "id": "0723b1f3-cb42-495e-b898-05d2468c086f",
+    "name": "gen-spat-maximum-10-second-Reception",
+    "value": 1,
+    "unit": "seconds",
+    "description": "SPaT Maximum 10-second Reception (gen)"
+  },
+  {
+    "id": "9c121621-b41e-4382-b93c-233e256e54d7",
+    "name": "gen-map-minimum-10-second-Reception",
+    "value": 1,
+    "unit": "seconds",
+    "description": "MAP Minimum 10-second Reception (gen)"
+  },
+  {
+    "id": "834a3427-afe1-4cbf-a09f-cca6e7327ec9",
+    "name": "gen-map-maximum-10-second-Reception",
+    "value": 1,
+    "unit": "seconds",
+    "description": "MAP Maximum 10-second Reception (gen)"
+  },
+  {
+    "id": "ed5bdb38-c6fc-4f7a-985d-ffb64a43f89f",
+    "name": "gen-signal-state-conflict",
+    "value": 1,
+    "unit": "seconds",
+    "description": "signal state conflict (gen)"
+  },
+  {
+    "id": "7d32640f-c91a-48a2-859e-81b891ed6bd2",
+    "name": "gen-time-change-details-notification-duration",
+    "value": 1,
+    "unit": "seconds",
+    "description": "time change details notification duration (gen)"
+  },
+  {
+    "id": "d0da6d0c-9345-496e-b00a-3afc7915882a",
+    "name": "ss-minimum-red-light-percentage-threshold",
+    "value": 1,
+    "unit": "seconds",
+    "description": "minimum red light percentage threshold (ss)"
+  }
+]
