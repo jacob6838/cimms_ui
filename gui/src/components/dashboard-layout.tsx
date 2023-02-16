@@ -27,7 +27,19 @@ export const DashboardLayout = (props) => {
   const [selectedNotification, setSelectedNotification] = useState(null);
   const [intersections, setIntersections] = useState<IntersectionSummary[]>([]);
 
+  const getTimeChangeDetails = async () => {
+    console.log("getTimeChangeDetails");
+    const details = await EventsApi.getTimeChangeDetails(
+      "token",
+      intersectionId,
+      new Date(),
+      new Date()
+    );
+    console.log(details);
+  };
+
   useEffect(() => {
+    getTimeChangeDetails();
     setIntersections(
       MessageMonitorApi.getIntersections().map((intersection) => {
         return {
@@ -36,7 +48,6 @@ export const DashboardLayout = (props) => {
         };
       })
     );
-    EventsApi.getTimeChangeDetails("token", intersectionId, new Date(), new Date());
   }, []);
 
   return (

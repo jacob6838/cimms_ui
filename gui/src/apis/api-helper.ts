@@ -3,16 +3,16 @@ import toast from "react-hot-toast";
 const MESSAGE_MONITOR_ENDPOINT = "http://localhost:8081"; //process.env.MESSAGE_MONITOR_API_ENDPOINT;
 
 class AuthApiHelper {
-  formatQueryParams(query_params: Record<string, any>): string {
+  formatQueryParams(query_params?: Record<string, any>): string {
     if (!query_params) return "";
-    return `?${new URLSearchParams().toString()}`;
+    return `?${new URLSearchParams(query_params).toString()}`;
   }
 
   async invokeApi({
     path,
     method = "GET",
     headers = {},
-    queryParams = {},
+    queryParams,
     body = {},
     token,
     toastOnFailure = true,
@@ -31,8 +31,9 @@ class AuthApiHelper {
     successMessage?: string;
     failureMessage?: string;
   }): Promise<any> {
+    console.log("QUERY PARAMS", queryParams, this.formatQueryParams(queryParams));
     const url = MESSAGE_MONITOR_ENDPOINT! + path + this.formatQueryParams(queryParams);
-    console.debug("MAKING REQUEST TO", url);
+    console.log("MAKING REQUEST TO", url);
 
     const localHeaders: HeadersInit = { ...headers };
     if (method === "POST" && body) {
@@ -42,7 +43,7 @@ class AuthApiHelper {
     const options: RequestInit = {
       method: method,
       headers: localHeaders,
-      body: body ? JSON.stringify(body) : null,
+      //   body: body ? JSON.stringify(body) : null,
     };
 
     return await fetch(url, options)
