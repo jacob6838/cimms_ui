@@ -10,11 +10,11 @@ const ConfigParamEdit = () => {
   const [parameter, setParameter] = useState<ConfigurationParameter | null>(null);
 
   const router = useRouter();
-  const { parameterName } = router.query;
+  const { key } = router.query;
 
-  const getParameter = async (name: string) => {
+  const getParameter = async (key: string) => {
     try {
-      const data = await configParamApi.getParameter("token", name);
+      const data = await configParamApi.getParameter("token", key);
 
       setParameter(data);
     } catch (err) {
@@ -23,7 +23,7 @@ const ConfigParamEdit = () => {
   };
 
   useEffect(() => {
-    getParameter(parameterName as string);
+    getParameter(key as string);
   }, []);
 
   if (!parameter) {
@@ -53,7 +53,7 @@ const ConfigParamEdit = () => {
           >
             <div>
               <Typography noWrap variant="h4">
-                {parameter.name}
+                {parameter.key}
               </Typography>
             </div>
           </Box>

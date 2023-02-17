@@ -30,22 +30,22 @@ const tabs = [
   },
   {
     label: "General",
-    value: "gen",
+    value: "general",
     description: "General Configuration Parameters",
   },
   {
     label: "Lane Direction of Travel",
-    value: "ldot",
+    value: "lane_direction_of_travel",
     description: "Lane Direction of Travel Configuration Parameters",
   },
   {
     label: "Signal State",
-    value: "ss",
+    value: "signal_state",
     description: "Signal State Configuration Parameters",
   },
   {
     label: "Connection of Travel",
-    value: "cot",
+    value: "connection_of_travel",
     description: "Connection of Travel Configuration Parameters",
   },
 ];
@@ -54,7 +54,7 @@ const applyFilters = (parameters, filter) =>
   parameters.filter((parameter) => {
     if (filter.query) {
       let queryMatched = false;
-      const properties = ["name", "description"];
+      const properties = ["name", "cetegory", "description"];
       properties.forEach((property) => {
         if (parameter[property].toLowerCase().includes(filter.query.toLowerCase())) {
           queryMatched = true;
@@ -70,7 +70,7 @@ const applyFilters = (parameters, filter) =>
       return true;
     }
 
-    return parameter["name"].split("-")[0] == filter.tab;
+    return parameter["category"].split("-")[0] == filter.tab;
   });
 
 const applyPagination = (parameters, page, rowsPerPage) =>
@@ -79,7 +79,7 @@ const applyPagination = (parameters, page, rowsPerPage) =>
 const Page = () => {
   const queryRef = useRef<TextFieldProps>(null);
   const [parameters, setParameters] = useState(Array<ConfigurationParameter>());
-  const [currentTab, setCurrentTab] = useState("gen");
+  const [currentTab, setCurrentTab] = useState("all");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentDescription, setCurrentDescription] = useState("");
@@ -94,7 +94,7 @@ const Page = () => {
 
   const getParameters = async () => {
     try {
-      const data = await configParamApi.getParameters("token");
+      const data = await configParamApi.getAllParameters("token", "Intersection ID");
       console.log(data);
 
       setParameters(data);

@@ -11,13 +11,77 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Chip,
+  Typography,
 } from "@mui/material";
 import React from "react";
 import { PencilAlt as PencilAltIcon } from "../../icons/pencil-alt";
+import CancelIcon from "@mui/icons-material/Cancel";
+import AddIcon from "@mui/icons-material/Add";
 
 export const ConfigParamListTable = (props) => {
   const { parameters, parametersCount, onPageChange, onRowsPerPageChange, page, rowsPerPage } =
     props;
+
+  const generalRow = (param) => {
+    return (
+      <TableRow hover key={param.id}>
+        <TableCell>{param.key}</TableCell>
+        <TableCell>{param.value}</TableCell>
+        <TableCell>{param.unit}</TableCell>
+        <TableCell>{param.description}</TableCell>
+        <TableCell align="right">
+          <NextLink href={`/configuration/${param.key}/create`} passHref>
+            <IconButton component="a">
+              <AddIcon fontSize="small" />
+            </IconButton>
+          </NextLink>
+        </TableCell>
+      </TableRow>
+    );
+  };
+
+  const intersectionRow = (param) => {
+    return (
+      <TableRow hover key={param.id}>
+        <TableCell>{param.key}</TableCell>
+        <TableCell>
+          {param.value}
+          {
+            <Chip
+              color="secondary"
+              sx={{ ml: 3 }}
+              label={
+                <Typography
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "600",
+                  }}
+                >
+                  Overrriden
+                </Typography>
+              }
+              size="small"
+            />
+          }
+        </TableCell>
+        <TableCell>{param.unit}</TableCell>
+        <TableCell>{param.description}</TableCell>
+        <TableCell align="right">
+          <NextLink href={`/configuration/${param.key}/edit`} passHref>
+            <IconButton component="a">
+              <PencilAltIcon fontSize="small" />
+            </IconButton>
+          </NextLink>
+          <NextLink href={`/configuration/${param.key}/remove`} passHref>
+            <IconButton component="a">
+              <CancelIcon fontSize="small" />
+            </IconButton>
+          </NextLink>
+        </TableCell>
+      </TableRow>
+    );
+  };
 
   return (
     <Card>
@@ -30,25 +94,13 @@ export const ConfigParamListTable = (props) => {
                 <TableCell>Value</TableCell>
                 <TableCell>Unit</TableCell>
                 <TableCell>Description</TableCell>
-                <TableCell align="right">Edit</TableCell>
+                <TableCell align="right">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {parameters.map((param) => (
-                <TableRow hover key={param.id}>
-                  <TableCell>{param.name}</TableCell>
-                  <TableCell>{param.value}</TableCell>
-                  <TableCell>{param.unit}</TableCell>
-                  <TableCell>{param.description}</TableCell>
-                  <TableCell align="right">
-                    <NextLink href={"/configuration/" + param.name + "/edit"} passHref>
-                      <IconButton component="a">
-                        <PencilAltIcon fontSize="small" />
-                      </IconButton>
-                    </NextLink>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {(parameters as ConfigurationParameter[]).map((param) =>
+                param.intersectionID == null ? generalRow(param) : intersectionRow(param)
+              )}
             </TableBody>
           </Table>
         </Box>
