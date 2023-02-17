@@ -3,3 +3,9 @@
 # Don't commit the mapbox token to github!
 
 server.port=8081
+spring.data.mongodb.uri=mongodb://localhost:27017/ConflictMonitor
+sprint.data.mongodb.database=ConflictMonitor
+
+server.cors="http://localhost:3000"
+server.maximumResponseSize=10000
+maximumResponseSize=10000

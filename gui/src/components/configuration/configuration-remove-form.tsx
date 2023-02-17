@@ -15,21 +15,19 @@ import {
   TextField,
 } from "@mui/material";
 
-export const ConfigParamEditForm = (props) => {
-  const { parameter, configParamApi, ...other } = props;
+export const ConfigParamRemoveForm = (props) => {
+  const { parameter, defaultParameter, configParamApi, ...other } = props;
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
       name: parameter.key,
       unit: parameter.unit,
       value: parameter.value,
+      defaultValue: defaultParameter.value,
       description: parameter.description,
       submit: null,
     },
-    validationSchema: Yup.object({
-      name: Yup.string(),
-      value: Yup.number().required("New value is required"),
-    }),
+    validationSchema: Yup.object({}),
     onSubmit: async (values, helpers) => {
       try {
         await configParamApi.updateParameter(values.name, values.value);
@@ -89,12 +87,25 @@ export const ConfigParamEditForm = (props) => {
                 error={Boolean(formik.touched.value && formik.errors.value)}
                 fullWidth
                 helperText={formik.touched.value && formik.errors.value}
-                label="Value"
+                label="Overriden Value"
                 name="value"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                required
+                disabled
                 value={formik.values.value}
+              />
+            </Grid>
+            <Grid item md={6} xs={12}>
+              <TextField
+                error={Boolean(formik.touched.defaultValue && formik.errors.defaultValue)}
+                fullWidth
+                helperText={formik.touched.defaultValue && formik.errors.defaultValue}
+                label="Default Value"
+                name="defaultValue"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                disabled
+                value={formik.values.defaultValue}
               />
             </Grid>
             <Grid item md={12} xs={12}>
@@ -120,7 +131,7 @@ export const ConfigParamEditForm = (props) => {
           }}
         >
           <Button disabled={formik.isSubmitting} type="submit" sx={{ m: 1 }} variant="contained">
-            Update
+            Remove Parameter Override
           </Button>
           <NextLink href="/configuration" passHref>
             <Button
@@ -141,7 +152,8 @@ export const ConfigParamEditForm = (props) => {
   );
 };
 
-ConfigParamEditForm.propTypes = {
+ConfigParamRemoveForm.propTypes = {
   parameter: PropTypes.object.isRequired,
+  defaultParameter: PropTypes.object.isRequired,
   configParamApi: PropTypes.object.isRequired,
 };

@@ -15,7 +15,7 @@ import {
   TextField,
 } from "@mui/material";
 
-export const ConfigParamEditForm = (props) => {
+export const ConfigParamCreateForm = (props) => {
   const { parameter, configParamApi, ...other } = props;
   const router = useRouter();
   const formik = useFormik({
@@ -54,7 +54,7 @@ export const ConfigParamEditForm = (props) => {
   return (
     <form onSubmit={formik.handleSubmit} {...other}>
       <Card>
-        <CardHeader title="Edit Configuration Parameter" />
+        <CardHeader title="Override Configuration Parameter" />
         <Divider />
         <CardContent>
           <Grid container spacing={3}>
@@ -120,7 +120,7 @@ export const ConfigParamEditForm = (props) => {
           }}
         >
           <Button disabled={formik.isSubmitting} type="submit" sx={{ m: 1 }} variant="contained">
-            Update
+            Overrride
           </Button>
           <NextLink href="/configuration" passHref>
             <Button
@@ -141,7 +141,7 @@ export const ConfigParamEditForm = (props) => {
   );
 };
 
-ConfigParamEditForm.propTypes = {
+ConfigParamCreateForm.propTypes = {
   parameter: PropTypes.object.isRequired,
   configParamApi: PropTypes.object.isRequired,
 };

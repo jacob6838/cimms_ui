@@ -46,21 +46,20 @@ class AuthApiHelper {
       //   body: body ? JSON.stringify(body) : null,
     };
 
-    return await fetch(url, options)
-      .then((response: Response) => {
-        if (response.ok) {
-          if (toastOnSuccess) toast.success(successMessage);
-        } else {
-          throw new Error(
-            "Request failed with status code " + response.status + ": " + response.statusText
-          );
-        }
-        return response.json();
-      })
-      .catch((error: Error) => {
-        if (toastOnFailure) toast.error(failureMessage);
-        console.error(error.message);
-      });
+    return await fetch(url, options).then((response: Response) => {
+      if (response.ok) {
+        if (toastOnSuccess) toast.success(successMessage);
+      } else {
+        throw new Error(
+          "Request failed with status code " + response.status + ": " + response.statusText
+        );
+      }
+      return response.json();
+    });
+    //   .catch((error: Error) => {
+    //     if (toastOnFailure) toast.error(failureMessage);
+    //     console.error(error.message);
+    //   });
   }
 }
 

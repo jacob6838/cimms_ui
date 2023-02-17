@@ -1,8 +1,8 @@
 import KeycloakProvider from "next-auth/providers/keycloak";
 
 const kaycloakProvider = KeycloakProvider({
-  clientId: "React-auth",
-  realm: "keycloak-react-auth",
+  clientId: "ui",
+  realm: "cimms",
   issuer: "http://localhost:8080/",
 });
 

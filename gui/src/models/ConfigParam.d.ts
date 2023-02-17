@@ -1,6 +1,6 @@
 type ConfigurationParameter = {
-  id: uuid;
-  name: string;
+  key: string;
+  category: string;
   value: number | string;
   unit: string;
   description: string;
