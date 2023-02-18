@@ -7,7 +7,10 @@ import org.springframework.data.mongodb.repository.Query;
 
 import us.dot.its.jpo.conflictmonitor.monitor.models.config.DefaultConfig;
 
-public interface DefaultConfigRepo<T> extends MongoRepository<DefaultConfig<T>, String> {    
+public interface DefaultConfigRepo<T> extends MongoRepository<DefaultConfig<T>, String> {
+    @Query("{}")
+    List<DefaultConfig<T>> getAll();
+
     @Query("?0")
     List<DefaultConfig<T>> query(String query);
 

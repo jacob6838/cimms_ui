@@ -3,6 +3,13 @@ package us.dot.its.jpo.ode.api;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import us.dot.its.jpo.geojsonconverter.DateJsonMapper;
+
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
@@ -30,4 +37,11 @@ public class Properties {
     public void setCors(String cors) {
         this.cors = cors;
     }
+
+    @Bean
+	public ObjectMapper defaultMapper() {
+		ObjectMapper objectMapper = DateJsonMapper.getInstance();
+		objectMapper.registerModule(new JavaTimeModule());
+		return objectMapper;
+	}
 }
