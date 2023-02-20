@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import us.dot.its.jpo.geojsonconverter.pojos.spat.ProcessedSpat;
+import us.dot.its.jpo.ode.api.accessors.spat.ProcessedSpatRepo;
 import us.dot.its.jpo.ode.mockdata.MockSpatGenerator;
 
 @RestController
@@ -20,6 +22,9 @@ public class SpatController {
     private static final Logger logger = LoggerFactory.getLogger(AssessmentController.class);
 
     ObjectMapper objectMapper = new ObjectMapper();
+
+    @Autowired
+    ProcessedSpatRepo processedSpatRepo;
 
     public String getCurrentTime(){
         return ZonedDateTime.now().toInstant().toEpochMilli() + "";
@@ -39,6 +44,8 @@ public class SpatController {
         if(testData){
             list = MockSpatGenerator.getProcessedSpats();
         }else{
+            list = processedSpatRepo.query("{}");
+            // processedSpatRepo.findById("63eab2b762b962385eb0064d");
 
         }
 

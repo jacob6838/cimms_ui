@@ -8,10 +8,10 @@ import org.springframework.data.mongodb.repository.Query;
 import us.dot.its.jpo.geojsonconverter.pojos.geojson.map.ProcessedMap;
 import us.dot.its.jpo.ode.model.OdeBsmData;
 
-public interface ProcessedMapRepo extends MongoRepository<ProcessedMapMongo, String> {
+public interface ProcessedMapRepo extends MongoRepository<ProcessedMap, String> {
 
     @Query("{\"properties.intersectionId\": 12109}")
-    List<ProcessedMapMongo> getProcessedMap(String intersectionID, String startTime, String endTime);
+    List<ProcessedMap> getProcessedMap(String intersectionID, String startTime, String endTime);
 
     
 }
