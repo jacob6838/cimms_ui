@@ -19,7 +19,8 @@ public class StringToZonedDateTimeConverter implements Converter<String, ZonedDa
         DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSVV"),
         DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSVV"),
         DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SVV"),
-        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssVV")
+        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssVV"),
+        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSVV")
     };
     
 

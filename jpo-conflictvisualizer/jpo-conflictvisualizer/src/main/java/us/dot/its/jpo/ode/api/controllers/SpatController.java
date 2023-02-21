@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import us.dot.its.jpo.geojsonconverter.pojos.spat.ProcessedSpat;
-import us.dot.its.jpo.ode.api.accessors.spat.ProcessedSpatRepo;
+import us.dot.its.jpo.ode.api.accessors.spat.ProcessedSpatRepository;
 import us.dot.its.jpo.ode.mockdata.MockSpatGenerator;
 
 @RestController
@@ -24,7 +24,7 @@ public class SpatController {
     ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
-    ProcessedSpatRepo processedSpatRepo;
+    ProcessedSpatRepository processedSpatRepo;
 
     public String getCurrentTime(){
         return ZonedDateTime.now().toInstant().toEpochMilli() + "";
@@ -44,9 +44,7 @@ public class SpatController {
         if(testData){
             list = MockSpatGenerator.getProcessedSpats();
         }else{
-            list = processedSpatRepo.query("{}");
-            // processedSpatRepo.findById("63eab2b762b962385eb0064d");
-
+            list = processedSpatRepo.findProcessedSpats(intersectionID, startTime, endTime);
         }
 
         logger.debug(String.format("Returning %d results for SPAT JSON Request.", list.size()));

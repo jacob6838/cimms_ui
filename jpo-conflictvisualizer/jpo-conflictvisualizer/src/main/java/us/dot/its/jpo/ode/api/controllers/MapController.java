@@ -1,5 +1,6 @@
 package us.dot.its.jpo.ode.api.controllers;
 
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -18,8 +19,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import us.dot.its.jpo.geojsonconverter.DateJsonMapper;
 import us.dot.its.jpo.geojsonconverter.pojos.geojson.map.ProcessedMap;
-import us.dot.its.jpo.ode.api.accessors.map.ProcessedMapMongo;
-import us.dot.its.jpo.ode.api.accessors.map.ProcessedMapRepo;
+import us.dot.its.jpo.ode.api.accessors.map.ProcessedMapRepository;
+import us.dot.its.jpo.ode.api.accessors.map.ProcessedMapRepositoryImpl;
 import us.dot.its.jpo.ode.mockdata.MockMapGenerator;
 
 @RestController
@@ -30,7 +31,7 @@ public class MapController {
     ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
-    ProcessedMapRepo processedMapRepo;
+    ProcessedMapRepository processedMapRepo;
 
     public String getCurrentTime(){
         return ZonedDateTime.now().toInstant().toEpochMilli() + "";
@@ -50,17 +51,7 @@ public class MapController {
         if(testData){
             list = MockMapGenerator.getProcessedMaps();
         }else{
-            String originIP = "{$exists: true}";
-            String startTimeString = "1970-01-00T00:00:00.000000Z";
-            String endTimeString = ZonedDateTime.now().format(DateTimeFormatter.ISO_DATE);
-            System.out.println(startTimeString);
-            System.out.println(endTimeString);
-            System.out.println(originIP);
-            List<ProcessedMapMongo> processedMapMongo = processedMapRepo.getProcessedMap("12109", startTimeString, endTimeString);
-            System.out.println(processedMapMongo);
-            // for(ProcessedMap map: processedMapMongo){
-            //     list.add((ProcessedMap)map);
-            // }
+            list = processedMapRepo.findProcessedMaps(intersectionID, startTime, endTime);
         }
 
         logger.debug(String.format("Returning %d results for MAP JSON Request.", list.size()));
