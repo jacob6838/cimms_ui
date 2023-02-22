@@ -24,9 +24,7 @@ public class OdeBsmJsonRepositoryImpl  implements OdeBsmJsonRepository{
 
     private ObjectMapper mapper = DateJsonMapper.getInstance();
 
-
-    @Override
-    public List<OdeBsmData> findOdeBsmJson(String originIp, Long startTime, Long endTime) {
+    public Query getQuery(String originIp, Long startTime, Long endTime){
         Query query = new Query();
 
         if(originIp != null){
@@ -44,6 +42,14 @@ public class OdeBsmJsonRepositoryImpl  implements OdeBsmJsonRepository{
         }
 
         query.addCriteria(Criteria.where("metadata.odeReceivedAt").gte(startTimeString).lte(endTimeString));
+        return query;
+    }
+
+    public long getQueryResultCount(Query query){
+        return mongoTemplate.count(query, OdeBsmData.class, "OdeBsmJson");
+    }
+
+    public List<OdeBsmData> findOdeBsmData(Query query) {
         List<Map> documents = mongoTemplate.find(query, Map.class, "OdeBsmJson");
         List<OdeBsmData> convertedList = new ArrayList<>();
         for(Map document : documents){
@@ -51,8 +57,7 @@ public class OdeBsmJsonRepositoryImpl  implements OdeBsmJsonRepository{
             OdeBsmData bsm = mapper.convertValue(document, OdeBsmData.class);
             convertedList.add(bsm);
         }
-
-        return convertedList;
+        return mongoTemplate.find(query, OdeBsmData.class);
     }
 
 }

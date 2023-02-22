@@ -2,8 +2,14 @@ package us.dot.its.jpo.ode.api.accessors.bsm;
 
 import java.util.List;
 
+import org.springframework.data.mongodb.core.query.Query;
+
 import us.dot.its.jpo.ode.model.OdeBsmData;
 
 public interface OdeBsmJsonRepository{
-    List<OdeBsmData> findOdeBsmJson(String originIp, Long startTime, Long endTime);  
+    Query getQuery(String originIp, Long startTime, Long endTime);
+
+    long getQueryResultCount(Query query);
+    
+    List<OdeBsmData> findOdeBsmData(Query query);  
 }

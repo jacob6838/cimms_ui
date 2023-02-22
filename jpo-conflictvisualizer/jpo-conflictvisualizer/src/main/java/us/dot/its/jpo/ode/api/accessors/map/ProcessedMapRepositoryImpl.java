@@ -16,7 +16,7 @@ public class ProcessedMapRepositoryImpl implements ProcessedMapRepository{
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public List<ProcessedMap> findProcessedMaps(Integer intersectionID, Long startTime, Long endTime) {
+    public Query getQuery(Integer intersectionID, Long startTime, Long endTime){
         Query query = new Query();
 
         if(intersectionID != null){
@@ -34,8 +34,15 @@ public class ProcessedMapRepositoryImpl implements ProcessedMapRepository{
         }
 
         query.addCriteria(Criteria.where("properties.timeStamp").gte(startTimeString).lte(endTimeString));
-        List<ProcessedMap> documents = mongoTemplate.find(query, ProcessedMap.class);
-        return documents;
+        return query;
+    }
+
+    public long getQueryResultCount(Query query){
+        return mongoTemplate.count(query, ProcessedMap.class);
+    }
+
+    public List<ProcessedMap> findProcessedMaps(Query query) {
+        return mongoTemplate.find(query, ProcessedMap.class);
     }
 
 }

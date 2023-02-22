@@ -18,7 +18,7 @@ public class ProcessedSpatRepositoryImpl implements ProcessedSpatRepository{
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public List<ProcessedSpat> findProcessedSpats(Integer intersectionID, Long startTime, Long endTime) {
+    public Query getQuery(Integer intersectionID, Long startTime, Long endTime){
         Query query = new Query();
 
         if(intersectionID != null){
@@ -36,8 +36,15 @@ public class ProcessedSpatRepositoryImpl implements ProcessedSpatRepository{
         }
 
         query.addCriteria(Criteria.where("utcTimeStamp").gte(startTimeString).lte(endTimeString));
-        List<ProcessedSpat> documents = mongoTemplate.find(query, ProcessedSpat.class);
-        return documents;
+        return query;
+    }
+
+    public long getQueryResultCount(Query query){
+        return mongoTemplate.count(query, ProcessedSpat.class);
+    }
+
+    public List<ProcessedSpat> findProcessedMaps(Query query) {
+        return mongoTemplate.find(query, ProcessedSpat.class);
     }
 
 }
