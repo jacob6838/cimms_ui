@@ -2,7 +2,16 @@ import { useEffect } from "react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
-import { Box, Button, Divider, Drawer, Typography, useMediaQuery, Theme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Drawer,
+  Typography,
+  useMediaQuery,
+  Theme,
+  Chip,
+} from "@mui/material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { ChartBar as ChartBarIcon } from "../icons/chart-bar";
 import { Cog as CogIcon } from "../icons/cog";
@@ -12,51 +21,83 @@ import { ShoppingBag as ShoppingBagIcon } from "../icons/shopping-bag";
 import { User as UserIcon } from "../icons/user";
 import { UserAdd as UserAddIcon } from "../icons/user-add";
 import { Users as UsersIcon } from "../icons/users";
-import { XCircle as XCircleIcon } from "../icons/x-circle";
+import MapIcon from "@mui/icons-material/Map";
 import { Logo } from "./logo";
 import { NavItem } from "./nav-item";
 import React from "react";
+import { DashboardSidebarSection } from "./dashboard-sidebar-section";
 
-const items = [
+const generalItems = [
   {
-    href: "/",
+    path: "/",
     icon: <ChartBarIcon fontSize="small" />,
     title: "Dashboard",
   },
   {
-    href: "/map",
+    path: "/notifications",
     icon: <ChartBarIcon fontSize="small" />,
+    title: "Notifications",
+  },
+  {
+    path: "/ceaseBroadcastRecommendations",
+    icon: <ChartBarIcon fontSize="small" />,
+    title: "Cease Broadcast Recommendations",
+    chip: (
+      <Chip
+        color="secondary"
+        className="blink_me"
+        sx={true ? null : { display: "none" }}
+        label={
+          <Typography
+            sx={{
+              fontSize: "10px",
+              fontWeight: "600",
+            }}
+          >
+            NEW
+          </Typography>
+        }
+        size="small"
+      />
+    ),
+  },
+  {
+    path: "/performanceReports",
+    icon: <ChartBarIcon fontSize="small" />,
+    title: "Performance Reports",
+  },
+  {
+    path: "/map",
+    icon: <MapIcon fontSize="small" />,
     title: "Map",
   },
   {
-    href: "/users",
+    path: "/users",
     icon: <UsersIcon fontSize="small" />,
     title: "Users",
   },
   {
-    href: "/configuration",
+    path: "/configuration",
     icon: <CogIcon fontSize="small" />,
     title: "Configuration",
   },
   {
-    href: "/settings",
+    path: "/settings",
     icon: <CogIcon fontSize="small" />,
     title: "Settings",
   },
+];
+
+const adminItems = [];
+
+const sections = [
+  {
+    title: "General",
+    items: generalItems,
+  },
   //   {
-  //     href: "/login",
-  //     icon: <LockIcon fontSize="small" />,
-  //     title: "Login",
-  //   },
-  //   {
-  //     href: "/register",
-  //     icon: <UserAddIcon fontSize="small" />,
-  //     title: "Register",
-  //   },
-  //   {
-  //     href: "/404",
-  //     icon: <XCircleIcon fontSize="small" />,
-  //     title: "Error",
+  //     title: "Admin",
+  //     items: adminItems,
   //   },
 ];
 
@@ -112,8 +153,18 @@ export const DashboardSidebar = (props) => {
           }}
         />
         <Box sx={{ flexGrow: 1 }}>
-          {items.map((item) => (
-            <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
+          {sections.map((section) => (
+            <DashboardSidebarSection
+              key={section.title}
+              path={router.asPath}
+              sx={{
+                mt: 2,
+                "& + &": {
+                  mt: 2,
+                },
+              }}
+              {...section}
+            />
           ))}
         </Box>
       </Box>
