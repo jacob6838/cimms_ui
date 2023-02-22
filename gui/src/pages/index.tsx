@@ -9,6 +9,7 @@ import { TotalCustomers } from "../components/dashboard/total-customers";
 import { TotalProfit } from "../components/dashboard/total-profit";
 import { TrafficByDevice } from "../components/dashboard/traffic-by-device";
 import { DashboardLayout } from "../components/dashboard-layout";
+import { NotificationsTable } from "../components/notifications/notifications-table";
 import React from "react";
 
 const Page = () => (
@@ -48,6 +49,9 @@ const Page = () => (
           </Grid>
           <Grid item lg={8} md={12} xl={9} xs={12}>
             <LatestOrders />
+          </Grid>
+          <Grid item lg={12} md={12} xl={12} xs={12}>
+            <NotificationsTable />
           </Grid>
         </Grid>
       </Container>

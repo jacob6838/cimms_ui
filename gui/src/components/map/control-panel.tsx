@@ -20,22 +20,6 @@ import {
   TextField,
 } from "@mui/material";
 
-const EVENT_TYPES = [
-  "ConnectionOfTravelEvent",
-  "IntersectionReferenceAlignmentEvent",
-  "LaneDirectionOfTravelEvent",
-  "ProcessingTimePeriod",
-  "SignalGroupAlignmentEvent",
-  "SignalStateConflictEvent",
-  "SignalStateEvent",
-  "SignalStateStopEvent",
-  "TimeChangeDetailsEvent",
-  "MapMinimumDataEvent",
-  "SpatMinimumDataEvent",
-  "MapBroadcastRateEvent",
-  "SpatBroadcastRateEvent",
-];
-
 function ControlPanel(props) {
   return (
     <div
