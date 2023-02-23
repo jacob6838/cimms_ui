@@ -22,18 +22,10 @@ import us.dot.its.jpo.conflictmonitor.monitor.models.assessments.LaneDirectionOf
 import us.dot.its.jpo.conflictmonitor.monitor.models.assessments.SignalStateAssessment;
 import us.dot.its.jpo.conflictmonitor.monitor.models.assessments.SignalStateEventAssessment;
 import us.dot.its.jpo.ode.api.Properties;
-import us.dot.its.jpo.ode.api.accessors.assessments.ConnectionOfTravelAssessmentRepo;
-import us.dot.its.jpo.ode.api.accessors.assessments.LaneDirectionOfTravelAssessmentRepo;
-import us.dot.its.jpo.ode.api.accessors.assessments.SignalStateAssessmentRepo;
-import us.dot.its.jpo.ode.api.accessors.assessments.SignalStateEventAssessmentRepo;
 import us.dot.its.jpo.ode.api.accessors.assessments.ConnectionOfTravelAssessment.ConnectionOfTravelAssessmentRepository;
 import us.dot.its.jpo.ode.api.accessors.assessments.LaneDirectionOfTravelAssessment.LaneDirectionOfTravelAssessmentRepository;
 import us.dot.its.jpo.ode.api.accessors.assessments.SignalStateAssessment.SignalStateAssessmentRepository;
 import us.dot.its.jpo.ode.api.accessors.assessments.SignalStateEventAssessment.SignalStateEventAssessmentRepository;
-import us.dot.its.jpo.ode.api.query.EqualsCriteria;
-import us.dot.its.jpo.ode.api.query.GreaterThanCriteria;
-import us.dot.its.jpo.ode.api.query.LessThanCriteria;
-import us.dot.its.jpo.ode.api.query.QueryBuilder;
 import us.dot.its.jpo.ode.mockdata.MockAssessmentGenerator;
 
 
