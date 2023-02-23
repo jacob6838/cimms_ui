@@ -1,5 +1,5 @@
 
 type Event = {
-  long: final
-  String: final
+  eventGeneratedAt: number
+  eventType: str
 }

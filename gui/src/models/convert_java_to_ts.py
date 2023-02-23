@@ -1,8 +1,10 @@
 import re
 import os
 
-matching_expr = r"    private ([a-zA-Z0-9_<>]*?) ([a-zA-Z_]*)"
+# matching_expr = r"    [a-zA-Z@]*?private  ([a-zA-Z0-9_<>]*?) ([a-zA-Z_]*)"
+matching_expr = r"    [a-zA-Z@]*?(?:private|public) (?:final)? ?(?:static)? ?([a-zA-Z0-9_<>]*?) ([a-zA-Z_]*).*?;"
 matching_expr_extends = r"public class (.*?) extends (.*?)\{"
+matching_expr_interface = r"public interface (.*?)\{"
 
 TYPE_MAPPINGS = {
     # Simple types
@@ -14,6 +16,7 @@ TYPE_MAPPINGS = {
     '(^double)': 'number',
     '(^long)': 'number',
     '(^Long)': 'number',
+    'final': 'any',
 
     '(^Boolean)': 'boolean',
     '(^bool)': 'boolean',
@@ -36,8 +39,8 @@ type {class_name} = {extension}{{
 # if not os.path.exists(IMPORTS_PATH):
 #     os.mkdir(IMPORTS_PATH)
 
-INITIAL_PATH = "java/jpo-conflictmonitor/jpo-conflictmonitor/src/main/java/us/dot/its/jpo/conflictmonitor/monitor/models"
-files = [os.path.join(dp, f) for dp, dn, filenames in os.walk("./" + INITIAL_PATH)
+INITIAL_PATH = "C:/Users/rando/Github/cimms_ui/jpo-conflictvisualizer/jpo-conflictmonitor/jpo-conflictmonitor/src/main/java/us/dot/its/jpo/conflictmonitor/monitor/models"
+files = [os.path.join(dp, f) for dp, dn, filenames in os.walk(INITIAL_PATH)
          for f in filenames if os.path.splitext(f)[1] == '.java']
 
 DIRECTORIES_TO_IGNORE = ["test", "jpo-s3-deposit", "jpo-ode-consumer-example",
@@ -60,6 +63,10 @@ for file_path in files:
         continue
 
     file_contents = open(f"{JAVA_PATH}/{CLASS_NAME}.java", 'r').read()
+    interface_match = re.findall(matching_expr_interface, file_contents)
+    if interface_match:
+        continue
+
     extension_match = re.findall(matching_expr_extends, file_contents)
     extension = ""
     if extension_match and extension_match[0][1]:

@@ -1,0 +1,4 @@
+
+type IntersectionConfig = Config<T> & {
+
+}
