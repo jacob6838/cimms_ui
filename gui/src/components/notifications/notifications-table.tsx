@@ -111,7 +111,8 @@ const applyFilters = (parameters, filter) =>
 const applyPagination = (parameters, page, rowsPerPage) =>
   parameters.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
-export const NotificationsTable = () => {
+export const NotificationsTable = (props: { simple: Boolean }) => {
+  const { simple } = props;
   const queryRef = useRef<TextFieldProps>(null);
   const [notifications, setNotifications] = useState<SpatBroadcastRateNotification>([]);
   const [acceptedNotifications, setAcceptedNotifications] = useState<String[]>([]);
@@ -175,97 +176,105 @@ export const NotificationsTable = () => {
   return (
     <>
       <Container maxWidth={false}>
-        <Box
-          sx={{
-            alignItems: "center",
-            display: "flex",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            m: -1,
-          }}
-        >
-          <Grid container justifyContent="space-between" spacing={3}>
-            <Grid item>
-              <Typography sx={{ m: 1 }} variant="h4">
-                Notifications
-              </Typography>
-            </Grid>
-          </Grid>
-          <Box
-            sx={{
-              m: -1,
-              mt: 3,
-            }}
-          ></Box>
-        </Box>
-        <Box
-          sx={{
-            m: -1,
-            mt: 3,
-            mb: 3,
-          }}
-        >
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={updateNotifications}
-            startIcon={<RefreshIcon fontSize="small" />}
-            sx={{ m: 1 }}
-          >
-            Refresh
-          </Button>
-        </Box>
-        <Card>
-          <CardHeader title="Notifications" />
-          <Tabs
-            indicatorColor="primary"
-            onChange={handleTabsChange}
-            scrollButtons="auto"
-            sx={{ px: 3 }}
-            textColor="primary"
-            value={currentTab}
-            variant="scrollable"
-          >
-            {tabs.map((tab) => (
-              <Tab key={tab.value} label={tab.label} value={tab.value} />
-            ))}
-          </Tabs>
-          <Divider />
-          <Box
-            sx={{
-              alignItems: "center",
-              display: "flex",
-              flexWrap: "wrap",
-              m: -1.5,
-              p: 3,
-            }}
-          >
-            <Stack>
+        {!simple && (
+          <>
+            <Box
+              sx={{
+                alignItems: "center",
+                display: "flex",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
+                m: -1,
+              }}
+            >
+              <Grid container justifyContent="space-between" spacing={3}>
+                <Grid item>
+                  <Typography sx={{ m: 1 }} variant="h4">
+                    Notifications
+                  </Typography>
+                </Grid>
+              </Grid>
               <Box
-                component="form"
-                onSubmit={handleQueryChange}
                 sx={{
-                  flexGrow: 1,
-                  m: 1.5,
+                  m: -1,
+                  mt: 3,
+                }}
+              ></Box>
+            </Box>
+            <Box
+              sx={{
+                m: -1,
+                mt: 3,
+                mb: 3,
+              }}
+            >
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={updateNotifications}
+                startIcon={<RefreshIcon fontSize="small" />}
+                sx={{ m: 1 }}
+              >
+                Refresh
+              </Button>
+            </Box>
+          </>
+        )}
+        <Card>
+          {!simple && (
+            <>
+              <CardHeader title="Notifications" />
+              <Tabs
+                indicatorColor="primary"
+                onChange={handleTabsChange}
+                scrollButtons="auto"
+                sx={{ px: 3 }}
+                textColor="primary"
+                value={currentTab}
+                variant="scrollable"
+              >
+                {tabs.map((tab) => (
+                  <Tab key={tab.value} label={tab.label} value={tab.value} />
+                ))}
+              </Tabs>
+              <Divider />
+              <Box
+                sx={{
+                  alignItems: "center",
+                  display: "flex",
+                  flexWrap: "wrap",
+                  m: -1.5,
+                  p: 3,
                 }}
               >
-                <TextField
-                  defaultValue=""
-                  fullWidth
-                  inputProps={{ ref: queryRef }}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchIcon fontSize="small" />
-                      </InputAdornment>
-                    ),
-                  }}
-                  placeholder="Search parameters"
-                />
+                <Stack>
+                  <Box
+                    component="form"
+                    onSubmit={handleQueryChange}
+                    sx={{
+                      flexGrow: 1,
+                      m: 1.5,
+                    }}
+                  >
+                    <TextField
+                      defaultValue=""
+                      fullWidth
+                      inputProps={{ ref: queryRef }}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <SearchIcon fontSize="small" />
+                          </InputAdornment>
+                        ),
+                      }}
+                      placeholder="Search parameters"
+                    />
+                  </Box>
+                  <Typography variant="body1">{currentDescription}</Typography>
+                </Stack>
               </Box>
-              <Typography variant="body1">{currentDescription}</Typography>
-            </Stack>
-          </Box>
+            </>
+          )}
 
           <CustomerListResults
             customers={paginatedNotifications}

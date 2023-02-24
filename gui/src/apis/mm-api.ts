@@ -4,6 +4,7 @@ import all_spat_data from "./fake_data/ProcessedSpat";
 // import bsm_data from './fake_data/BsmSingle.json';
 import all_bsm_data from "./fake_data/10.11.81.12_BSMlist";
 import intersectionsList from "./fake_data/intersections.json";
+import assessments from "./fake_data/assessments.json";
 
 class MessageMonitorApi {
   getIntersections(): Intersection[] {
@@ -12,6 +13,19 @@ class MessageMonitorApi {
 
   getNotifications(): MessageMonitor.Notification[] {
     return notifications;
+  }
+
+  // Assessments
+  getSignalStateAssessment(): SignalStateAssessment {
+    return assessments.signalStateAssessment;
+  }
+
+  getConnectionOfTravelAssessment(): ConnectionOfTravelAssessment {
+    return assessments.connectionOfTravelAssessment;
+  }
+
+  getLaneDirectionOfTravelAssessment(): LaneDirectionOfTravelAssessment {
+    return assessments.laneDirectionOfTravelAssessment;
   }
 
   getMapMessage(): ProcessedMap {
