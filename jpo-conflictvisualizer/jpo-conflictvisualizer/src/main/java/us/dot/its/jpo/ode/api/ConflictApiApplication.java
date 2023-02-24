@@ -3,17 +3,15 @@ package us.dot.its.jpo.ode.api;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-@EnableMongoRepositories
 public class ConflictApiApplication extends SpringBootServletInitializer {
 
-	
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
@@ -27,15 +25,13 @@ public class ConflictApiApplication extends SpringBootServletInitializer {
 	}
 
 	@Bean
-
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
 				Properties props = new Properties();
-                registry.addMapping("/**").allowedOrigins(props.getCors());
-            }
-        };
-    }
-
+				registry.addMapping("/**").allowedOrigins(props.getCors());
+			}
+		};
+	}
 }

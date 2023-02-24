@@ -1,12 +1,17 @@
 package us.dot.its.jpo.ode.api.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,14 +21,11 @@ import us.dot.its.jpo.conflictmonitor.monitor.models.assessments.ConnectionOfTra
 import us.dot.its.jpo.conflictmonitor.monitor.models.assessments.LaneDirectionOfTravelAssessment;
 import us.dot.its.jpo.conflictmonitor.monitor.models.assessments.SignalStateAssessment;
 import us.dot.its.jpo.conflictmonitor.monitor.models.assessments.SignalStateEventAssessment;
-import us.dot.its.jpo.ode.api.accessors.assessments.ConnectionOfTravelAssessmentRepo;
-import us.dot.its.jpo.ode.api.accessors.assessments.LaneDirectionOfTravelAssessmentRepo;
-import us.dot.its.jpo.ode.api.accessors.assessments.SignalStateAssessmentRepo;
-import us.dot.its.jpo.ode.api.accessors.assessments.SignalStateEventAssessmentRepo;
-import us.dot.its.jpo.ode.api.query.EqualsCriteria;
-import us.dot.its.jpo.ode.api.query.GreaterThanCriteria;
-import us.dot.its.jpo.ode.api.query.LessThanCriteria;
-import us.dot.its.jpo.ode.api.query.QueryBuilder;
+import us.dot.its.jpo.ode.api.Properties;
+import us.dot.its.jpo.ode.api.accessors.assessments.ConnectionOfTravelAssessment.ConnectionOfTravelAssessmentRepository;
+import us.dot.its.jpo.ode.api.accessors.assessments.LaneDirectionOfTravelAssessment.LaneDirectionOfTravelAssessmentRepository;
+import us.dot.its.jpo.ode.api.accessors.assessments.SignalStateAssessment.SignalStateAssessmentRepository;
+import us.dot.its.jpo.ode.api.accessors.assessments.SignalStateEventAssessment.SignalStateEventAssessmentRepository;
 import us.dot.its.jpo.ode.mockdata.MockAssessmentGenerator;
 
 
@@ -31,16 +33,19 @@ import us.dot.its.jpo.ode.mockdata.MockAssessmentGenerator;
 public class AssessmentController {
 
     @Autowired
-	LaneDirectionOfTravelAssessmentRepo laneDirectionOfTravelAssessmentRepo;
+	LaneDirectionOfTravelAssessmentRepository laneDirectionOfTravelAssessmentRepo;
 
     @Autowired
-	ConnectionOfTravelAssessmentRepo connectionOfTravelAssessmentRepo;
+	ConnectionOfTravelAssessmentRepository connectionOfTravelAssessmentRepo;
 
     @Autowired
-    SignalStateAssessmentRepo signalStateAssessmentRepo;
+    SignalStateAssessmentRepository signalStateAssessmentRepo;
 
     @Autowired
-    SignalStateEventAssessmentRepo signalStateEventAssessmentRepo;
+    SignalStateEventAssessmentRepository signalStateEventAssessmentRepo;
+
+    @Autowired
+    Properties props;
 
     private static final Logger logger = LoggerFactory.getLogger(AssessmentController.class);
 
@@ -52,167 +57,111 @@ public class AssessmentController {
     
     
     @RequestMapping(value = "/assessments/connection_of_travel", method = RequestMethod.GET, produces = "application/json")
-	public List<ConnectionOfTravelAssessment> findConnectionOfTravelAssessment(
+	public ResponseEntity<List<ConnectionOfTravelAssessment>> findConnectionOfTravelAssessment(
             @RequestParam(name="road_regulator_id", required = false) Integer roadRegulatorID,
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
             @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
             ) {
-        
-        
-        List<ConnectionOfTravelAssessment> list = new ArrayList<>();
-        
-        if(testData){
+
+
+        if (testData) {
+            List<ConnectionOfTravelAssessment> list = new ArrayList<>();
             list.add(MockAssessmentGenerator.getConnectionOfTravelAssessment());
-        }else{
-            QueryBuilder builder = new QueryBuilder();
-
-            if(intersectionID != null){
-                builder.addCriteria(new EqualsCriteria<Integer>("intersectionID", intersectionID));
+            return ResponseEntity.ok(list);
+        } else {
+            Query query = connectionOfTravelAssessmentRepo.getQuery(intersectionID, startTime, endTime);
+            long count = connectionOfTravelAssessmentRepo.getQueryResultCount(query);
+            if (count <= props.getMaximumResponseSize()) {
+                logger.info("Returning ProcessedMap Response with Size: " + count);
+                return ResponseEntity.ok(connectionOfTravelAssessmentRepo.find(query));
+            } else {
+                throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE,
+                        "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");          
             }
-
-            if(roadRegulatorID != null){
-                builder.addCriteria(new EqualsCriteria<Integer>("intersectionID", roadRegulatorID));
-            }
-
-            if(endTime != null){
-                builder.addCriteria(new LessThanCriteria<Long>("assessmentGeneratedAt", endTime));
-            }
-
-            if(startTime != null){
-                builder.addCriteria(new GreaterThanCriteria<Long>("assessmentGeneratedAt", startTime));
-            }
-
-            list = connectionOfTravelAssessmentRepo.query(builder.getQueryString());
         }
-
-        logger.debug(String.format("Returning %d results for Connection of Travel Assessment Request.", list.size()));
-		return list;
 	}
 
     
     @RequestMapping(value = "/assessments/lane_direction_of_travel", method = RequestMethod.GET, produces = "application/json")
-	public List<LaneDirectionOfTravelAssessment> findLaneDirectionOfTravelAssessment(
+	public ResponseEntity<List<LaneDirectionOfTravelAssessment>> findLaneDirectionOfTravelAssessment(
             @RequestParam(name="road_regulator_id", required = false) Integer roadRegulatorID,
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
             @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
             ) {
-        
-                List<LaneDirectionOfTravelAssessment> list = new ArrayList<>();
-        
-        if(testData){
+
+        if (testData) {
+            List<LaneDirectionOfTravelAssessment> list = new ArrayList<>();
             list.add(MockAssessmentGenerator.getLaneDirectionOfTravelAssessment());
-        }else{
-            QueryBuilder builder = new QueryBuilder();
-
-            if(intersectionID != null){
-                builder.addCriteria(new EqualsCriteria<Integer>("intersectionID", intersectionID));
+            return ResponseEntity.ok(list);
+        } else {
+            Query query = laneDirectionOfTravelAssessmentRepo.getQuery(intersectionID, startTime, endTime);
+            long count = laneDirectionOfTravelAssessmentRepo.getQueryResultCount(query);
+            if (count <= props.getMaximumResponseSize()) {
+                logger.info("Returning LaneDirectionOfTravelAssessment Response with Size: " + count);
+                return ResponseEntity.ok(laneDirectionOfTravelAssessmentRepo.find(query));
+            } else {
+                throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE,
+                        "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");          
             }
-
-            if(roadRegulatorID != null){
-                builder.addCriteria(new EqualsCriteria<Integer>("intersectionID", roadRegulatorID));
-            }
-
-            if(endTime != null){
-                builder.addCriteria(new LessThanCriteria<Long>("assessmentGeneratedAt", endTime));
-            }
-
-            if(startTime != null){
-                builder.addCriteria(new GreaterThanCriteria<Long>("assessmentGeneratedAt", startTime));
-            }
-
-            list = laneDirectionOfTravelAssessmentRepo.query(builder.getQueryString());
-            
         }
-
-        logger.debug(String.format("Returning %d results for Lane Direction of Travel Assessment Request.", list.size()));
-
-        return list;
 		
 	}
 
     
     @RequestMapping(value = "/assessments/signal_state_assessment", method = RequestMethod.GET, produces = "application/json")
-	public List<SignalStateAssessment> findSignalStateAssessment(
+	public ResponseEntity<List<SignalStateAssessment>> findSignalStateAssessment(
             @RequestParam(name="road_regulator_id", required = false) Integer roadRegulatorID,
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
             @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
             ) {
-        
-        List<SignalStateAssessment> list = new ArrayList<>();
-        
-        if(testData){
+
+        if (testData) {
+            List<SignalStateAssessment> list = new ArrayList<>();
             list.add(MockAssessmentGenerator.getSignalStateAssessment());
-        }else{
-            QueryBuilder builder = new QueryBuilder();
-
-            if(intersectionID != null){
-                builder.addCriteria(new EqualsCriteria<Integer>("intersectionID", intersectionID));
+            return ResponseEntity.ok(list);
+        } else {
+            Query query = signalStateAssessmentRepo.getQuery(intersectionID, startTime, endTime);
+            long count = signalStateAssessmentRepo.getQueryResultCount(query);
+            if (count <= props.getMaximumResponseSize()) {
+                logger.info("Returning SignalStateAssessment Response with Size: " + count);
+                return ResponseEntity.ok(signalStateAssessmentRepo.find(query));
+            } else {
+                throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE,
+                        "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");          
             }
-
-            if(roadRegulatorID != null){
-                builder.addCriteria(new EqualsCriteria<Integer>("intersectionID", roadRegulatorID));
-            }
-
-            if(endTime != null){
-                builder.addCriteria(new LessThanCriteria<Long>("assessmentGeneratedAt", endTime));
-            }
-
-            if(startTime != null){
-                builder.addCriteria(new GreaterThanCriteria<Long>("assessmentGeneratedAt", startTime));
-            }
-
-            list = signalStateAssessmentRepo.query(builder.getQueryString());
         }
-
-        logger.debug(String.format("Returning %d results for Signal State Assessment Request.", list.size()));
-
-		return list;
 	}
 
     
     @RequestMapping(value = "/assessments/signal_state_event_assessment", method = RequestMethod.GET, produces = "application/json")
-	public List<SignalStateEventAssessment> findSignalStateEventAssessment(
+	public ResponseEntity<List<SignalStateEventAssessment>> findSignalStateEventAssessment(
             @RequestParam(name="road_regulator_id", required = false) Integer roadRegulatorID,
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
             @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
             ) {
-        
-        List<SignalStateEventAssessment> list = new ArrayList<>();
-        
-        if(testData){
+
+        if (testData) {
+            List<SignalStateEventAssessment> list = new ArrayList<>();
             list.add(MockAssessmentGenerator.getSignalStateEventAssessment());
-        }else{
-            QueryBuilder builder = new QueryBuilder();
-
-            if(intersectionID != null){
-                builder.addCriteria(new EqualsCriteria<Integer>("intersectionID", intersectionID));
+            return ResponseEntity.ok(list);
+        } else {
+            Query query = signalStateEventAssessmentRepo.getQuery(intersectionID, startTime, endTime);
+            long count = signalStateEventAssessmentRepo.getQueryResultCount(query);
+            if (count <= props.getMaximumResponseSize()) {
+                logger.info("Returning SignalStateEventAssessment Response with Size: " + count);
+                return ResponseEntity.ok(signalStateEventAssessmentRepo.find(query));
+            } else {
+                throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE,
+                        "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");          
             }
-
-            if(roadRegulatorID != null){
-                builder.addCriteria(new EqualsCriteria<Integer>("intersectionID", roadRegulatorID));
-            }
-
-            if(endTime != null){
-                builder.addCriteria(new LessThanCriteria<Long>("assessmentGeneratedAt", endTime));
-            }
-
-            if(startTime != null){
-                builder.addCriteria(new GreaterThanCriteria<Long>("assessmentGeneratedAt", startTime));
-            }
-
-            list = signalStateEventAssessmentRepo.query(builder.getQueryString());
         }
-
-        logger.debug(String.format("Returning %d results for Signal State Event Assessment Request.", list.size()));
-
-		return list;
 	}
 }
