@@ -1,12 +1,6 @@
-import processed_map_data from "./fake_data/ProcessedMap.json";
-import all_spat_data from "./fake_data/ProcessedSpat";
-// import processed_spat_data from './fake_data/ProcessedSpatSingle.json';
-// import bsm_data from './fake_data/BsmSingle.json';
-import all_bsm_data from "./fake_data/10.11.81.12_BSMlist";
-import intersectionsList from "./fake_data/intersections.json";
 import { authApiHelper } from "./api-helper";
 
-class MessageMonitorApi {
+class NotificationApi {
   getIntersections(): Intersection[] {
     return intersectionsList;
   }
@@ -43,7 +37,7 @@ class MessageMonitorApi {
     return spatData;
   }
 
-  async getMapMessages({
+  async getSpatMessages({
     token,
     intersection_id,
     startTime,
@@ -98,7 +92,7 @@ class MessageMonitorApi {
   }
 }
 
-export default new MessageMonitorApi();
+export default new NotificationApi();
 
 const notifications: MessageMonitor.Notification[] = [
   {

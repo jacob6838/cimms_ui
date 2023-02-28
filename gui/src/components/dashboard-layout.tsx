@@ -35,7 +35,7 @@ export const DashboardLayout = (props) => {
       new Date(),
       new Date()
     );
-    console.log(details);
+    console.log("TimeChangeDetails", details);
   };
 
   useEffect(() => {

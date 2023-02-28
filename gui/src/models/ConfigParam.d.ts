@@ -4,4 +4,5 @@ type ConfigurationParameter = {
   value: number | string;
   unit: string;
   description: string;
+  roadRegulatorID: string;
 };

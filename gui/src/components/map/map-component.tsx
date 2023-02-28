@@ -272,7 +272,7 @@ const MapTab = (props: MyProps) => {
     setSpatSignalGroups(spatSignalGroupsLocal);
     setSliderValue(Number(Object.keys(spatSignalGroupsLocal)?.[0] ?? 0));
 
-    setBsmData(parseBsmToGeojson(MessageMonitorApi.getBsmMessages()));
+    MessageMonitorApi.getBsmMessages({token: "token"}).then((bsmData) => setBsmData(parseBsmToGeojson(bsmData)));
   }, []);
 
   useEffect(() => {

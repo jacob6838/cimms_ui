@@ -4,7 +4,7 @@ const MESSAGE_MONITOR_ENDPOINT = "http://localhost:8081"; //process.env.MESSAGE_
 
 class AuthApiHelper {
   formatQueryParams(query_params?: Record<string, any>): string {
-    if (!query_params) return "";
+    if (!query_params || Object.keys(query_params).length === 0) return "";
     return `?${new URLSearchParams(query_params).toString()}`;
   }
 
