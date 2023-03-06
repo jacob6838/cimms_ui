@@ -41,6 +41,7 @@ public class BsmController {
     @RequestMapping(value = "/bsm/json", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<OdeBsmData>> findBSMs(
             @RequestParam(name = "origin_ip", required = false) String originIp,
+            @RequestParam(name = "vehicle_id", required = false) String vehicleId,
             @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
             @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
@@ -48,7 +49,7 @@ public class BsmController {
         if (testData) {
             return ResponseEntity.ok(MockBsmGenerator.getJsonBsms());
         } else {
-            Query query = odeBsmJsonRepo.getQuery(originIp, startTime, endTime);
+            Query query = odeBsmJsonRepo.getQuery(originIp, vehicleId, startTime, endTime);
             long count = odeBsmJsonRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning Ode Bsm Data Response with Size: " + count);

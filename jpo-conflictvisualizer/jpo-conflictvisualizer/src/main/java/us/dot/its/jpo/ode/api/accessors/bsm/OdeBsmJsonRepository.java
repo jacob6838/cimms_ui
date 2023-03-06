@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import us.dot.its.jpo.ode.model.OdeBsmData;
 
 public interface OdeBsmJsonRepository{
-    Query getQuery(String originIp, Long startTime, Long endTime);
+    Query getQuery(String originIp, String vehicle_id, Long startTime, Long endTime);
 
     long getQueryResultCount(Query query);
     
