@@ -1,14 +1,26 @@
 package us.dot.its.jpo.ode.api.accessors.map;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.ExposedFields;
+import org.springframework.data.mongodb.core.aggregation.Fields;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
+import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import us.dot.its.jpo.geojsonconverter.pojos.geojson.map.ProcessedMap;
+import us.dot.its.jpo.ode.api.IntersectionReferenceData;
 
 @Component
 public class ProcessedMapRepositoryImpl implements ProcessedMapRepository{
@@ -43,6 +55,18 @@ public class ProcessedMapRepositoryImpl implements ProcessedMapRepository{
 
     public List<ProcessedMap> findProcessedMaps(Query query) {
         return mongoTemplate.find(query, ProcessedMap.class);
+    }
+
+    public List<IntersectionReferenceData> getIntersectionIDs(){
+        GroupOperation groupOperator = Aggregation.group("properties.intersectionId","properties.originIp")
+        .first("properties.intersectionId").as("intersectionID")
+        .first("properties.originIp").as("rsuIP");
+        
+        Aggregation aggregation = Aggregation.newAggregation(groupOperator);
+
+        AggregationResults<IntersectionReferenceData> output = mongoTemplate.aggregate(aggregation, "ProcessedMap", IntersectionReferenceData.class);
+        List<IntersectionReferenceData> referenceData = output.getMappedResults();
+        return referenceData;
     }
 
 }
