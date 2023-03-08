@@ -24,11 +24,17 @@ public class OdeBsmJsonRepositoryImpl  implements OdeBsmJsonRepository{
 
     private ObjectMapper mapper = DateJsonMapper.getInstance();
 
-    public Query getQuery(String originIp, Long startTime, Long endTime){
+    public Query getQuery(String originIp, String vehicleId, Long startTime, Long endTime){
         Query query = new Query();
 
         if(originIp != null){
             query.addCriteria(Criteria.where("metadata.originIp").is(originIp));
+        }
+
+        
+
+        if(vehicleId != null){
+            query.addCriteria(Criteria.where("payload.data.coreData.id").is(vehicleId));
         }
 
         String startTimeString = Instant.ofEpochMilli(0).toString();
@@ -57,7 +63,7 @@ public class OdeBsmJsonRepositoryImpl  implements OdeBsmJsonRepository{
             OdeBsmData bsm = mapper.convertValue(document, OdeBsmData.class);
             convertedList.add(bsm);
         }
-        return mongoTemplate.find(query, OdeBsmData.class);
+        return convertedList;
     }
 
 }

@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import us.dot.its.jpo.conflictmonitor.monitor.models.config.Config;
 import us.dot.its.jpo.conflictmonitor.monitor.models.config.DefaultConfig;
 import us.dot.its.jpo.conflictmonitor.monitor.models.config.IntersectionConfig;
-import us.dot.its.jpo.ode.api.accessors.config.DefaultConfigRepo;
-import us.dot.its.jpo.ode.api.accessors.config.IntersectionConfigRepo;
 import us.dot.its.jpo.ode.api.accessors.config.DefaultConfig.DefaultConfigRepository;
 import us.dot.its.jpo.ode.api.accessors.config.IntersectionConfig.IntersectionConfigRepository;
 
