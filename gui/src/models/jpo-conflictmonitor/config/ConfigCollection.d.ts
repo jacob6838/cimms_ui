@@ -1,4 +1,1 @@
-
-type ConfigCollection = Config<?>> extends ArrayList<T>  & {
-
-}
+type ConfigCollection = Config & {};

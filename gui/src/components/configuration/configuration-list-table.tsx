@@ -98,7 +98,7 @@ export const ConfigParamListTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {(parameters as ConfigurationParameter[]).map((param) =>
+              {(parameters as Config[]).map((param) =>
                 param.intersectionID == null ? generalRow(param) : intersectionRow(param)
               )}
             </TableBody>

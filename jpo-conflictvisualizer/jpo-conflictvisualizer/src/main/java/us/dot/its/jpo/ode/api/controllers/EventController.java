@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,28 +41,28 @@ import us.dot.its.jpo.ode.mockdata.MockEventGenerator;
 public class EventController {
 
     @Autowired
-	ConnectionOfTravelEventRepository connectionOfTravelEventRepo;
+    ConnectionOfTravelEventRepository connectionOfTravelEventRepo;
 
     @Autowired
-	IntersectionReferenceAlignmentEventRepository intersectionReferenceAlignmentEventRepo;
+    IntersectionReferenceAlignmentEventRepository intersectionReferenceAlignmentEventRepo;
 
     @Autowired
-	LaneDirectionOfTravelEventRepository laneDirectionOfTravelEventRepo;
+    LaneDirectionOfTravelEventRepository laneDirectionOfTravelEventRepo;
 
     @Autowired
-	SignalGroupAlignmentEventRepository signalGroupAlignmentEventRepo;
+    SignalGroupAlignmentEventRepository signalGroupAlignmentEventRepo;
 
     @Autowired
-	SignalStateConflictEventRepository signalStateConflictEventRepo;
+    SignalStateConflictEventRepository signalStateConflictEventRepo;
 
     @Autowired
-	SignalStateStopEventRepository signalStateStopEventRepo;
+    SignalStateStopEventRepository signalStateStopEventRepo;
 
     @Autowired
-	SignalStateEventRepository signalStateEventRepo;
+    SignalStateEventRepository signalStateEventRepo;
 
     @Autowired
-	TimeChangeDetailsEventRepository timeChangeDetailsEventRepo;
+    TimeChangeDetailsEventRepository timeChangeDetailsEventRepo;
 
     @Autowired
     Properties props;
@@ -70,24 +71,23 @@ public class EventController {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
-    public String getCurrentTime(){
+    public String getCurrentTime() {
         return ZonedDateTime.now().toInstant().toEpochMilli() + "";
     }
 
-    
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/events/intersection_reference_alignment", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<IntersectionReferenceAlignmentEvent>> findIntersectionReferenceAlignmentEvents(
-            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
-            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
-            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
-            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
-            ) {
+    public ResponseEntity<List<IntersectionReferenceAlignmentEvent>> findIntersectionReferenceAlignmentEvents(
+            @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
 
-        if(testData){
+        if (testData) {
             List<IntersectionReferenceAlignmentEvent> list = new ArrayList<>();
             list.add(MockEventGenerator.getIntersectionReferenceAlignmentEvent());
             return ResponseEntity.ok(list);
-        }else{
+        } else {
             Query query = intersectionReferenceAlignmentEventRepo.getQuery(null, startTime, endTime);
             long count = intersectionReferenceAlignmentEventRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
@@ -97,24 +97,22 @@ public class EventController {
                 throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE,
                         "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");
             }
-        }    
-	}
+        }
+    }
 
-    
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/events/connection_of_travel", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<ConnectionOfTravelEvent>> findConnectionOfTravelEvents(
-            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
-            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
-            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
-            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
-            ) {
+    public ResponseEntity<List<ConnectionOfTravelEvent>> findConnectionOfTravelEvents(
+            @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
 
-
-        if(testData){
+        if (testData) {
             List<ConnectionOfTravelEvent> list = new ArrayList<>();
             list.add(MockEventGenerator.getConnectionOfTravelEvent());
             return ResponseEntity.ok(list);
-        }else{
+        } else {
             Query query = connectionOfTravelEventRepo.getQuery(null, startTime, endTime);
             long count = connectionOfTravelEventRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
@@ -125,22 +123,21 @@ public class EventController {
                         "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");
             }
         }
-	}
+    }
 
-    
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/events/lane_direction_of_travel", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<LaneDirectionOfTravelEvent>> findLaneDirectionOfTravelEvent(
-            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
-            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
-            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
-            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
-            ) {
+    public ResponseEntity<List<LaneDirectionOfTravelEvent>> findLaneDirectionOfTravelEvent(
+            @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
 
-        if(testData){
+        if (testData) {
             List<LaneDirectionOfTravelEvent> list = new ArrayList<>();
             list.add(MockEventGenerator.getLaneDirectionOfTravelEvent());
             return ResponseEntity.ok(list);
-        }else{
+        } else {
             Query query = laneDirectionOfTravelEventRepo.getQuery(null, startTime, endTime);
             long count = laneDirectionOfTravelEventRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
@@ -151,23 +148,21 @@ public class EventController {
                         "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");
             }
         }
-	}
+    }
 
-    
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/events/signal_group_alignment", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<SignalGroupAlignmentEvent>> findSignalGroupAlignmentEvent(
-            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
-            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
-            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
-            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
-            ) {
+    public ResponseEntity<List<SignalGroupAlignmentEvent>> findSignalGroupAlignmentEvent(
+            @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
 
-
-        if(testData){
+        if (testData) {
             List<SignalGroupAlignmentEvent> list = new ArrayList<>();
             list.add(MockEventGenerator.getSignalGroupAlignmentEvent());
             return ResponseEntity.ok(list);
-        }else{
+        } else {
             Query query = signalGroupAlignmentEventRepo.getQuery(null, startTime, endTime);
             long count = signalGroupAlignmentEventRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
@@ -178,48 +173,46 @@ public class EventController {
                         "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");
             }
         }
-	}
+    }
 
-    
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/events/signal_state_conflict", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<SignalStateConflictEvent>> findSignalStateConflictEvent(
-            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
-            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
-            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
-            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
-            ) {
+    public ResponseEntity<List<SignalStateConflictEvent>> findSignalStateConflictEvent(
+            @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
 
-            if(testData){
-                List<SignalStateConflictEvent> list = new ArrayList<>();
-                list.add(MockEventGenerator.getSignalStateConflictEvent());
-                return ResponseEntity.ok(list);
-            }else{
-                Query query = signalStateConflictEventRepo.getQuery(null, startTime, endTime);
-                long count = signalStateConflictEventRepo.getQueryResultCount(query);
-                if (count <= props.getMaximumResponseSize()) {
-                    logger.info("Returning SignalStateConflictEvent Response with Size: " + count);
-                    return ResponseEntity.ok(signalStateConflictEventRepo.find(query));
-                } else {
-                    throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE,
-                            "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");
-                }
+        if (testData) {
+            List<SignalStateConflictEvent> list = new ArrayList<>();
+            list.add(MockEventGenerator.getSignalStateConflictEvent());
+            return ResponseEntity.ok(list);
+        } else {
+            Query query = signalStateConflictEventRepo.getQuery(null, startTime, endTime);
+            long count = signalStateConflictEventRepo.getQueryResultCount(query);
+            if (count <= props.getMaximumResponseSize()) {
+                logger.info("Returning SignalStateConflictEvent Response with Size: " + count);
+                return ResponseEntity.ok(signalStateConflictEventRepo.find(query));
+            } else {
+                throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE,
+                        "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");
             }
-	}
+        }
+    }
 
-    
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/events/signal_state", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<SignalStateEvent>> findSignalStateEvent(
-            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
-            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
-            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
-            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
-            ) {
+    public ResponseEntity<List<SignalStateEvent>> findSignalStateEvent(
+            @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
 
-        if(testData){
+        if (testData) {
             List<SignalStateEvent> list = new ArrayList<>();
             list.add(MockEventGenerator.getSignalStateEvent());
             return ResponseEntity.ok(list);
-        }else{
+        } else {
             Query query = signalStateEventRepo.getQuery(null, startTime, endTime);
             long count = signalStateEventRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
@@ -230,23 +223,21 @@ public class EventController {
                         "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");
             }
         }
-	}
+    }
 
-    
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/events/signal_state_stop", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<SignalStateStopEvent>> findSignalStateStopEvent(
-            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
-            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
-            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
-            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
-            ) {
+    public ResponseEntity<List<SignalStateStopEvent>> findSignalStateStopEvent(
+            @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
 
-
-        if(testData){
+        if (testData) {
             List<SignalStateStopEvent> list = new ArrayList<>();
             list.add(MockEventGenerator.getSignalStateStopEvent());
             return ResponseEntity.ok(list);
-        }else{
+        } else {
             Query query = signalStateStopEventRepo.getQuery(null, startTime, endTime);
             long count = signalStateStopEventRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
@@ -257,22 +248,21 @@ public class EventController {
                         "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");
             }
         }
-	}
+    }
 
-    
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/events/time_change_details", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<TimeChangeDetailsEvent>> findTimeChangeDetailsEvent(
-            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
-            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
-            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
-            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
-            ) {
+    public ResponseEntity<List<TimeChangeDetailsEvent>> findTimeChangeDetailsEvent(
+            @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
 
-        if(testData){
+        if (testData) {
             List<TimeChangeDetailsEvent> list = new ArrayList<>();
             list.add(MockEventGenerator.getTimeChangeDetailsEvent());
             return ResponseEntity.ok(list);
-        }else{
+        } else {
             Query query = timeChangeDetailsEventRepo.getQuery(null, startTime, endTime);
             long count = timeChangeDetailsEventRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
@@ -283,5 +273,5 @@ public class EventController {
                         "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");
             }
         }
-	}
+    }
 }

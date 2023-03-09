@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,8 +19,8 @@ public class IntersectionController {
 
     @Autowired
     ProcessedMapRepository processedMapRepo;
-    
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/intersection/list", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<IntersectionReferenceData>> getIntersections(
             @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
@@ -37,7 +38,7 @@ public class IntersectionController {
         } else {
 
             return ResponseEntity.ok(processedMapRepo.getIntersectionIDs());
-            
+
         }
     }
 }

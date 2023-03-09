@@ -7,14 +7,14 @@ import { DashboardLayout } from "../../../components/dashboard-layout";
 import { ConfigParamRemoveForm } from "../../../components/configuration/configuration-remove-form";
 
 const ConfigParamRemove = () => {
-  const [parameter, setParameter] = useState<ConfigurationParameter | null>(null);
+  const [parameter, setParameter] = useState<Config | null>(null);
 
   const router = useRouter();
   const { key } = router.query;
 
   const getParameter = async (key: string) => {
     try {
-      const data = await configParamApi.getParameter("token", key);
+      const data = await configParamApi.getParameter("token", key, "-1", "1212");
 
       setParameter(data);
     } catch (err) {

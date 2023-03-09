@@ -78,7 +78,7 @@ const applyPagination = (parameters, page, rowsPerPage) =>
 
 const Page = () => {
   const queryRef = useRef<TextFieldProps>(null);
-  const [parameters, setParameters] = useState(Array<ConfigurationParameter>());
+  const [parameters, setParameters] = useState(Array<Config>());
   const [currentTab, setCurrentTab] = useState("all");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -94,7 +94,7 @@ const Page = () => {
 
   const getParameters = async () => {
     try {
-      const data = await configParamApi.getAllParameters("token", "Intersection ID");
+      const data = await configParamApi.getAllParameters("token", "12012");
       console.log(data);
 
       setParameters(data);

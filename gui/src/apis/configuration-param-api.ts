@@ -4,14 +4,14 @@ import configParamsIntersection from "./fake_data/configParamsIntersection.json"
 import toast from "react-hot-toast";
 
 class ConfigParamsApi {
-  async getGeneralParameters(token: string): Promise<ConfigurationParameter[]> {
-    return ConfigParamsGeneral;
+  async getGeneralParameters(token: string): Promise<Config[]> {
+    // return ConfigParamsGeneral;
     try {
       var response = await authApiHelper.invokeApi({
         path: "/config/default/all",
         token: token,
       });
-      return response as ConfigurationParameter[];
+      return response as Config[];
     } catch (exception_var) {
       console.error(exception_var);
       return [];
@@ -21,51 +21,44 @@ class ConfigParamsApi {
   async getIntersectionParameters(
     token: string,
     intersectionId: string
-  ): Promise<ConfigurationParameterIntersection[]> {
-    return configParamsIntersection;
+  ): Promise<IntersectionConfig[]> {
+    // return configParamsIntersection;
     try {
       var response = await authApiHelper.invokeApi({
-        path: "/config/intersection/all",
+        path: "/config/intersection/unique",
         token: token,
-        queryParams: { intersectionId },
+        queryParams: { intersection_id: intersectionId, road_regulator_id: "1" },
       });
-      return response as ConfigurationParameterIntersection[];
+      return response as IntersectionConfig[];
     } catch (exception_var) {
       console.error(exception_var);
       return [];
     }
   }
 
-  async getAllParameters(token: string, intersectionId: string): Promise<ConfigurationParameter[]> {
-    const generalParams = await this.getGeneralParameters(token);
-    const intersectionParams = await this.getIntersectionParameters(token, intersectionId);
-
-    const allParams: ConfigurationParameter[] = [];
-
-    for (const param of generalParams) {
-      const intersectionParam = intersectionParams.find((p) => p.key === param.key);
-      if (intersectionParam) {
-        allParams.push(intersectionParam);
-      } else {
-        allParams.push(param);
-      }
+  async getAllParameters(token: string, intersectionId: string): Promise<Config[]> {
+    try {
+      var response = await authApiHelper.invokeApi({
+        path: "/config/intersection/unique",
+        token: token,
+        queryParams: { intersection_id: intersectionId, road_regulator_id: "-1" },
+      });
+      return response as IntersectionConfig[];
+    } catch (exception_var) {
+      console.error(exception_var);
+      return [];
     }
-    return allParams;
   }
 
-  async getParameterGeneral(
-    token: string,
-    key: string,
-    intersectionId?: string
-  ): Promise<ConfigurationParameter | null> {
-    return ConfigParamsGeneral.find((c) => c.key === key)!;
+  async getParameterGeneral(token: string, key: string): Promise<Config | null> {
+    // return ConfigParamsGeneral.find((c) => c.key === key)!;
     try {
       var response = await authApiHelper.invokeApi({
         path: `/config/default/${key}`,
         token: token,
         failureMessage: "Failed to Retrieve Configuration Parameter " + name,
       });
-      return response as ConfigurationParameter;
+      return response as Config;
     } catch (exception_var) {
       console.error(exception_var);
       return null;
@@ -75,27 +68,44 @@ class ConfigParamsApi {
   async getParameterIntersection(
     token: string,
     key: string,
-    intersectionId?: string
-  ): Promise<ConfigurationParameterIntersection | null> {
-    return configParamsIntersection.find((c) => c.key === key)!;
+    road_regulator_id: string,
+    intersection_id: string
+  ): Promise<IntersectionConfig | null> {
+    // return configParamsIntersection.find((c) => c.key === key)!;
     try {
       var response = await authApiHelper.invokeApi({
         path: `/config/intersection/${key}`,
         token: token,
+        queryParams: { intersection_id, road_regulator_id: "-1" },
         failureMessage: "Failed to Retrieve Configuration Parameter " + name,
       });
-      return response as ConfigurationParameterIntersection;
+      return response as IntersectionConfig;
     } catch (exception_var) {
       console.error(exception_var);
       return null;
     }
   }
 
-  async updateDefaultParameter(
+  async getParameter(
     token: string,
-    name: string,
-    param: ConfigurationParameter
-  ): Promise<ConfigurationParameter | null> {
+    key: string,
+    road_regulator_id: string,
+    intersection_id: string
+  ): Promise<Config | null> {
+    // try to get intersection parameter first, if not found, get general parameter
+    var param: Config | null = await this.getParameterIntersection(
+      token,
+      key,
+      road_regulator_id,
+      intersection_id
+    );
+    if (param == null) {
+      param = await this.getParameterGeneral(token, key);
+    }
+    return param;
+  }
+
+  async updateDefaultParameter(token: string, name: string, param: Config): Promise<Config | null> {
     toast.success(`Successfully Update Configuration Parameter ${name}`);
     return null;
     try {
@@ -109,7 +119,7 @@ class ConfigParamsApi {
         successMessage: `Successfully Update Configuration Parameter ${name}`,
         failureMessage: `Failed to Update Configuration Parameter ${name}`,
       });
-      return response as ConfigurationParameter;
+      return response as Config;
     } catch (exception_var) {
       console.error(exception_var);
       return null;
@@ -119,8 +129,8 @@ class ConfigParamsApi {
   async updateIntersectionParameter(
     token: string,
     name: string,
-    param: ConfigurationParameterIntersection
-  ): Promise<ConfigurationParameterIntersection | null> {
+    param: IntersectionConfig
+  ): Promise<IntersectionConfig | null> {
     toast.success(`Successfully Update Configuration Parameter ${name}`);
     return null;
     try {
@@ -134,7 +144,7 @@ class ConfigParamsApi {
         successMessage: `Successfully Update Configuration Parameter ${name}`,
         failureMessage: `Failed to Update Configuration Parameter ${name}`,
       });
-      return response as ConfigurationParameterIntersection;
+      return response as IntersectionConfig;
     } catch (exception_var) {
       console.error(exception_var);
       return null;
@@ -144,14 +154,15 @@ class ConfigParamsApi {
   async createIntersectionParameter(
     token: string,
     name: string,
-    value: ConfigurationParameter,
+    value: Config,
     intersectionID: number
-  ): Promise<ConfigurationParameter | null> {
+  ): Promise<Config | null> {
     toast.success(`Successfully Update Configuration Parameter ${name}`);
     // return null;
 
-    const param: ConfigurationParameterIntersection = {
+    const param: IntersectionConfig = {
       intersectionID: intersectionID,
+      roadRegulatorID: -1,
       rsuID: "rsu_1",
       ...value,
     };
@@ -167,7 +178,7 @@ class ConfigParamsApi {
         successMessage: `Successfully Update Configuration Parameter ${name}`,
         failureMessage: `Failed to Update Configuration Parameter ${name}`,
       });
-      return response as ConfigurationParameter;
+      return response as Config;
     } catch (exception_var) {
       console.error(exception_var);
       return null;
@@ -179,7 +190,7 @@ class ConfigParamsApi {
     name: string,
     value: number | string,
     intersectionID: number
-  ): Promise<ConfigurationParameter | null> {
+  ): Promise<Config | null> {
     toast.success(`Successfully Removed Configuration Parameter ${name}`);
     return null;
     try {
@@ -193,7 +204,7 @@ class ConfigParamsApi {
         successMessage: `Successfully Update Configuration Parameter ${name}`,
         failureMessage: `Failed to Update Configuration Parameter ${name}`,
       });
-      return response as ConfigurationParameter;
+      return response as Config;
     } catch (exception_var) {
       console.error(exception_var);
       return null;

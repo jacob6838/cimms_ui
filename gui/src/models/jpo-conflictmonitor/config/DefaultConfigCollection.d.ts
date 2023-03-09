@@ -1,4 +1,1 @@
-
-type DefaultConfigCollection = ConfigCollection<DefaultConfig<?>>  & {
-
-}
+type DefaultConfigCollection = ConfigCollection & {};

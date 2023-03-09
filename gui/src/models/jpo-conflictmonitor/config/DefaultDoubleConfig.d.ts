@@ -1,4 +1,1 @@
-
-type DefaultDoubleConfig = DefaultConfig<Double>  & {
-
-}
+type DefaultDoubleConfig = DefaultConfig & {};

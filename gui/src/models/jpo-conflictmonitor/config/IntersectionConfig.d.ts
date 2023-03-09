@@ -1,6 +1,5 @@
-
-type IntersectionConfig = Config<T> & {
-  intersectionID: number
-  roadRegulatorID: number
-  rsuID: str
-}
+type IntersectionConfig = Config & {
+  intersectionID: number;
+  roadRegulatorID: number;
+  rsuID: str;
+};

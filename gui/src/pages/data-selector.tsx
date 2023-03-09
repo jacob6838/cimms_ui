@@ -7,8 +7,6 @@ import { DashboardLayout } from "../components/dashboard-layout";
 import { DataSelectorEditForm } from "../components/data-selector/data-selector-edit-form";
 
 const DataSelectorPage = () => {
-  const [parameter, setParameter] = useState<ConfigurationParameter | null>(null);
-
   const router = useRouter();
   const { parameterName } = router.query;
 

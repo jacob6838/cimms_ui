@@ -1,4 +1,1 @@
-
-type IntersectionConfigCollection = ConfigCollection<IntersectionConfig<?>>  & {
-
-}
+type IntersectionConfigCollection = ConfigCollection & {};

@@ -1,4 +1,1 @@
-
-type DefaultConfig = Config<T> & {
-
-}
+type DefaultConfig = Config & {};

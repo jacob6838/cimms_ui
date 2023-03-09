@@ -1,4 +1,1 @@
-
-type ConfigMap = ConcurrentSkipListMap<String, T>  & {
-
-}
+type ConfigMap = ConcurrentSkipListMap & {};

@@ -1,4 +1,1 @@
-
-type DefaultLongConfig = DefaultConfig<Long>  & {
-
-}
+type DefaultLongConfig = DefaultConfig & {};

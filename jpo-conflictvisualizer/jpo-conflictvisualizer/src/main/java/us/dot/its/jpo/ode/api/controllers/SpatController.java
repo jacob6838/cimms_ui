@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,7 +15,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import us.dot.its.jpo.geojsonconverter.pojos.spat.ProcessedSpat;
 import us.dot.its.jpo.ode.api.accessors.spat.ProcessedSpatRepository;
 import us.dot.its.jpo.ode.mockdata.MockSpatGenerator;
-
 
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
@@ -36,19 +36,17 @@ public class SpatController {
     @Autowired
     Properties props;
 
-    public String getCurrentTime(){
+    public String getCurrentTime() {
         return ZonedDateTime.now().toInstant().toEpochMilli() + "";
     }
 
-    
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/spat/json", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<ProcessedSpat>> findSpats(
-            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
-            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
-            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
-            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
-            ) {
-        
+    public ResponseEntity<List<ProcessedSpat>> findSpats(
+            @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
 
         if (testData) {
             return ResponseEntity.ok(MockSpatGenerator.getProcessedSpats());
@@ -61,8 +59,8 @@ public class SpatController {
             } else {
                 throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE,
                         "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");
-                        
+
             }
         }
-	}
+    }
 }

@@ -1,4 +1,1 @@
-
-type DefaultStringConfig = DefaultConfig<String>  & {
-
-}
+type DefaultStringConfig = DefaultConfig & {};
