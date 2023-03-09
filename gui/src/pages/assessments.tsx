@@ -149,130 +149,20 @@ const Page = () => {
         }}
       >
         <Container maxWidth={false}>
-          <Box
-            sx={{
-              alignItems: "center",
-              display: "flex",
-              justifyContent: "space-between",
-              flexWrap: "wrap",
-              m: -1,
-            }}
-          >
-            <Grid container justifyContent="space-between" spacing={3}>
-              <Grid item>
-                <Typography sx={{ m: 1 }} variant="h4">
-                  Assessments
-                </Typography>
-              </Grid>
+          <Grid container spacing={3}>
+            <Grid item lg={3} sm={6} xl={3} xs={12}>
+              <ConnectionOfTravelAssessmentCard assessment={connectionOfTravelAssessment} />
             </Grid>
-            <Box
-              sx={{
-                m: -1,
-                mt: 3,
-              }}
-            ></Box>
-          </Box>
-          <Box
-            sx={{
-              m: -1,
-              mt: 3,
-              mb: 3,
-            }}
-          >
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={updateNotifications}
-              startIcon={<RefreshIcon fontSize="small" />}
-              sx={{ m: 1 }}
-            >
-              Refresh
-            </Button>
-          </Box>
-          <Card>
-            <Tabs
-              indicatorColor="primary"
-              onChange={handleTabsChange}
-              scrollButtons="auto"
-              sx={{ px: 3 }}
-              textColor="primary"
-              value={currentTab}
-              variant="scrollable"
-            >
-              {tabs.map((tab) => (
-                <Tab key={tab.value} label={tab.label} value={tab.value} />
-              ))}
-            </Tabs>
-            <Divider />
-            <Box
-              sx={{
-                alignItems: "center",
-                display: "flex",
-                flexWrap: "wrap",
-                m: -1.5,
-                p: 3,
-              }}
-            >
-              <Stack>
-                <Box
-                  component="form"
-                  onSubmit={handleQueryChange}
-                  sx={{
-                    flexGrow: 1,
-                    m: 1.5,
-                  }}
-                >
-                  <TextField
-                    defaultValue=""
-                    fullWidth
-                    inputProps={{ ref: queryRef }}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <SearchIcon fontSize="small" />
-                        </InputAdornment>
-                      ),
-                    }}
-                    placeholder="Search parameters"
-                  />
-                </Box>
-                <Typography variant="body1">{currentDescription}</Typography>
-              </Stack>
-            </Box>
-
-            <AssessmentListResults
-              customers={paginatedNotifications}
-              allTabNotifications={notifications}
-              notificationsCount={notifications.length}
-              selectedNotifications={acceptedNotifications}
-              onSelectedItemsChanged={setAcceptedNotifications}
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              rowsPerPage={rowsPerPage}
-              page={page}
-            />
-          </Card>
-          <Box sx={{ mb: 4 }}>
-            <Box
-              sx={{
-                m: -1,
-                mt: 3,
-              }}
-            >
-              <Grid container justifyContent="left" spacing={3}>
-                <Grid item>
-                  <Button
-                    sx={{ m: 1 }}
-                    variant="contained"
-                    onClick={() => {}}
-                    disabled={acceptedNotifications.length <= 0 ? true : false}
-                  >
-                    Dismiss Notifications
-                  </Button>
-                </Grid>
-              </Grid>
-            </Box>
-          </Box>
+            <Grid item xl={3} lg={3} sm={6} xs={12}>
+              <LaneDirectionOfTravelAssessmentCard assessment={laneDirectionOfTravelAssessment} />
+            </Grid>
+            <Grid item xl={3} lg={3} sm={6} xs={12}>
+              <SignalStateAssessmentCard assessment={signalStateAssessment} />
+            </Grid>
+            <Grid item lg={12} md={12} xl={12} xs={12}>
+              <NotificationsTable simple={true} />
+            </Grid>
+          </Grid>
         </Container>
       </Box>
     </>

@@ -24,7 +24,7 @@ export const AuthGuard = (props) => {
     if (!session) {
       // session == null
       console.log("Forcing Sign In");
-    //   signIn();
+      //   signIn();
       // console.log('Not authenticated, redirecting');
       // router
       //   .replace({
