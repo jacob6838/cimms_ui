@@ -115,7 +115,7 @@ public class ConfigController {
 
     @RequestMapping(value = "/config/intersection/unique", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<List<Config>> intersection_config_unique(
-            @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
+            @RequestParam(name = "road_regulator_id", required = true) int roadRegulatorID,
             @RequestParam(name = "intersection_id", required = true) int intersectionID) {
 
         Query query = defaultConfigRepository.getQuery(null);
@@ -153,14 +153,13 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new DefaultConfig<Double>("ldot_minimum_speed_threshold", "lane_direction_of_travel", null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
     @RequestMapping(value = "/config/intersection/lane_direction_of_travel/minimum_speed_threshold", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Double>> intersection_lane_direction_of_travel_minimum_speed_threshold(
-            @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
+            @RequestParam(name = "road_regulator_id", required = true) int roadRegulatorID,
             @RequestParam(name = "intersection_id", required = true) int intersectionID) {
 
         Query query = intersectionConfigRepository.getQuery("ldot_minimum_speed_threshold", roadRegulatorID,
@@ -169,9 +168,7 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new IntersectionConfig<Double>("ldot_minimum_speed_threshold", "lane_direction_of_travel",
-                            roadRegulatorID, intersectionID, null, null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
@@ -179,10 +176,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_lane_direction_of_travel_minimum_speed_threshold(
             @RequestBody DefaultConfig<Double> newConfig) {
         try {
-            DefaultConfig<Double> config = new DefaultConfig<Double>("ldot_minimum_speed_threshold",
-                    "lane_direction_of_travel", (Double) newConfig.getValue());
-            defaultConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            defaultConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -193,12 +188,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_lane_direction_of_travel_minimum_speed_threshold(
             @RequestBody IntersectionConfig<Double> newConfig) {
         try {
-            String rsuID = "0";
-            IntersectionConfig<Double> config = new IntersectionConfig<Double>("ldot_minimum_speed_threshold",
-                    "lane_direction_of_travel", newConfig.getRoadRegulatorID(), newConfig.getIntersectionID(), rsuID,
-                    (Double) newConfig.getValue());
-            intersectionConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            intersectionConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -212,15 +203,13 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new DefaultConfig<Integer>("ldot_minimum_number_of_points", "lane_direction_of_travel",
-                            null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
     @RequestMapping(value = "/config/intersection/lane_direction_of_travel/minimum_number_of_points", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Integer>> intersection_lane_direction_of_travel_minimum_number_of_points(
-            @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
+            @RequestParam(name = "road_regulator_id", required = true) int roadRegulatorID,
             @RequestParam(name = "intersection_id", required = true) int intersectionID) {
 
         Query query = intersectionConfigRepository.getQuery("ldot_minimum_number_of_points", roadRegulatorID,
@@ -230,9 +219,7 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new IntersectionConfig<Integer>("ldot_minimum_number_of_points", "lane_direction_of_travel",
-                            roadRegulatorID, intersectionID, null, null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
@@ -240,10 +227,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_lane_direction_of_travel_minimum_number_of_points(
             @RequestBody DefaultConfig<Integer> newConfig) {
         try {
-            DefaultConfig<Integer> config = new DefaultConfig<Integer>("ldot_minimum_number_of_points",
-                    "lane_direction_of_travel", (Integer) newConfig.getValue());
-            defaultConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            defaultConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -254,12 +239,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_lane_direction_of_travel_minimum_number_of_points(
             @RequestBody IntersectionConfig<Integer> newConfig) {
         try {
-            String rsuID = "0";
-            IntersectionConfig<Integer> config = new IntersectionConfig<Integer>("ldot_minimum_number_of_points",
-                    "lane_direction_of_travel", newConfig.getRoadRegulatorID(), newConfig.getIntersectionID(), rsuID,
-                    (Integer) newConfig.getValue());
-            intersectionConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            intersectionConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -273,14 +254,13 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new DefaultConfig<Long>("ldot_look_back_period", "lane_direction_of_travel", null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
     @RequestMapping(value = "/config/intersection/lane_direction_of_travel/look_back_period", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Long>> intersection_lane_direction_of_travel_look_back_period(
-            @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
+            @RequestParam(name = "road_regulator_id", required = true) int roadRegulatorID,
             @RequestParam(name = "intersection_id", required = true) int intersectionID) {
 
         Query query = intersectionConfigRepository.getQuery("ldot_look_back_period", roadRegulatorID, intersectionID);
@@ -288,9 +268,7 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new IntersectionConfig<Long>("ldot_look_back_period", "lane_direction_of_travel",
-                            roadRegulatorID, intersectionID, null, null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
@@ -298,10 +276,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_lane_direction_of_travel_look_back_period(
             @RequestBody DefaultConfig<Long> newConfig) {
         try {
-            DefaultConfig<Long> config = new DefaultConfig<Long>("ldot_look_back_period",
-                    "lane_direction_of_travel", (Long) newConfig.getValue());
-            defaultConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            defaultConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -312,12 +288,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_lane_direction_of_travel_look_back_period(
             @RequestBody IntersectionConfig<Long> newConfig) {
         try {
-            String rsuID = "0";
-            IntersectionConfig<Long> config = new IntersectionConfig<Long>("ldot_look_back_period",
-                    "lane_direction_of_travel", newConfig.getRoadRegulatorID(), newConfig.getIntersectionID(), rsuID,
-                    (Long) newConfig.getValue());
-            intersectionConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            intersectionConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -331,14 +303,13 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new DefaultConfig<Double>("ldot_heading_tolerance", "lane_direction_of_travel", null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
     @RequestMapping(value = "/config/intersection/lane_direction_of_travel/heading_tolerance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Double>> intersection_lane_direction_of_travel_heading_tolerance(
-            @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
+            @RequestParam(name = "road_regulator_id", required = true) int roadRegulatorID,
             @RequestParam(name = "intersection_id", required = true) int intersectionID) {
 
         Query query = intersectionConfigRepository.getQuery("ldot_heading_tolerance", roadRegulatorID, intersectionID);
@@ -346,9 +317,7 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new IntersectionConfig<Double>("ldot_heading_tolerance", "lane_direction_of_travel",
-                            roadRegulatorID, intersectionID, null, null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
@@ -356,10 +325,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_lane_direction_of_travel_heading_tolerance(
             @RequestBody DefaultConfig<Double> newConfig) {
         try {
-            DefaultConfig<Double> config = new DefaultConfig<Double>("ldot_heading_tolerance",
-                    "lane_direction_of_travel", (Double) newConfig.getValue());
-            defaultConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            defaultConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -370,12 +337,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_lane_direction_of_travel_heading_tolerance(
             @RequestBody IntersectionConfig<Double> newConfig) {
         try {
-            String rsuID = "0";
-            IntersectionConfig<Double> config = new IntersectionConfig<Double>("ldot_heading_tolerance",
-                    "lane_direction_of_travel", newConfig.getRoadRegulatorID(), newConfig.getIntersectionID(), rsuID,
-                    (Double) newConfig.getValue());
-            intersectionConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            intersectionConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -389,15 +352,13 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new DefaultConfig<Integer>("ldot_minimum_number_of_events", "lane_direction_of_travel",
-                            null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
     @RequestMapping(value = "/config/intersection/lane_direction_of_travel/minimum_number_of_events", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Integer>> intersection_lane_direction_of_travel_minimum_number_of_events(
-            @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
+            @RequestParam(name = "road_regulator_id", required = true) int roadRegulatorID,
             @RequestParam(name = "intersection_id", required = true) int intersectionID) {
 
         Query query = intersectionConfigRepository.getQuery("ldot_minimum_number_of_events", roadRegulatorID,
@@ -406,9 +367,7 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new IntersectionConfig<Integer>("ldot_minimum_number_of_events", "lane_direction_of_travel",
-                            roadRegulatorID, intersectionID, null, null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
@@ -416,10 +375,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_lane_direction_of_travel_minimum_number_of_events(
             @RequestBody DefaultConfig<Integer> newConfig) {
         try {
-            DefaultConfig<Integer> config = new DefaultConfig<Integer>("ldot_minimum_number_of_events",
-                    "lane_direction_of_travel", (Integer) newConfig.getValue());
-            defaultConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            defaultConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -430,12 +387,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_lane_direction_of_travel_minimum_number_of_events(
             @RequestBody IntersectionConfig<Integer> newConfig) {
         try {
-            String rsuID = "0";
-            IntersectionConfig<Integer> config = new IntersectionConfig<Integer>("ldot_minimum_number_of_events",
-                    "lane_direction_of_travel", newConfig.getRoadRegulatorID(), newConfig.getIntersectionID(), rsuID,
-                    (Integer) newConfig.getValue());
-            intersectionConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            intersectionConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -449,14 +402,13 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new DefaultConfig<Double>("ss_maximum_distance_from_stopbar", "signal_state", null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
     @RequestMapping(value = "/config/intersection/signal_state/maximum_distance_from_stopbar", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Double>> intersection_signal_state_maximum_distance_from_stopbar(
-            @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
+            @RequestParam(name = "road_regulator_id", required = true) int roadRegulatorID,
             @RequestParam(name = "intersection_id", required = true) int intersectionID) {
 
         Query query = intersectionConfigRepository.getQuery("ss_maximum_distance_from_stopbar", roadRegulatorID,
@@ -465,9 +417,7 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new IntersectionConfig<Double>("ss_maximum_distance_from_stopbar", "signal_state",
-                            roadRegulatorID, intersectionID, null, null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
@@ -475,10 +425,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_signal_state_maximum_distance_from_stopbar(
             @RequestBody DefaultConfig<Double> newConfig) {
         try {
-            DefaultConfig<Double> config = new DefaultConfig<Double>("ss_maximum_distance_from_stopbar",
-                    "signal_state", (Double) newConfig.getValue());
-            defaultConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            defaultConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -489,12 +437,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_signal_state_maximum_distance_from_stopbar(
             @RequestBody IntersectionConfig<Double> newConfig) {
         try {
-            String rsuID = "0";
-            IntersectionConfig<Double> config = new IntersectionConfig<Double>("ss_maximum_distance_from_stopbar",
-                    "signal_state", newConfig.getRoadRegulatorID(), newConfig.getIntersectionID(), rsuID,
-                    (Double) newConfig.getValue());
-            intersectionConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            intersectionConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -508,14 +452,13 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new DefaultConfig<Double>("ss_heading_tolerance", "signal_state", null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
     @RequestMapping(value = "/config/intersection/signal_state/heading_tolerance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Double>> intersection_signal_state_heading_tolerance(
-            @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
+            @RequestParam(name = "road_regulator_id", required = true) int roadRegulatorID,
             @RequestParam(name = "intersection_id", required = true) int intersectionID) {
 
         Query query = intersectionConfigRepository.getQuery("ss_heading_tolerance", roadRegulatorID, intersectionID);
@@ -523,9 +466,7 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new IntersectionConfig<Double>("ss_heading_tolerance", "signal_state",
-                            roadRegulatorID, intersectionID, null, null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
@@ -533,10 +474,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_signal_state_heading_tolerance(
             @RequestBody DefaultConfig<Double> newConfig) {
         try {
-            DefaultConfig<Double> config = new DefaultConfig<Double>("ss_heading_tolerance",
-                    "signal_state", (Double) newConfig.getValue());
-            defaultConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            defaultConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -547,12 +486,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_signal_state_heading_tolerance(
             @RequestBody IntersectionConfig newConfig) {
         try {
-            String rsuID = "0";
-            IntersectionConfig<Double> config = new IntersectionConfig<Double>("ss_heading_tolerance",
-                    "signal_state", newConfig.getRoadRegulatorID(), newConfig.getIntersectionID(), rsuID,
-                    (Double) newConfig.getValue());
-            intersectionConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            intersectionConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -566,14 +501,13 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new DefaultConfig<Long>("ss_look_back_period", "signal_state", null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
     @RequestMapping(value = "/config/intersection/signal_state/look_back_period", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Long>> intersection_signal_state_look_back_period(
-            @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
+            @RequestParam(name = "road_regulator_id", required = true) int roadRegulatorID,
             @RequestParam(name = "intersection_id", required = true) int intersectionID) {
 
         Query query = intersectionConfigRepository.getQuery("ss_look_back_period", roadRegulatorID, intersectionID);
@@ -581,9 +515,7 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new IntersectionConfig<Long>("ss_look_back_period", "signal_state",
-                            roadRegulatorID, intersectionID, null, null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
@@ -591,10 +523,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_signal_state_look_back_period(
             @RequestBody DefaultConfig<Long> newConfig) {
         try {
-            DefaultConfig<Long> config = new DefaultConfig<Long>("ss_look_back_period",
-                    "signal_state", (Long) newConfig.getValue());
-            defaultConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            defaultConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -605,12 +535,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_signal_state_look_back_period(
             @RequestBody IntersectionConfig<Long> newConfig) {
         try {
-            String rsuID = "0";
-            IntersectionConfig<Long> config = new IntersectionConfig<Long>("ss_look_back_period",
-                    "signal_state", newConfig.getRoadRegulatorID(), newConfig.getIntersectionID(), rsuID,
-                    (Long) newConfig.getValue());
-            intersectionConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            intersectionConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -624,14 +550,13 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new DefaultConfig<Double>("ss_minimum_red_light_percentage_threshold", "signal_state", null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
     @RequestMapping(value = "/config/intersection/signal_state/minimum_red_light_percentage_threshold", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Double>> intersection_signal_state_minimum_red_light_percentage_threshold(
-            @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
+            @RequestParam(name = "road_regulator_id", required = true) int roadRegulatorID,
             @RequestParam(name = "intersection_id", required = true) int intersectionID) {
 
         Query query = intersectionConfigRepository.getQuery("ss_minimum_red_light_percentage_threshold",
@@ -640,9 +565,7 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new IntersectionConfig<Double>("ss_minimum_red_light_percentage_threshold", "signal_state",
-                            roadRegulatorID, intersectionID, null, null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
@@ -650,10 +573,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_signal_state_minimum_red_light_percentage_threshold(
             @RequestBody DefaultConfig<Double> newConfig) {
         try {
-            DefaultConfig<Double> config = new DefaultConfig<Double>("ss_minimum_red_light_percentage_threshold",
-                    "signal_state", (Double) newConfig.getValue());
-            defaultConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            defaultConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -664,13 +585,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_signal_state_minimum_red_light_percentage_threshold(
             @RequestBody IntersectionConfig newConfig) {
         try {
-            String rsuID = "0";
-            IntersectionConfig<Double> config = new IntersectionConfig<Double>(
-                    "ss_minimum_red_light_percentage_threshold",
-                    "signal_state", newConfig.getRoadRegulatorID(), newConfig.getIntersectionID(), rsuID,
-                    (Double) newConfig.getValue());
-            intersectionConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            intersectionConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -684,14 +600,13 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new DefaultConfig<Integer>("ss_minimum_number_of_events", "signal_state", null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
     @RequestMapping(value = "/config/intersection/signal_state/minimum_number_of_events", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Integer>> intersection_signal_state_minimum_number_of_events(
-            @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
+            @RequestParam(name = "road_regulator_id", required = true) int roadRegulatorID,
             @RequestParam(name = "intersection_id", required = true) int intersectionID) {
 
         Query query = intersectionConfigRepository.getQuery("ss_minimum_number_of_events", roadRegulatorID,
@@ -700,9 +615,7 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new IntersectionConfig<Integer>("ss_minimum_number_of_events", "signal_state",
-                            roadRegulatorID, intersectionID, null, null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
@@ -710,10 +623,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_signal_state_minimum_number_of_events(
             @RequestBody DefaultConfig<Integer> newConfig) {
         try {
-            DefaultConfig<Integer> config = new DefaultConfig<Integer>("ss_minimum_number_of_events",
-                    "signal_state", (Integer) newConfig.getValue());
-            defaultConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            defaultConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -724,12 +635,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_signal_state_minimum_number_of_events(
             @RequestBody IntersectionConfig newConfig) {
         try {
-            String rsuID = "0";
-            IntersectionConfig<Integer> config = new IntersectionConfig<Integer>("ss_minimum_number_of_events",
-                    "signal_state", newConfig.getRoadRegulatorID(), newConfig.getIntersectionID(), rsuID,
-                    (Integer) newConfig.getValue());
-            intersectionConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            intersectionConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -743,14 +650,13 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new DefaultConfig<Double>("ss_red_light_running_minimum_speed", "signal_state", null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
     @RequestMapping(value = "/config/intersection/signal_state/red_light_running_minimum_speed", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Double>> intersection_signal_state_red_light_running_minimum_speed(
-            @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
+            @RequestParam(name = "road_regulator_id", required = true) int roadRegulatorID,
             @RequestParam(name = "intersection_id", required = true) int intersectionID) {
 
         Query query = intersectionConfigRepository.getQuery("ss_red_light_running_minimum_speed", roadRegulatorID,
@@ -759,9 +665,7 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new IntersectionConfig<Double>("ss_red_light_running_minimum_speed", "signal_state",
-                            roadRegulatorID, intersectionID, null, null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
@@ -769,10 +673,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_signal_state_red_light_running_minimum_speed(
             @RequestBody DefaultConfig<Double> newConfig) {
         try {
-            DefaultConfig<Double> config = new DefaultConfig<Double>("ss_red_light_running_minimum_speed",
-                    "signal_state", (Double) newConfig.getValue());
-            defaultConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            defaultConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -783,12 +685,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_signal_state_red_light_running_minimum_speed(
             @RequestBody IntersectionConfig<Double> newConfig) {
         try {
-            String rsuID = "0";
-            IntersectionConfig<Double> config = new IntersectionConfig<Double>("ss_red_light_running_minimum_speed",
-                    "signal_state", newConfig.getRoadRegulatorID(), newConfig.getIntersectionID(), rsuID,
-                    (Double) newConfig.getValue());
-            intersectionConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            intersectionConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -802,23 +700,20 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new DefaultConfig<Long>("cot_look_back_period", "connection_of_travel", null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
     @RequestMapping(value = "/config/intersection/connection_of_travel/look_back_period", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Long>> intersection_connection_of_travel_look_back_period(
-            @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
+            @RequestParam(name = "road_regulator_id", required = true) int roadRegulatorID,
             @RequestParam(name = "intersection_id", required = true) int intersectionID) {
         Query query = intersectionConfigRepository.getQuery("cot_look_back_period", roadRegulatorID, intersectionID);
         List<IntersectionConfig> list = intersectionConfigRepository.find(query);
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new IntersectionConfig<Long>("cot_look_back_period", "connection_of_travel",
-                            roadRegulatorID, intersectionID, null, null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
@@ -826,10 +721,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_connection_of_travel_look_back_period(
             @RequestBody DefaultConfig<Long> newConfig) {
         try {
-            DefaultConfig<Long> config = new DefaultConfig<Long>("cot_look_back_period",
-                    "connection_of_travel", (Long) newConfig.getValue());
-            defaultConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            defaultConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -840,12 +733,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_connection_of_travel_look_back_period(
             @RequestBody IntersectionConfig<Long> newConfig) {
         try {
-            String rsuID = "0";
-            IntersectionConfig<Long> config = new IntersectionConfig<Long>("cot_look_back_period",
-                    "connection_of_travel", newConfig.getRoadRegulatorID(), newConfig.getIntersectionID(), rsuID,
-                    (Long) newConfig.getValue());
-            intersectionConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            intersectionConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -859,14 +748,13 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new DefaultConfig<Integer>("cot_minimum_number_of_events", "connection_of_travel", null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
     @RequestMapping(value = "/config/intersection/connection_of_travel/minimum_number_of_events", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Integer>> intersection_connection_of_travel_minimum_number_of_events(
-            @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
+            @RequestParam(name = "road_regulator_id", required = true) int roadRegulatorID,
             @RequestParam(name = "intersection_id", required = true) int intersectionID) {
 
         Query query = intersectionConfigRepository.getQuery("cot_minimum_number_of_events", roadRegulatorID,
@@ -875,9 +763,7 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new IntersectionConfig<Integer>("cot_minimum_number_of_events", "connection_of_travel",
-                            roadRegulatorID, intersectionID, null, null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
@@ -885,10 +771,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_connection_of_travel_minimum_number_of_events(
             @RequestBody DefaultConfig<Integer> newConfig) {
         try {
-            DefaultConfig<Integer> config = new DefaultConfig<Integer>("cot_minimum_number_of_events",
-                    "connection_of_travel", (Integer) newConfig.getValue());
-            defaultConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            defaultConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -899,12 +783,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_connection_of_travel_minimum_number_of_events(
             @RequestBody IntersectionConfig<Integer> newConfig) {
         try {
-            String rsuID = "0";
-            IntersectionConfig<Integer> config = new IntersectionConfig<Integer>("cot_minimum_number_of_events",
-                    "connection_of_travel", newConfig.getRoadRegulatorID(), newConfig.getIntersectionID(), rsuID,
-                    (Integer) newConfig.getValue());
-            intersectionConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            intersectionConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -918,14 +798,13 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new DefaultConfig<Integer>("g_v2x_message_processing_frequency", "general", null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
     @RequestMapping(value = "/config/intersection/general/v2x_message_processing_frequency", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Integer>> intersection_general_v2x_message_processing_frequency(
-            @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
+            @RequestParam(name = "road_regulator_id", required = true) int roadRegulatorID,
             @RequestParam(name = "intersection_id", required = true) int intersectionID) {
 
         Query query = intersectionConfigRepository.getQuery("g_v2x_message_processing_frequency", roadRegulatorID,
@@ -934,9 +813,7 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new IntersectionConfig<Integer>("g_v2x_message_processing_frequency", "general",
-                            roadRegulatorID, intersectionID, null, null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
@@ -944,10 +821,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_general_v2x_message_processing_frequency(
             @RequestBody DefaultConfig newConfig) {
         try {
-            DefaultConfig<Integer> config = new DefaultConfig<Integer>("g_v2x_message_processing_frequency",
-                    "general", (Integer) newConfig.getValue());
-            defaultConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            defaultConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -958,12 +833,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_general_v2x_message_processing_frequency(
             @RequestBody IntersectionConfig<Integer> newConfig) {
         try {
-            String rsuID = "0";
-            IntersectionConfig<Integer> config = new IntersectionConfig<Integer>("g_v2x_message_processing_frequency",
-                    "general", newConfig.getRoadRegulatorID(), newConfig.getIntersectionID(), rsuID,
-                    (Integer) newConfig.getValue());
-            intersectionConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            intersectionConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -977,14 +848,13 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new DefaultConfig<Long>("g_message_storage_period", "general", null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
     @RequestMapping(value = "/config/intersection/general/message_storage_period", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Long>> intersection_general_message_storage_period(
-            @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
+            @RequestParam(name = "road_regulator_id", required = true) int roadRegulatorID,
             @RequestParam(name = "intersection_id", required = true) int intersectionID) {
 
         Query query = intersectionConfigRepository.getQuery("g_message_storage_period", roadRegulatorID,
@@ -993,9 +863,7 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new IntersectionConfig<Long>("g_message_storage_period", "general",
-                            roadRegulatorID, intersectionID, null, null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
@@ -1003,10 +871,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_general_message_storage_period(
             @RequestBody DefaultConfig<Long> newConfig) {
         try {
-            DefaultConfig<Long> config = new DefaultConfig<Long>("g_message_storage_period",
-                    "general", (Long) newConfig.getValue());
-            defaultConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            defaultConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -1017,12 +883,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_general_message_storage_period(
             @RequestBody IntersectionConfig<Long> newConfig) {
         try {
-            String rsuID = "0";
-            IntersectionConfig<Long> config = new IntersectionConfig<Long>("g_message_storage_period",
-                    "general", newConfig.getRoadRegulatorID(), newConfig.getIntersectionID(), rsuID,
-                    (Long) newConfig.getValue());
-            intersectionConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            intersectionConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -1036,14 +898,13 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new DefaultConfig<Integer>("g_spat_minimum_10_second_reception", "general", null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
     @RequestMapping(value = "/config/intersection/general/spat_minimum_10_second_reception", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Integer>> intersection_general_spat_minimum_10_second_reception(
-            @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
+            @RequestParam(name = "road_regulator_id", required = true) int roadRegulatorID,
             @RequestParam(name = "intersection_id", required = true) int intersectionID) {
         Query query = intersectionConfigRepository.getQuery("g_spat_minimum_10_second_reception", roadRegulatorID,
                 intersectionID);
@@ -1051,9 +912,7 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new IntersectionConfig<Integer>("g_spat_minimum_10_second_reception", "general",
-                            roadRegulatorID, intersectionID, null, null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
@@ -1061,10 +920,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_general_spat_minimum_10_second_reception(
             @RequestBody DefaultConfig<Integer> newConfig) {
         try {
-            DefaultConfig<Integer> config = new DefaultConfig<Integer>("g_spat_minimum_10_second_reception",
-                    "general", (Integer) newConfig.getValue());
-            defaultConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            defaultConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -1075,12 +932,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_general_spat_minimum_10_second_reception(
             @RequestBody IntersectionConfig<Integer> newConfig) {
         try {
-            String rsuID = "0";
-            IntersectionConfig<Integer> config = new IntersectionConfig<Integer>("g_spat_minimum_10_second_reception",
-                    "general", newConfig.getRoadRegulatorID(), newConfig.getIntersectionID(), rsuID,
-                    (Integer) newConfig.getValue());
-            intersectionConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            intersectionConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -1094,14 +947,13 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new DefaultConfig<Integer>("g_spat_maximum_10_second_reception", "general", null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
     @RequestMapping(value = "/config/intersection/general/spat_maximum_10_second_reception", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Integer>> intersection_general_spat_maximum_10_second_reception(
-            @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
+            @RequestParam(name = "road_regulator_id", required = true) int roadRegulatorID,
             @RequestParam(name = "intersection_id", required = true) int intersectionID) {
 
         Query query = intersectionConfigRepository.getQuery("g_spat_maximum_10_second_reception", roadRegulatorID,
@@ -1110,9 +962,7 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new IntersectionConfig<Integer>("g_spat_maximum_10_second_reception", "general",
-                            roadRegulatorID, intersectionID, null, null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
@@ -1120,10 +970,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_general_spat_maximum_10_second_reception(
             @RequestBody DefaultConfig<Integer> newConfig) {
         try {
-            DefaultConfig<Integer> config = new DefaultConfig<Integer>("g_spat_maximum_10_second_reception",
-                    "general", (Integer) newConfig.getValue());
-            defaultConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            defaultConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -1134,12 +982,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_general_spat_maximum_10_second_reception(
             @RequestBody IntersectionConfig<Integer> newConfig) {
         try {
-            String rsuID = "0";
-            IntersectionConfig<Integer> config = new IntersectionConfig<Integer>("g_spat_maximum_10_second_reception",
-                    "general", newConfig.getRoadRegulatorID(), newConfig.getIntersectionID(), rsuID,
-                    (Integer) newConfig.getValue());
-            intersectionConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            intersectionConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -1153,14 +997,13 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new DefaultConfig<Integer>("g_map_minimum_10_second_reception", "general", null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
     @RequestMapping(value = "/config/intersection/general/map_minimum_10_second_reception", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Integer>> intersection_general_map_minimum_10_second_reception(
-            @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
+            @RequestParam(name = "road_regulator_id", required = true) int roadRegulatorID,
             @RequestParam(name = "intersection_id", required = true) int intersectionID) {
 
         Query query = intersectionConfigRepository.getQuery("g_map_minimum_10_second_reception", roadRegulatorID,
@@ -1169,9 +1012,7 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new IntersectionConfig<Integer>("g_map_minimum_10_second_reception", "general",
-                            roadRegulatorID, intersectionID, null, null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
@@ -1179,10 +1020,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_general_map_minimum_10_second_reception(
             @RequestBody DefaultConfig newConfig) {
         try {
-            DefaultConfig<Integer> config = new DefaultConfig<Integer>("g_map_minimum_10_second_reception",
-                    "general", (Integer) newConfig.getValue());
-            defaultConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            defaultConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -1193,12 +1032,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_general_map_minimum_10_second_reception(
             @RequestBody IntersectionConfig newConfig) {
         try {
-            String rsuID = "0";
-            IntersectionConfig<Integer> config = new IntersectionConfig<Integer>("g_map_minimum_10_second_reception",
-                    "general", newConfig.getRoadRegulatorID(), newConfig.getIntersectionID(), rsuID,
-                    (Integer) newConfig.getValue());
-            intersectionConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            intersectionConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -1212,14 +1047,13 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new DefaultConfig<Integer>("g_map_maximum_10_second_reception", "general", null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
     @RequestMapping(value = "/config/intersection/general/map_maximum_10_second_reception", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody ResponseEntity<IntersectionConfig<Integer>> intersection_general_map_maximum_10_second_reception(
-            @RequestParam(name = "road_regulator_id", required = true) String roadRegulatorID,
+            @RequestParam(name = "road_regulator_id", required = true) int roadRegulatorID,
             @RequestParam(name = "intersection_id", required = true) int intersectionID) {
 
         Query query = intersectionConfigRepository.getQuery("g_map_maximum_10_second_reception", roadRegulatorID,
@@ -1228,9 +1062,7 @@ public class ConfigController {
         if (list.size() > 0) {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(list.get(0));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .body(new IntersectionConfig<Integer>("g_map_maximum_10_second_reception", "general",
-                            roadRegulatorID, intersectionID, null, null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
@@ -1238,10 +1070,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_general_map_maximum_10_second_reception(
             @RequestBody DefaultConfig newConfig) {
         try {
-            DefaultConfig<Integer> config = new DefaultConfig<Integer>("g_map_maximum_10_second_reception",
-                    "general", (Integer) newConfig.getValue());
-            defaultConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            defaultConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
@@ -1252,12 +1082,8 @@ public class ConfigController {
     public @ResponseBody ResponseEntity<String> default_general_map_maximum_10_second_reception(
             @RequestBody IntersectionConfig newConfig) {
         try {
-            String rsuID = "0";
-            IntersectionConfig<Integer> config = new IntersectionConfig<Integer>("g_map_maximum_10_second_reception",
-                    "general", newConfig.getRoadRegulatorID(), newConfig.getIntersectionID(), rsuID,
-                    (Integer) newConfig.getValue());
-            intersectionConfigRepository.save(config);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(config.toString());
+            intersectionConfigRepository.save(newConfig);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(newConfig.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
                     .body(ExceptionUtils.getStackTrace(e));
