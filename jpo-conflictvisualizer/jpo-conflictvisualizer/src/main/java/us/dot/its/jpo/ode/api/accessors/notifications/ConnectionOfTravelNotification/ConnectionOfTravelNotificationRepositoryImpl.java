@@ -21,20 +21,17 @@ public class ConnectionOfTravelNotificationRepositoryImpl implements ConnectionO
         Query query = new Query();
 
         if(intersectionID != null){
-            query.addCriteria(Criteria.where("properties.intersectionId").is(intersectionID));
+            query.addCriteria(Criteria.where("assessment.intersectionID").is(intersectionID));
         }
 
-        String startTimeString = Instant.ofEpochMilli(0).toString();
-        String endTimeString = Instant.now().toString();
-
-        if(startTime != null){
-            startTimeString = Instant.ofEpochMilli(startTime).toString(); 
+        if(startTime == null){
+            startTime = Instant.ofEpochMilli(0).toEpochMilli();
         }
-        if(endTime != null){
-            endTimeString = Instant.ofEpochMilli(endTime).toString();
+        if(endTime == null){
+            endTime = Instant.now().toEpochMilli(); 
         }
 
-        query.addCriteria(Criteria.where("notificationGeneratedAt").gte(startTimeString).lte(endTimeString));
+        query.addCriteria(Criteria.where("notificationGeneratedAt").gte(startTime).lte(endTime));
         return query;
     }
 

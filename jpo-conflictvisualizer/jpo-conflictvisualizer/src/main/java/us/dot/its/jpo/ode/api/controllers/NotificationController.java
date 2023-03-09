@@ -77,6 +77,7 @@ public class NotificationController {
     
     @RequestMapping(value = "/notifications/connection_of_travel", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<ConnectionOfTravelNotification>> findConnectionOfTravelNotification(
+            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
             @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
@@ -86,7 +87,7 @@ public class NotificationController {
             list.add(MockNotificationGenerator.getConnectionOfTravelNotification());
             return ResponseEntity.ok(list);
         }else{
-            Query query = connectionOfTravelNotificationRepo.getQuery(null, startTime, endTime);
+            Query query = connectionOfTravelNotificationRepo.getQuery(intersectionID, startTime, endTime);
             long count = connectionOfTravelNotificationRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning ProcessedMap Response with Size: " + count);
@@ -101,6 +102,7 @@ public class NotificationController {
     
     @RequestMapping(value = "/notifications/intersection_reference_alignment", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<IntersectionReferenceAlignmentNotification>> findIntersectionReferenceAlignmentNotification(
+            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
             @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
@@ -111,7 +113,7 @@ public class NotificationController {
             list.add(MockNotificationGenerator.getIntersectionReferenceAlignmentNotification());
             return ResponseEntity.ok(list);
         }else{
-            Query query = intersectionReferenceAlignmentNotificationRepo.getQuery(null, startTime, endTime);
+            Query query = intersectionReferenceAlignmentNotificationRepo.getQuery(intersectionID, startTime, endTime);
             long count = intersectionReferenceAlignmentNotificationRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning IntersectionReferenceAlignmentNotification Response with Size: " + count);
@@ -126,6 +128,7 @@ public class NotificationController {
     
     @RequestMapping(value = "/notifications/lane_direction_of_travel", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<LaneDirectionOfTravelNotification>> findLaneDirectionOfTravelNotification(
+            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
             @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
@@ -136,7 +139,7 @@ public class NotificationController {
             list.add(MockNotificationGenerator.getLaneDirectionOfTravelNotification());
             return ResponseEntity.ok(list);
         }else{
-            Query query = laneDirectionOfTravelNotificationRepo.getQuery(null, startTime, endTime);
+            Query query = laneDirectionOfTravelNotificationRepo.getQuery(intersectionID, startTime, endTime);
             long count = laneDirectionOfTravelNotificationRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning LaneDirectionOfTravelNotification Response with Size: " + count);
@@ -151,6 +154,7 @@ public class NotificationController {
     
     @RequestMapping(value = "/notifications/map_broadcast_rate_notification", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<MapBroadcastRateNotification>> findMapBroadcastRateNotification(
+            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
             @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
@@ -161,7 +165,7 @@ public class NotificationController {
             list.add(MockNotificationGenerator.getMapBroadcastRateNotification());
             return ResponseEntity.ok(list);
         }else{
-            Query query = mapBroadcastRateNotificationRepo.getQuery(null, startTime, endTime);
+            Query query = mapBroadcastRateNotificationRepo.getQuery(intersectionID, startTime, endTime);
             long count = mapBroadcastRateNotificationRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning MapBroadcastRateNotification Response with Size: " + count);
@@ -176,6 +180,7 @@ public class NotificationController {
     
     @RequestMapping(value = "/notifications/signal_group_alignment_notification", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<SignalGroupAlignmentNotification>> findSignalGroupAlignmentNotification(
+            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
             @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
@@ -185,7 +190,7 @@ public class NotificationController {
             list.add(MockNotificationGenerator.getSignalGroupAlignmentNotification());
             return ResponseEntity.ok(list);
         }else{
-            Query query = signalGroupAlignmentNotificationRepo.getQuery(null, startTime, endTime);
+            Query query = signalGroupAlignmentNotificationRepo.getQuery(intersectionID, startTime, endTime);
             long count = signalGroupAlignmentNotificationRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning SignalGroupAlignmentNotification Response with Size: " + count);
@@ -200,6 +205,7 @@ public class NotificationController {
     
     @RequestMapping(value = "/notifications/signal_state_conflict_notification", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<SignalStateConflictNotification>> findSignalStateConflictNotification(
+            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
             @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
@@ -210,7 +216,7 @@ public class NotificationController {
             list.add(MockNotificationGenerator.getSignalStateConflictNotification());
             return ResponseEntity.ok(list);
         }else{
-            Query query = signalStateConflictNotificationRepo.getQuery(null, startTime, endTime);
+            Query query = signalStateConflictNotificationRepo.getQuery(intersectionID, startTime, endTime);
             long count = signalStateConflictNotificationRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning SignalGroupAlignmentNotification Response with Size: " + count);
@@ -225,6 +231,7 @@ public class NotificationController {
     
     @RequestMapping(value = "/notifications/spat_broadcast_rate_notification", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<SpatBroadcastRateNotification>> findSpatBroadcastRateNotification(
+        @RequestParam(name="intersection_id", required = false) Integer intersectionID,
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
             @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
@@ -235,7 +242,7 @@ public class NotificationController {
             list.add(MockNotificationGenerator.getSpatBroadcastRateNotification());
             return ResponseEntity.ok(list);
         }else{
-            Query query = spatBroadcastRateNotificationRepo.getQuery(null, startTime, endTime);
+            Query query = spatBroadcastRateNotificationRepo.getQuery(intersectionID, startTime, endTime);
             long count = spatBroadcastRateNotificationRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning SpatBroadcastRateNotification Response with Size: " + count);
