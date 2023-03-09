@@ -1,4 +1,4 @@
 
 type RsuConfigKey = {
-  final: static
+  Logger: any
 }
