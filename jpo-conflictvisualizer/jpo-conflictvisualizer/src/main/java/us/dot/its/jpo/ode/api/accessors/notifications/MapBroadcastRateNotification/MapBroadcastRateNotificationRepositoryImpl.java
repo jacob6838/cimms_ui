@@ -17,7 +17,7 @@ public class MapBroadcastRateNotificationRepositoryImpl implements MapBroadcastR
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public Query getQuery(Integer intersectionID, Long startTime, Long endTime){
+    public Query getQuery(Integer intersectionID, Long startTime, Long endTime, boolean latest){
         Query query = new Query();
 
         if(intersectionID != null){
@@ -32,6 +32,10 @@ public class MapBroadcastRateNotificationRepositoryImpl implements MapBroadcastR
         }
 
         query.addCriteria(Criteria.where("notificationGeneratedAt").gte(startTime).lte(endTime));
+        if(latest){
+            query.with(Sort.by(Sort.Direction.DESC, "notificationGeneratedAt"));
+            query.limit(1);
+        }
         return query;
     }
 

@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.broadcast_rate.SpatBroadcastRateNotification;
 
 public interface SpatBroadcastRateNotificationRepository{
-    Query getQuery(Integer intersectionID, Long startTime, Long endTime);
+    Query getQuery(Integer intersectionID, Long startTime, Long endTime, boolean latest);
 
     long getQueryResultCount(Query query);
     
