@@ -40,13 +40,18 @@ export const DashboardLayout = (props) => {
 
   useEffect(() => {
     getTimeChangeDetails();
-    setIntersections(
-      MessageMonitorApi.getIntersections().map((intersection) => {
-        return {
-          id: intersection.intersectionId,
-          location: [intersection.referencePoint.y!, intersection.referencePoint.x!],
-        };
-      })
+    MessageMonitorApi.getIntersections({ token: "token" }).then((intersections) =>
+      setIntersections(
+        intersections.map((intersection) => {
+          return {
+            id: intersection.intersectionId,
+            location:
+              intersection.referencePoint == null
+                ? null
+                : [intersection.referencePoint.y!, intersection.referencePoint.x!],
+          };
+        })
+      )
     );
   }, []);
 

@@ -1,95 +1,13 @@
 import { authApiHelper } from "./api-helper";
 
 class NotificationApi {
-  getIntersections(): Intersection[] {
-    return intersectionsList;
-  }
-
   getNotifications(): MessageMonitor.Notification[] {
     return notifications;
   }
 
-  async getSpatMessages({
-    token,
-    intersection_id,
-    startTime,
-    endTime,
-  }: {
-    token: string;
-    intersection_id?: string;
-    startTime?: Date;
-    endTime?: Date;
-  }): Promise<ProcessedSpat[]> {
-    const queryParams: Record<string, string> = {};
-    if (intersection_id) queryParams["intersection_id"] = intersection_id;
-    if (startTime) queryParams["start_time_utc_millis"] = startTime.getTime().toString();
-    if (endTime) queryParams["end_time_utc_millis"] = endTime.getTime().toString();
-
-    var response = await authApiHelper.invokeApi({
-      path: "/spat/json",
-      token: token,
-      queryParams,
-    });
-    return response as ProcessedSpat[];
-
-    const data: string = all_spat_data;
-    const spatData: ProcessedSpat[] = data.split("\n").map((line) => JSON.parse(line));
-    return spatData;
-  }
-
-  async getSpatMessages({
-    token,
-    intersection_id,
-    startTime,
-    endTime,
-  }: {
-    token: string;
-    intersection_id?: string;
-    startTime?: Date;
-    endTime?: Date;
-  }): Promise<ProcessedMap[]> {
-    const queryParams: Record<string, string> = {};
-    if (intersection_id) queryParams["intersection_id"] = intersection_id;
-    if (startTime) queryParams["start_time_utc_millis"] = startTime.getTime().toString();
-    if (endTime) queryParams["end_time_utc_millis"] = endTime.getTime().toString();
-
-    var response = await authApiHelper.invokeApi({
-      path: "/map/json",
-      token: token,
-      queryParams,
-    });
-    return response as ProcessedMap[];
-
-    return [processed_map_data];
-  }
-
-  async getBsmMessages({
-    token,
-    origin_ip,
-    startTime,
-    endTime,
-  }: {
-    token: string;
-    origin_ip?: string;
-    startTime?: Date;
-    endTime?: Date;
-  }): Promise<OdeBsmData[]> {
-    const queryParams: Record<string, string> = {};
-    if (origin_ip) queryParams["origin_ip"] = origin_ip;
-    if (startTime) queryParams["start_time_utc_millis"] = startTime.getTime().toString();
-    if (endTime) queryParams["end_time_utc_millis"] = endTime.getTime().toString();
-
-    var response = await authApiHelper.invokeApi({
-      path: "/bsm/json",
-      token: token,
-      queryParams,
-    });
-    return response as OdeBsmData[];
-
-    const data: string = all_bsm_data;
-    const bsmData: OdeBsmData[] = data.split("\n").map((line) => JSON.parse(line));
-    return bsmData;
-  }
+  //   getCeaseBroadcastRecommendations(): CeaseBroadcastRecommendation[] {
+  //     return ceaseBroadcastRecommendations;
+  //   }
 }
 
 export default new NotificationApi();

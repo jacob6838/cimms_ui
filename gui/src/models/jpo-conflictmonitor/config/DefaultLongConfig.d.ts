@@ -1,0 +1,4 @@
+
+type DefaultLongConfig = DefaultConfig<Long>  & {
+
+}

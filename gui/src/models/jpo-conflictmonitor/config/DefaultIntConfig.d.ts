@@ -1,0 +1,4 @@
+
+type DefaultIntConfig = DefaultConfig<Integer>  & {
+
+}

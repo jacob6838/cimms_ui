@@ -8,12 +8,16 @@ import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { Theme, useTheme } from "@mui/material/styles";
 import {
+  Autocomplete,
   Button,
+  Box,
   Card,
   CardActions,
   CardContent,
   CardHeader,
+  Chip,
   Divider,
   Grid,
   TextField,
@@ -21,10 +25,15 @@ import {
   MenuItem,
   Select,
   InputAdornment,
+  OutlinedInput,
+  Checkbox,
 } from "@mui/material";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import { FormikCheckboxList } from "./formik-checkbox-list";
 
 const EVENT_TYPES = [
-  "Any",
+  "All",
   "ConnectionOfTravelEvent",
   "IntersectionReferenceAlignmentEvent",
   "LaneDirectionOfTravelEvent",
@@ -41,26 +50,11 @@ const EVENT_TYPES = [
 ];
 
 const ASSESSMENT_TYPES = [
-  "Any",
+  "All",
   "SignalStateAssessment",
   "LaneDirectionOfTravelAssessment",
   "ConnectionOfTravelAssessment",
   "VehicleStopAssessment",
-];
-
-const NOTIFICATION_TYPES = [
-  "Any",
-  "IntersectionReferenceAlignmentNotification",
-  "SignalGroupAlignmentNotification",
-  "SpatMinimumDataNotification",
-  "MapMinimumDataNotification",
-  "SpatBroadcastRateNotification",
-  "MapBroadcastRateNotification",
-  "SignalStateAssessmentNotification",
-  "LaneDirectionOfTravelAssessmentNotification",
-  "ConnectionOfTravelNotification",
-  "SignalStateConflictNotification",
-  "TimeChangeDetailsNotification",
 ];
 
 export const DataSelectorEditForm = (props) => {
@@ -77,9 +71,8 @@ export const DataSelectorEditForm = (props) => {
 
       // type specific filters
       bsmVehicleId: null,
-      eventType: "Any",
-      assessmentId: "Any",
-      notificationId: "Any",
+      eventTypes: [] as string[],
+      assessmentTypes: [] as string[],
     },
     validationSchema: Yup.object({
       type: Yup.string().required("Type is required"),
@@ -114,7 +107,7 @@ export const DataSelectorEditForm = (props) => {
   const onTypeChange = (newType) => {
     // formik.setFieldValue("bsmVehicleId", null);
     // formik.setFieldValue("eventType", "Any");
-    // formik.setFieldValue("assessmentId", "Any");
+    // formik.setFieldValue("assessmentTypes", "Any");
     // formik.setFieldValue("notificationId", "Any");
   };
 
@@ -143,23 +136,11 @@ export const DataSelectorEditForm = (props) => {
               <InputLabel variant="standard" htmlFor="uncontrolled-native">
                 Event Type
               </InputLabel>
-              <Select
-                error={Boolean(formik.touched.eventType && formik.errors.eventType)}
-                // fullWidth
-                value={formik.values.eventType}
-                // label="Query Type"
-                label="Event Type"
-                helperText={formik.touched.eventType && formik.errors.eventType}
-                onChange={(e) => {
-                  onTypeChange(e.target.value);
-                  formik.setFieldValue("eventType", e.target.value);
-                }}
-                onBlur={formik.handleBlur}
-              >
-                {EVENT_TYPES.map((eventType) => (
-                  <MenuItem value={eventType}>{eventType}</MenuItem>
-                ))}
-              </Select>
+              <FormikCheckboxList
+                values={EVENT_TYPES}
+                selectedValues={formik.values.eventTypes}
+                setValues={(val) => formik.setFieldValue("eventTypes", val)}
+              />
             </Grid>
           </>
         );
@@ -170,49 +151,11 @@ export const DataSelectorEditForm = (props) => {
               <InputLabel variant="standard" htmlFor="uncontrolled-native">
                 Assessment Type
               </InputLabel>
-              <Select
-                error={Boolean(formik.touched.assessmentId && formik.errors.assessmentId)}
-                // fullWidth
-                value={formik.values.assessmentId}
-                // label="Query Type"
-                label="Assessment Type"
-                helperText={formik.touched.assessmentId && formik.errors.assessmentId}
-                onChange={(e) => {
-                  onTypeChange(e.target.value);
-                  formik.setFieldValue("assessmentId", e.target.value);
-                }}
-                onBlur={formik.handleBlur}
-              >
-                {ASSESSMENT_TYPES.map((assessmentType) => (
-                  <MenuItem value={assessmentType}>{assessmentType}</MenuItem>
-                ))}
-              </Select>
-            </Grid>
-          </>
-        );
-      case "notifications":
-        return (
-          <>
-            <Grid item md={6} xs={12}>
-              <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                Notification Type
-              </InputLabel>
-              <Select
-                error={Boolean(formik.touched.notificationId && formik.errors.notificationId)}
-                // fullWidth
-                value={formik.values.notificationId}
-                label="Notification Type"
-                helperText={formik.touched.notificationId && formik.errors.notificationId}
-                onChange={(e) => {
-                  onTypeChange(e.target.value);
-                  formik.setFieldValue("notificationId", e.target.value);
-                }}
-                onBlur={formik.handleBlur}
-              >
-                {NOTIFICATION_TYPES.map((notificationType) => (
-                  <MenuItem value={notificationType}>{notificationType}</MenuItem>
-                ))}
-              </Select>
+              <FormikCheckboxList
+                values={ASSESSMENT_TYPES}
+                selectedValues={formik.values.assessmentTypes}
+                setValues={(val) => formik.setFieldValue("assessmentTypes", val)}
+              />
             </Grid>
           </>
         );

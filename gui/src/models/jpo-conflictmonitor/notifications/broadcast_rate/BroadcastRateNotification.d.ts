@@ -1,4 +1,4 @@
 
 type BroadcastRateNotification = {
-
+  event: T
 }

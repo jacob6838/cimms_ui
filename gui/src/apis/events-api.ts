@@ -3,8 +3,6 @@ import { authApiHelper } from "./api-helper";
 
 class EventsApi {
   // GET
-
-  // GET
   // /events/signal_state_stop
   async getSignalStateStop(
     token: string,

@@ -1,0 +1,4 @@
+
+type DefaultStringConfig = DefaultConfig<String>  & {
+
+}

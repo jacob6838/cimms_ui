@@ -1,0 +1,4 @@
+
+type DefaultBooleanConfig = DefaultConfig<Boolean>  & {
+
+}

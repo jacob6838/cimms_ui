@@ -7,8 +7,20 @@ import intersectionsList from "./fake_data/intersections.json";
 import { authApiHelper } from "./api-helper";
 
 class MessageMonitorApi {
-  getIntersections(): Intersection[] {
-    return intersectionsList;
+  async getIntersections({ token }): Promise<Intersection[]> {
+    try {
+      var response = await authApiHelper.invokeApi({
+        path: "/intersection/list",
+        token: token,
+      });
+      console.log(response);
+      return response;
+    } catch (exception_var) {
+      console.error(exception_var);
+      return [];
+    }
+
+    //return intersectionsList;
   }
 
   getNotifications(): MessageMonitor.Notification[] {
