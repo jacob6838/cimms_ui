@@ -2,7 +2,7 @@ package us.dot.its.jpo.ode.api.accessors.notifications.IntersectionReferenceAlig
 
 import java.time.Instant;
 import java.util.List;
-
+import org.springframework.data.domain.Sort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -16,7 +16,7 @@ public class IntersectionReferenceAlignmentNotificationRepositoryImpl implements
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public Query getQuery(Integer intersectionID, Long startTime, Long endTime){
+    public Query getQuery(Integer intersectionID, Long startTime, Long endTime, boolean latest){
         Query query = new Query();
 
         if(intersectionID != null){
@@ -31,6 +31,10 @@ public class IntersectionReferenceAlignmentNotificationRepositoryImpl implements
         }
 
         query.addCriteria(Criteria.where("notificationGeneratedAt").gte(startTime).lte(endTime));
+        if(latest){
+            query.with(Sort.by(Sort.Direction.DESC, "notificationGeneratedAt"));
+            query.limit(1);
+        }
         return query;
     }
 

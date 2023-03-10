@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
-
+import org.springframework.data.domain.Sort;
 import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.ConnectionOfTravelNotification;
 
 @Component
@@ -17,7 +17,7 @@ public class ConnectionOfTravelNotificationRepositoryImpl implements ConnectionO
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public Query getQuery(Integer intersectionID, Long startTime, Long endTime){
+    public Query getQuery(Integer intersectionID, Long startTime, Long endTime, boolean latest){
         Query query = new Query();
 
         if(intersectionID != null){
@@ -32,6 +32,10 @@ public class ConnectionOfTravelNotificationRepositoryImpl implements ConnectionO
         }
 
         query.addCriteria(Criteria.where("notificationGeneratedAt").gte(startTime).lte(endTime));
+        if(latest){
+            query.with(Sort.by(Sort.Direction.DESC, "notificationGeneratedAt"));
+            query.limit(1);
+        }
         return query;
     }
 
