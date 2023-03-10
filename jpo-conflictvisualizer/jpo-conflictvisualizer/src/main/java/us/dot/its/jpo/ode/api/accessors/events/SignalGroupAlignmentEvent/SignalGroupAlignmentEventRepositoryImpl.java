@@ -1,46 +1,51 @@
 
-    package us.dot.its.jpo.ode.api.accessors.events.SignalGroupAlignmentEvent;
+package us.dot.its.jpo.ode.api.accessors.events.SignalGroupAlignmentEvent;
 
-    import java.time.Instant;
-    import java.util.List;
+import java.time.Instant;
+import java.util.List;
 
-    import org.springframework.beans.factory.annotation.Autowired;
-    import org.springframework.data.mongodb.core.MongoTemplate;
-    import org.springframework.data.mongodb.core.query.Criteria;
-    import org.springframework.data.mongodb.core.query.Query;
-    import org.springframework.stereotype.Component;
-    import us.dot.its.jpo.conflictmonitor.monitor.models.events.SignalGroupAlignmentEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Component;
+import us.dot.its.jpo.conflictmonitor.monitor.models.events.SignalGroupAlignmentEvent;
+import org.springframework.data.domain.Sort;
 
-    @Component
-    public class SignalGroupAlignmentEventRepositoryImpl implements SignalGroupAlignmentEventRepository{
-        
-        @Autowired
-        private MongoTemplate mongoTemplate;
+@Component
+public class SignalGroupAlignmentEventRepositoryImpl implements SignalGroupAlignmentEventRepository {
 
-        public Query getQuery(Integer intersectionID, Long startTime, Long endTime){
-            Query query = new Query();
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
-            if(intersectionID != null){
-                query.addCriteria(Criteria.where("intersectionID").is(intersectionID));
-            }
+    public Query getQuery(Integer intersectionID, Long startTime, Long endTime, boolean latest) {
+        Query query = new Query();
 
-            if(startTime == null){
-                startTime = 0L; 
-            }
-            if(endTime == null){
-                endTime = Instant.now().toEpochMilli();
-            }
-
-            query.addCriteria(Criteria.where("timestamp").gte(startTime).lte(endTime));
-            return query;
+        if (intersectionID != null) {
+            query.addCriteria(Criteria.where("intersectionID").is(intersectionID));
         }
 
-        public long getQueryResultCount(Query query){
-            return mongoTemplate.count(query, SignalGroupAlignmentEvent.class, "CmSignalGroupAlignmentEvent");
+        if (startTime == null) {
+            startTime = 0L;
+        }
+        if (endTime == null) {
+            endTime = Instant.now().toEpochMilli();
         }
 
-        public List<SignalGroupAlignmentEvent> find(Query query) {
-            return mongoTemplate.find(query, SignalGroupAlignmentEvent.class, "CmSignalGroupAlignmentEvent");
+        query.addCriteria(Criteria.where("timestamp").gte(startTime).lte(endTime));
+        if (latest) {
+            query.with(Sort.by(Sort.Direction.DESC, "notificationGeneratedAt"));
+            query.limit(1);
         }
-
+        return query;
     }
+
+    public long getQueryResultCount(Query query) {
+        return mongoTemplate.count(query, SignalGroupAlignmentEvent.class, "CmSignalGroupAlignmentEvents");
+    }
+
+    public List<SignalGroupAlignmentEvent> find(Query query) {
+        return mongoTemplate.find(query, SignalGroupAlignmentEvent.class, "CmSignalGroupAlignmentEvents");
+    }
+
+}

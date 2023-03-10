@@ -80,6 +80,7 @@ public class EventController {
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name= "latest", required = false, defaultValue = "false") boolean latest,
             @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
             ) {
 
@@ -88,8 +89,9 @@ public class EventController {
             list.add(MockEventGenerator.getIntersectionReferenceAlignmentEvent());
             return ResponseEntity.ok(list);
         }else{
-            Query query = intersectionReferenceAlignmentEventRepo.getQuery(null, startTime, endTime);
+            Query query = intersectionReferenceAlignmentEventRepo.getQuery(null, startTime, endTime, latest);
             long count = intersectionReferenceAlignmentEventRepo.getQueryResultCount(query);
+            System.out.println("Count" + count);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning IntersectionReferenceAlignmentEvent Response with Size: " + count);
                 return ResponseEntity.ok(intersectionReferenceAlignmentEventRepo.find(query));
@@ -106,6 +108,7 @@ public class EventController {
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name= "latest", required = false, defaultValue = "false") boolean latest,
             @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
             ) {
 
@@ -115,7 +118,7 @@ public class EventController {
             list.add(MockEventGenerator.getConnectionOfTravelEvent());
             return ResponseEntity.ok(list);
         }else{
-            Query query = connectionOfTravelEventRepo.getQuery(null, startTime, endTime);
+            Query query = connectionOfTravelEventRepo.getQuery(null, startTime, endTime, latest);
             long count = connectionOfTravelEventRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning ConnectionOfTravelEvent Response with Size: " + count);
@@ -133,6 +136,7 @@ public class EventController {
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name= "latest", required = false, defaultValue = "false") boolean latest,
             @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
             ) {
 
@@ -141,7 +145,7 @@ public class EventController {
             list.add(MockEventGenerator.getLaneDirectionOfTravelEvent());
             return ResponseEntity.ok(list);
         }else{
-            Query query = laneDirectionOfTravelEventRepo.getQuery(null, startTime, endTime);
+            Query query = laneDirectionOfTravelEventRepo.getQuery(null, startTime, endTime, latest);
             long count = laneDirectionOfTravelEventRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning LaneDirectionOfTravelEvent Response with Size: " + count);
@@ -159,6 +163,7 @@ public class EventController {
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name= "latest", required = false, defaultValue = "false") boolean latest,
             @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
             ) {
 
@@ -168,7 +173,7 @@ public class EventController {
             list.add(MockEventGenerator.getSignalGroupAlignmentEvent());
             return ResponseEntity.ok(list);
         }else{
-            Query query = signalGroupAlignmentEventRepo.getQuery(null, startTime, endTime);
+            Query query = signalGroupAlignmentEventRepo.getQuery(null, startTime, endTime, latest);
             long count = signalGroupAlignmentEventRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning LaneDirectionOfTravelEvent Response with Size: " + count);
@@ -186,6 +191,7 @@ public class EventController {
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name= "latest", required = false, defaultValue = "false") boolean latest,
             @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
             ) {
 
@@ -194,7 +200,7 @@ public class EventController {
                 list.add(MockEventGenerator.getSignalStateConflictEvent());
                 return ResponseEntity.ok(list);
             }else{
-                Query query = signalStateConflictEventRepo.getQuery(null, startTime, endTime);
+                Query query = signalStateConflictEventRepo.getQuery(null, startTime, endTime, latest);
                 long count = signalStateConflictEventRepo.getQueryResultCount(query);
                 if (count <= props.getMaximumResponseSize()) {
                     logger.info("Returning SignalStateConflictEvent Response with Size: " + count);
@@ -212,6 +218,7 @@ public class EventController {
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name= "latest", required = false, defaultValue = "false") boolean latest,
             @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
             ) {
 
@@ -220,7 +227,7 @@ public class EventController {
             list.add(MockEventGenerator.getSignalStateEvent());
             return ResponseEntity.ok(list);
         }else{
-            Query query = signalStateEventRepo.getQuery(null, startTime, endTime);
+            Query query = signalStateEventRepo.getQuery(null, startTime, endTime, latest);
             long count = signalStateEventRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning SignalStateEvent Response with Size: " + count);
@@ -238,6 +245,7 @@ public class EventController {
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name= "latest", required = false, defaultValue = "false") boolean latest,
             @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
             ) {
 
@@ -247,7 +255,7 @@ public class EventController {
             list.add(MockEventGenerator.getSignalStateStopEvent());
             return ResponseEntity.ok(list);
         }else{
-            Query query = signalStateStopEventRepo.getQuery(null, startTime, endTime);
+            Query query = signalStateStopEventRepo.getQuery(null, startTime, endTime, latest);
             long count = signalStateStopEventRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning SignalStateStopEvent Response with Size: " + count);
@@ -265,6 +273,7 @@ public class EventController {
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,
             @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name= "latest", required = false, defaultValue = "false") boolean latest,
             @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
             ) {
 
@@ -273,7 +282,7 @@ public class EventController {
             list.add(MockEventGenerator.getTimeChangeDetailsEvent());
             return ResponseEntity.ok(list);
         }else{
-            Query query = timeChangeDetailsEventRepo.getQuery(null, startTime, endTime);
+            Query query = timeChangeDetailsEventRepo.getQuery(null, startTime, endTime, latest);
             long count = timeChangeDetailsEventRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning TimeChangeDetailsEventRepo Response with Size: " + count);

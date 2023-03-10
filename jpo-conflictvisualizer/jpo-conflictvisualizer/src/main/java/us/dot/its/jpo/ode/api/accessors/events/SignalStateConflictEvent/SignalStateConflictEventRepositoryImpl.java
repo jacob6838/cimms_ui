@@ -1,46 +1,51 @@
 
-    package us.dot.its.jpo.ode.api.accessors.events.SignalStateConflictEvent;
+package us.dot.its.jpo.ode.api.accessors.events.SignalStateConflictEvent;
 
-    import java.time.Instant;
-    import java.util.List;
+import java.time.Instant;
+import java.util.List;
 
-    import org.springframework.beans.factory.annotation.Autowired;
-    import org.springframework.data.mongodb.core.MongoTemplate;
-    import org.springframework.data.mongodb.core.query.Criteria;
-    import org.springframework.data.mongodb.core.query.Query;
-    import org.springframework.stereotype.Component;
-    import us.dot.its.jpo.conflictmonitor.monitor.models.events.SignalStateConflictEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Component;
+import us.dot.its.jpo.conflictmonitor.monitor.models.events.SignalStateConflictEvent;
+import org.springframework.data.domain.Sort;
 
-    @Component
-    public class SignalStateConflictEventRepositoryImpl implements SignalStateConflictEventRepository{
-        
-        @Autowired
-        private MongoTemplate mongoTemplate;
+@Component
+public class SignalStateConflictEventRepositoryImpl implements SignalStateConflictEventRepository {
 
-        public Query getQuery(Integer intersectionID, Long startTime, Long endTime){
-            Query query = new Query();
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
-            if(intersectionID != null){
-                query.addCriteria(Criteria.where("intersectionID").is(intersectionID));
-            }
+    public Query getQuery(Integer intersectionID, Long startTime, Long endTime, boolean latest) {
+        Query query = new Query();
 
-            if(startTime == null){
-                startTime = 0L; 
-            }
-            if(endTime == null){
-                endTime = Instant.now().toEpochMilli();
-            }
-
-            query.addCriteria(Criteria.where("timestamp").gte(startTime).lte(endTime));
-            return query;
+        if (intersectionID != null) {
+            query.addCriteria(Criteria.where("intersectionID").is(intersectionID));
         }
 
-        public long getQueryResultCount(Query query){
-            return mongoTemplate.count(query, SignalStateConflictEvent.class, "CmSignalStateConflictEvents");
+        if (startTime == null) {
+            startTime = 0L;
+        }
+        if (endTime == null) {
+            endTime = Instant.now().toEpochMilli();
         }
 
-        public List<SignalStateConflictEvent> find(Query query) {
-            return mongoTemplate.find(query, SignalStateConflictEvent.class, "CmSignalStateConflictEvents");
+        query.addCriteria(Criteria.where("timestamp").gte(startTime).lte(endTime));
+        if (latest) {
+            query.with(Sort.by(Sort.Direction.DESC, "notificationGeneratedAt"));
+            query.limit(1);
         }
-
+        return query;
     }
+
+    public long getQueryResultCount(Query query) {
+        return mongoTemplate.count(query, SignalStateConflictEvent.class, "CmSignalStateConflictEvents");
+    }
+
+    public List<SignalStateConflictEvent> find(Query query) {
+        return mongoTemplate.find(query, SignalStateConflictEvent.class, "CmSignalStateConflictEvents");
+    }
+
+}

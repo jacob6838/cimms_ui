@@ -1,46 +1,51 @@
 
-    package us.dot.its.jpo.ode.api.accessors.events.ConnectionOfTravelEvent;
+package us.dot.its.jpo.ode.api.accessors.events.ConnectionOfTravelEvent;
 
-    import java.time.Instant;
-    import java.util.List;
+import java.time.Instant;
+import java.util.List;
 
-    import org.springframework.beans.factory.annotation.Autowired;
-    import org.springframework.data.mongodb.core.MongoTemplate;
-    import org.springframework.data.mongodb.core.query.Criteria;
-    import org.springframework.data.mongodb.core.query.Query;
-    import org.springframework.stereotype.Component;
-    import us.dot.its.jpo.conflictmonitor.monitor.models.events.ConnectionOfTravelEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Component;
+import us.dot.its.jpo.conflictmonitor.monitor.models.events.ConnectionOfTravelEvent;
+import org.springframework.data.domain.Sort;
 
-    @Component
-    public class ConnectionOfTravelEventRepositoryImpl implements ConnectionOfTravelEventRepository{
-        
-        @Autowired
-        private MongoTemplate mongoTemplate;
+@Component
+public class ConnectionOfTravelEventRepositoryImpl implements ConnectionOfTravelEventRepository {
 
-        public Query getQuery(Integer intersectionID, Long startTime, Long endTime){
-            Query query = new Query();
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
-            if(intersectionID != null){
-                query.addCriteria(Criteria.where("intersectionID").is(intersectionID));
-            }
+    public Query getQuery(Integer intersectionID, Long startTime, Long endTime, boolean latest) {
+        Query query = new Query();
 
-            if(startTime == null){
-                startTime = 0L; 
-            }
-            if(endTime == null){
-                endTime = Instant.now().toEpochMilli();
-            }
-
-            query.addCriteria(Criteria.where("timestamp").gte(startTime).lte(endTime));
-            return query;
+        if (intersectionID != null) {
+            query.addCriteria(Criteria.where("intersectionID").is(intersectionID));
         }
 
-        public long getQueryResultCount(Query query){
-            return mongoTemplate.count(query, ConnectionOfTravelEvent.class, "CmConnectionOfTravelEvent");
+        if (startTime == null) {
+            startTime = 0L;
+        }
+        if (endTime == null) {
+            endTime = Instant.now().toEpochMilli();
         }
 
-        public List<ConnectionOfTravelEvent> find(Query query) {
-            return mongoTemplate.find(query, ConnectionOfTravelEvent.class, "CmConnectionOfTravelEvent");
+        query.addCriteria(Criteria.where("timestamp").gte(startTime).lte(endTime));
+        if (latest) {
+            query.with(Sort.by(Sort.Direction.DESC, "notificationGeneratedAt"));
+            query.limit(1);
         }
-
+        return query;
     }
+
+    public long getQueryResultCount(Query query) {
+        return mongoTemplate.count(query, ConnectionOfTravelEvent.class, "CmConnectionOfTravelEvent");
+    }
+
+    public List<ConnectionOfTravelEvent> find(Query query) {
+        return mongoTemplate.find(query, ConnectionOfTravelEvent.class, "CmConnectionOfTravelEvent");
+    }
+
+}
