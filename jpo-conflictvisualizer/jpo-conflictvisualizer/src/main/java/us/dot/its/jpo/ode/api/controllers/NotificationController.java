@@ -115,7 +115,7 @@ public class NotificationController {
             list.add(MockNotificationGenerator.getIntersectionReferenceAlignmentNotification());
             return ResponseEntity.ok(list);
         }else{
-            Query query = intersectionReferenceAlignmentNotificationRepo.getQuery(intersectionID, startTime, , latest);
+            Query query = intersectionReferenceAlignmentNotificationRepo.getQuery(intersectionID, startTime, endTime , latest);
             long count = intersectionReferenceAlignmentNotificationRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning IntersectionReferenceAlignmentNotification Response with Size: " + count);

@@ -8,10 +8,10 @@ import us.dot.its.jpo.geojsonconverter.pojos.geojson.map.ProcessedMap;
 import us.dot.its.jpo.ode.api.IntersectionReferenceData;
 
 public interface ProcessedMapRepository{
-    Query getQuery(Integer intersectionID, Long startTime, Long endTime);
+    Query getQuery(Integer intersectionID, Long startTime, Long endTime,boolean latest);
 
     long getQueryResultCount(Query query);
-    
+
     List<ProcessedMap> findProcessedMaps(Query query); 
     
     List<IntersectionReferenceData> getIntersectionIDs();

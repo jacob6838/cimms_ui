@@ -22,7 +22,7 @@ public class IntersectionConfigRepositoryImpl implements IntersectionConfigRepos
         Query query = new Query();
 
         if (key != null) {
-            query.addCriteria(Criteria.where("key").is(key));
+            query.addCriteria(Criteria.where("_id").is(key));
         }
 
         if (roadRegulatorID != null) {

@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -21,7 +22,7 @@ public class ProcessedMapRepositoryImpl implements ProcessedMapRepository{
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public Query getQuery(Integer intersectionID, Long startTime, Long endTime){
+    public Query getQuery(Integer intersectionID, Long startTime, Long endTime, boolean latest){
         Query query = new Query();
 
         if(intersectionID != null){
@@ -36,6 +37,11 @@ public class ProcessedMapRepositoryImpl implements ProcessedMapRepository{
         }
         if(endTime != null){
             endTimeString = Instant.ofEpochMilli(endTime).toString();
+        }
+
+        if(latest){
+            query.with(Sort.by(Sort.Direction.DESC, "notificationGeneratedAt"));
+            query.limit(1);
         }
 
         query.addCriteria(Criteria.where("properties.timeStamp").gte(startTimeString).lte(endTimeString));
