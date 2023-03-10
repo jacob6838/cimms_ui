@@ -7,7 +7,7 @@
     import us.dot.its.jpo.conflictmonitor.monitor.models.assessments.ConnectionOfTravelAssessment;
 
     public interface ConnectionOfTravelAssessmentRepository{
-        Query getQuery(Integer intersectionID, Long startTime, Long endTime);
+        Query getQuery(Integer intersectionID, Long startTime, Long endTime, boolean latest);
 
         long getQueryResultCount(Query query);
         
