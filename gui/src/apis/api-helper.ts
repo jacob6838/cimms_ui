@@ -50,9 +50,12 @@ class AuthApiHelper {
       if (response.ok) {
         if (toastOnSuccess) toast.success(successMessage);
       } else {
-        throw new Error(
+        console.error(
           "Request failed with status code " + response.status + ": " + response.statusText
         );
+        // throw new Error(
+
+        // );
       }
       return response.json();
     });

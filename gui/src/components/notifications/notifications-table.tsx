@@ -19,7 +19,7 @@ import { CustomerListResults } from "./customer-list-results";
 import { DashboardLayout } from "../dashboard-layout";
 import { Refresh as RefreshIcon } from "../../icons/refresh";
 import { Search as SearchIcon } from "../../icons/search";
-import MessageMonitorApi from "../../apis/mm-api";
+import NotificationApi from "../../apis/notification-api";
 import React, { useEffect, useState, useRef } from "react";
 
 const tabs = [
@@ -114,7 +114,7 @@ const applyPagination = (parameters, page, rowsPerPage) =>
 export const NotificationsTable = (props: { simple: Boolean }) => {
   const { simple } = props;
   const queryRef = useRef<TextFieldProps>(null);
-  const [notifications, setNotifications] = useState<SpatBroadcastRateNotification>([]);
+  const [notifications, setNotifications] = useState<MessageMonitor.Notification[]>([]);
   const [acceptedNotifications, setAcceptedNotifications] = useState<String[]>([]);
   const [currentTab, setCurrentTab] = useState("all");
   const [page, setPage] = useState(0);
@@ -126,7 +126,9 @@ export const NotificationsTable = (props: { simple: Boolean }) => {
   });
 
   const updateNotifications = () => {
-    setNotifications(MessageMonitorApi.getNotifications());
+    NotificationApi.getNotifications({ token: "token", intersection_id: "12109" }).then((notifs) =>
+      setNotifications(notifs)
+    );
   };
 
   useEffect(() => {

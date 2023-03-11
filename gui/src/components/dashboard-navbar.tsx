@@ -32,7 +32,7 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }: { theme: Theme }) => ({
 
 interface Props {
   onSidebarOpen: () => void;
-  intersections: IntersectionSummary[];
+  intersections: IntersectionReferenceData[];
   intersectionId: number;
   setIntersectionId: (val: number) => void;
 }
@@ -122,7 +122,11 @@ export const DashboardNavbar = (props: Props) => {
                 onChange={(e) => setIntersectionId(e.target.value as number)}
               >
                 {intersections.map((intersection) => {
-                  return <MenuItem value={intersection.id}>{intersection.id}</MenuItem>;
+                  return (
+                    <MenuItem value={intersection.intersectionID}>
+                      {intersection.intersectionID}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>

@@ -1,6 +1,5 @@
 package us.dot.its.jpo.ode.api.controllers;
 
-
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,32 +36,29 @@ import us.dot.its.jpo.ode.api.accessors.notifications.SignalStateConflictNotific
 import us.dot.its.jpo.ode.api.accessors.notifications.SpatBroadcastRateNotification.SpatBroadcastRateNotificationRepository;
 import us.dot.its.jpo.ode.mockdata.MockNotificationGenerator;
 
-
 @RestController
 public class NotificationController {
 
     @Autowired
-	IntersectionReferenceAlignmentNotificationRepository intersectionReferenceAlignmentNotificationRepo;
+    IntersectionReferenceAlignmentNotificationRepository intersectionReferenceAlignmentNotificationRepo;
 
     @Autowired
-	LaneDirectionOfTravelNotificationRepository laneDirectionOfTravelNotificationRepo;
+    LaneDirectionOfTravelNotificationRepository laneDirectionOfTravelNotificationRepo;
 
     @Autowired
-	MapBroadcastRateNotificationRepository mapBroadcastRateNotificationRepo;
+    MapBroadcastRateNotificationRepository mapBroadcastRateNotificationRepo;
 
     @Autowired
-	SignalGroupAlignmentNotificationRepository signalGroupAlignmentNotificationRepo;
+    SignalGroupAlignmentNotificationRepository signalGroupAlignmentNotificationRepo;
 
     @Autowired
-	SignalStateConflictNotificationRepository signalStateConflictNotificationRepo;
+    SignalStateConflictNotificationRepository signalStateConflictNotificationRepo;
 
     @Autowired
-	SpatBroadcastRateNotificationRepository spatBroadcastRateNotificationRepo;
+    SpatBroadcastRateNotificationRepository spatBroadcastRateNotificationRepo;
 
     @Autowired
     ConnectionOfTravelNotificationRepository connectionOfTravelNotificationRepo;
-
-
 
     @Autowired
     Properties props;
@@ -70,24 +67,23 @@ public class NotificationController {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
-    public String getCurrentTime(){
+    public String getCurrentTime() {
         return ZonedDateTime.now().toInstant().toEpochMilli() + "";
     }
 
-    
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/notifications/connection_of_travel", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<ConnectionOfTravelNotification>> findConnectionOfTravelNotification(
-            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
-            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
-            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
-            @RequestParam(name="latest", required = false, defaultValue = "false") boolean latest,
-            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
-            ) {
-        if(testData){
+    public ResponseEntity<List<ConnectionOfTravelNotification>> findConnectionOfTravelNotification(
+            @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name = "latest", required = false, defaultValue = "false") boolean latest,
+            @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
+        if (testData) {
             List<ConnectionOfTravelNotification> list = new ArrayList<>();
             list.add(MockNotificationGenerator.getConnectionOfTravelNotification());
             return ResponseEntity.ok(list);
-        }else{
+        } else {
             Query query = connectionOfTravelNotificationRepo.getQuery(intersectionID, startTime, endTime, latest);
             long count = connectionOfTravelNotificationRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
@@ -98,24 +94,24 @@ public class NotificationController {
                         "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");
             }
         }
-	}
+    }
 
-    
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/notifications/intersection_reference_alignment", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<IntersectionReferenceAlignmentNotification>> findIntersectionReferenceAlignmentNotification(
-            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
-            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
-            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
-            @RequestParam(name="latest", required = false, defaultValue = "false") boolean latest,
-            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
-            ) {
+    public ResponseEntity<List<IntersectionReferenceAlignmentNotification>> findIntersectionReferenceAlignmentNotification(
+            @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name = "latest", required = false, defaultValue = "false") boolean latest,
+            @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
 
-        if(testData){
+        if (testData) {
             List<IntersectionReferenceAlignmentNotification> list = new ArrayList<>();
             list.add(MockNotificationGenerator.getIntersectionReferenceAlignmentNotification());
             return ResponseEntity.ok(list);
-        }else{
-            Query query = intersectionReferenceAlignmentNotificationRepo.getQuery(intersectionID, startTime, , latest);
+        } else {
+            Query query = intersectionReferenceAlignmentNotificationRepo.getQuery(intersectionID, startTime, endTime,
+                    latest);
             long count = intersectionReferenceAlignmentNotificationRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning IntersectionReferenceAlignmentNotification Response with Size: " + count);
@@ -125,23 +121,22 @@ public class NotificationController {
                         "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");
             }
         }
-	}
+    }
 
-    
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/notifications/lane_direction_of_travel", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<LaneDirectionOfTravelNotification>> findLaneDirectionOfTravelNotification(
-            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
-            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
-            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
-            @RequestParam(name="latest", required = false, defaultValue = "false") boolean latest,
-            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
-            ) {
+    public ResponseEntity<List<LaneDirectionOfTravelNotification>> findLaneDirectionOfTravelNotification(
+            @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name = "latest", required = false, defaultValue = "false") boolean latest,
+            @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
 
-        if(testData){
+        if (testData) {
             List<LaneDirectionOfTravelNotification> list = new ArrayList<>();
             list.add(MockNotificationGenerator.getLaneDirectionOfTravelNotification());
             return ResponseEntity.ok(list);
-        }else{
+        } else {
             Query query = laneDirectionOfTravelNotificationRepo.getQuery(intersectionID, startTime, endTime, latest);
             long count = laneDirectionOfTravelNotificationRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
@@ -152,23 +147,22 @@ public class NotificationController {
                         "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");
             }
         }
-	}
+    }
 
-    
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/notifications/map_broadcast_rate_notification", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<MapBroadcastRateNotification>> findMapBroadcastRateNotification(
-            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
-            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
-            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
-            @RequestParam(name="latest", required = false, defaultValue = "false") boolean latest,
-            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
-            ) {
+    public ResponseEntity<List<MapBroadcastRateNotification>> findMapBroadcastRateNotification(
+            @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name = "latest", required = false, defaultValue = "false") boolean latest,
+            @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
 
-        if(testData){
+        if (testData) {
             List<MapBroadcastRateNotification> list = new ArrayList<>();
             list.add(MockNotificationGenerator.getMapBroadcastRateNotification());
             return ResponseEntity.ok(list);
-        }else{
+        } else {
             Query query = mapBroadcastRateNotificationRepo.getQuery(intersectionID, startTime, endTime, latest);
             long count = mapBroadcastRateNotificationRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
@@ -179,22 +173,21 @@ public class NotificationController {
                         "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");
             }
         }
-	}
+    }
 
-    
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/notifications/signal_group_alignment_notification", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<SignalGroupAlignmentNotification>> findSignalGroupAlignmentNotification(
-            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
-            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
-            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
-            @RequestParam(name="latest", required = false, defaultValue = "false") boolean latest,
-            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
-            ) {
-        if(testData){
+    public ResponseEntity<List<SignalGroupAlignmentNotification>> findSignalGroupAlignmentNotification(
+            @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name = "latest", required = false, defaultValue = "false") boolean latest,
+            @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
+        if (testData) {
             List<SignalGroupAlignmentNotification> list = new ArrayList<>();
             list.add(MockNotificationGenerator.getSignalGroupAlignmentNotification());
             return ResponseEntity.ok(list);
-        }else{
+        } else {
             Query query = signalGroupAlignmentNotificationRepo.getQuery(intersectionID, startTime, endTime, latest);
             long count = signalGroupAlignmentNotificationRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
@@ -205,23 +198,22 @@ public class NotificationController {
                         "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");
             }
         }
-	}
+    }
 
-    
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/notifications/signal_state_conflict_notification", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<SignalStateConflictNotification>> findSignalStateConflictNotification(
-            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
-            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
-            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
-            @RequestParam(name="latest", required = false, defaultValue = "false") boolean latest,
-            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
-            ) {
+    public ResponseEntity<List<SignalStateConflictNotification>> findSignalStateConflictNotification(
+            @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name = "latest", required = false, defaultValue = "false") boolean latest,
+            @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
 
-        if(testData){
+        if (testData) {
             List<SignalStateConflictNotification> list = new ArrayList<>();
             list.add(MockNotificationGenerator.getSignalStateConflictNotification());
             return ResponseEntity.ok(list);
-        }else{
+        } else {
             Query query = signalStateConflictNotificationRepo.getQuery(intersectionID, startTime, endTime, latest);
             long count = signalStateConflictNotificationRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
@@ -232,23 +224,22 @@ public class NotificationController {
                         "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");
             }
         }
-	}
+    }
 
-    
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/notifications/spat_broadcast_rate_notification", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<SpatBroadcastRateNotification>> findSpatBroadcastRateNotification(
-        @RequestParam(name="intersection_id", required = false) Integer intersectionID,
-            @RequestParam(name="start_time_utc_millis", required = false) Long startTime,
-            @RequestParam(name="end_time_utc_millis", required = false) Long endTime,
-            @RequestParam(name="latest", required = false, defaultValue = "false") boolean latest,
-            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
-            ) {
+    public ResponseEntity<List<SpatBroadcastRateNotification>> findSpatBroadcastRateNotification(
+            @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
+            @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name = "latest", required = false, defaultValue = "false") boolean latest,
+            @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
 
-        if(testData){
+        if (testData) {
             List<SpatBroadcastRateNotification> list = new ArrayList<>();
             list.add(MockNotificationGenerator.getSpatBroadcastRateNotification());
             return ResponseEntity.ok(list);
-        }else{
+        } else {
             Query query = spatBroadcastRateNotificationRepo.getQuery(intersectionID, startTime, endTime, latest);
             long count = spatBroadcastRateNotificationRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
@@ -259,5 +250,5 @@ public class NotificationController {
                         "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");
             }
         }
-	}
+    }
 }

@@ -14,7 +14,7 @@ const ConfigParamRemove = () => {
 
   const getParameter = async (key: string) => {
     try {
-      const data = await configParamApi.getParameter("token", key, "-1", "1212");
+      const data = await configParamApi.getParameter("token", key, "-1", "12109");
 
       setParameter(data);
     } catch (err) {

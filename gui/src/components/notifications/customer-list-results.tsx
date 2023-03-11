@@ -117,6 +117,11 @@ export const CustomerListResults = ({
                     <TableCell>{format(customer.notificationGeneratedAt, "dd/MM/yyyy")}</TableCell>
                     <TableCell>{customer.notificationText}</TableCell>
                     <TableCell align="right">
+                      <NextLink href={`/notifications/${customer.id}`} passHref>
+                        <IconButton component="a">
+                          <MapRoundedIcon fontSize="medium" />
+                        </IconButton>
+                      </NextLink>
                       <NextLink href={`/map/notification/${customer.id}`} passHref>
                         <IconButton component="a">
                           <MapRoundedIcon fontSize="medium" />

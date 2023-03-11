@@ -43,11 +43,12 @@ public class ProcessedMapRepositoryImpl implements ProcessedMapRepository{
     }
 
     public long getQueryResultCount(Query query){
-        return mongoTemplate.count(query, ProcessedMap.class);
+        return mongoTemplate.count(query, ProcessedMap.class, "OdeMapJson");
     }
 
     public List<ProcessedMap> findProcessedMaps(Query query) {
-        return mongoTemplate.find(query, ProcessedMap.class);
+        // return mongoTemplate.find(query, ProcessedMap.class, "OdeMapJson1234");
+        return mongoTemplate.find(query, ProcessedMap.class, "ProcessedMap");
     }
 
     public List<IntersectionReferenceData> getIntersectionIDs(){

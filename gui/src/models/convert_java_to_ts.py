@@ -46,6 +46,8 @@ files = [os.path.join(dp, f) for dp, dn, filenames in os.walk("./" + INITIAL_PAT
 DIRECTORIES_TO_IGNORE = ["test", "jpo-s3-deposit", "jpo-ode-consumer-example",
                          "jpo-ode-svcs", "jpo-sdw-depositor", "jpo-security-scvs", "asn1_codec", "jpo-geojsonconverter"]
 
+CUSTOM_DIRECTORIES_TO_NOT_REGENERATE = ["config"]
+
 for file_path in files:
     print(file_path)
     imports = ""
@@ -58,6 +60,9 @@ for file_path in files:
     ignored = False
     directories = file_path.split('/')
     for ignored_dir in DIRECTORIES_TO_IGNORE:
+        if ignored_dir in directories:
+            ignored = True
+    for ignored_dir in CUSTOM_DIRECTORIES_TO_NOT_REGENERATE:
         if ignored_dir in directories:
             ignored = True
     if ignored:
