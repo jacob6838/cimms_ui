@@ -39,29 +39,6 @@ const generalItems = [
     title: "Notifications",
   },
   {
-    path: "/ceaseBroadcastRecommendations",
-    icon: <ChartBarIcon fontSize="small" />,
-    title: "Cease Broadcast Recommendations",
-    chip: (
-      <Chip
-        color="secondary"
-        className="blink_me"
-        sx={true ? null : { display: "none" }}
-        label={
-          <Typography
-            sx={{
-              fontSize: "10px",
-              fontWeight: "600",
-            }}
-          >
-            NEW
-          </Typography>
-        }
-        size="small"
-      />
-    ),
-  },
-  {
     path: "/performanceReports",
     icon: <ChartBarIcon fontSize="small" />,
     title: "Performance Reports",
