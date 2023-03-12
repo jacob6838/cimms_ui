@@ -34,7 +34,6 @@ public class SpatBroadcastRateNotificationRepositoryImpl implements SpatBroadcas
         }
 
         query.addCriteria(Criteria.where("notificationGeneratedAt").gte(startTime).lte(endTime));
-        query.addCriteria(Criteria.where("notificationGeneratedAt").gte(startTime).lte(endTime));
         if(latest){
             query.with(Sort.by(Sort.Direction.DESC, "notificationGeneratedAt"));
             query.limit(1);
