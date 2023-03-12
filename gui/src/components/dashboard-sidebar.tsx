@@ -72,6 +72,11 @@ const generalItems = [
     title: "Map",
   },
   {
+    path: "/data-selector",
+    icon: <ChartBarIcon fontSize="small" />,
+    title: "Data Selector",
+  },
+  {
     path: "/users",
     icon: <UsersIcon fontSize="small" />,
     title: "Users",

@@ -34,7 +34,7 @@ export const FormikCheckboxList = (props) => {
           setValues(newEventTypes);
         }}
       />
-      {eventType}
+      {eventType.label}
     </div>
   ));
 };

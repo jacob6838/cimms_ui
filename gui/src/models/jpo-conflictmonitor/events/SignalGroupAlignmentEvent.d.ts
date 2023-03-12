@@ -1,4 +1,1 @@
-
-type SignalGroupAlignmentEvent = Event & {
-
-}
+type SignalGroupAlignmentEvent = MessageMonitor.Event & {};

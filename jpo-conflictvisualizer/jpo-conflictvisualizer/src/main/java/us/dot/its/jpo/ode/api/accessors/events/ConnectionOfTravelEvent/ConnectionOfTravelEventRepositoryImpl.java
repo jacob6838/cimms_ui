@@ -1,7 +1,7 @@
 
 package us.dot.its.jpo.ode.api.accessors.events.ConnectionOfTravelEvent;
 
-import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +24,17 @@ public class ConnectionOfTravelEventRepositoryImpl implements ConnectionOfTravel
         if (intersectionID != null) {
             query.addCriteria(Criteria.where("intersectionID").is(intersectionID));
         }
+        Date startTimeDate = new Date(0);
+        Date endTimeDate = new Date();
 
-        if (startTime == null) {
-            startTime = 0L;
+        if (startTime != null) {
+            startTimeDate = new Date(startTime);
         }
-        if (endTime == null) {
-            endTime = Instant.now().toEpochMilli();
+        if (endTime != null) {
+            endTimeDate = new Date(endTime);
         }
 
-        query.addCriteria(Criteria.where("timestamp").gte(startTime).lte(endTime));
+        query.addCriteria(Criteria.where("eventGeneratedAt").gte(startTimeDate).lte(endTimeDate));
         if (latest) {
             query.with(Sort.by(Sort.Direction.DESC, "notificationGeneratedAt"));
             query.limit(1);

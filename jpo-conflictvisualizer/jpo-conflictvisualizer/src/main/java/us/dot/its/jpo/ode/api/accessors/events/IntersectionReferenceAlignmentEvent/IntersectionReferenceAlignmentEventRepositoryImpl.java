@@ -2,6 +2,7 @@
 package us.dot.its.jpo.ode.api.accessors.events.IntersectionReferenceAlignmentEvent;
 
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,21 @@ public class IntersectionReferenceAlignmentEventRepositoryImpl
         }
 
         query.addCriteria(Criteria.where("timestamp").gte(startTime).lte(endTime));
+        if (latest) {
+            query.with(Sort.by(Sort.Direction.DESC, "notificationGeneratedAt"));
+            query.limit(1);
+        }
+        Date startTimeDate = new Date(0);
+        Date endTimeDate = new Date();
+
+        if (startTime != null) {
+            startTimeDate = new Date(startTime);
+        }
+        if (endTime != null) {
+            endTimeDate = new Date(endTime);
+        }
+
+        query.addCriteria(Criteria.where("eventGeneratedAt").gte(startTimeDate).lte(endTimeDate));
         if (latest) {
             query.with(Sort.by(Sort.Direction.DESC, "notificationGeneratedAt"));
             query.limit(1);

@@ -33,20 +33,20 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { FormikCheckboxList } from "./formik-checkbox-list";
 
 const EVENT_TYPES = [
-  "All",
-  "ConnectionOfTravelEvent",
-  "IntersectionReferenceAlignmentEvent",
-  "LaneDirectionOfTravelEvent",
-  "ProcessingTimePeriod",
-  "SignalGroupAlignmentEvent",
-  "SignalStateConflictEvent",
-  "SignalStateEvent",
-  "SignalStateStopEvent",
-  "TimeChangeDetailsEvent",
-  "MapMinimumDataEvent",
-  "SpatMinimumDataEvent",
-  "MapBroadcastRateEvent",
-  "SpatBroadcastRateEvent",
+  { label: "All", value: "All" },
+  { label: "ConnectionOfTravelEvent", value: "connection_of_travel" },
+  { label: "IntersectionReferenceAlignmentEvent", value: "intersection_reference_alignment" },
+  { label: "LaneDirectionOfTravelEvent", value: "lane_direction_of_travel" },
+  //   { label: "ProcessingTimePeriod", value: "processing_time_period" },
+  { label: "SignalGroupAlignmentEvent", value: "signal_group_alignment" },
+  { label: "SignalStateConflictEvent", value: "signal_state_conflict" },
+  { label: "SignalStateEvent", value: "signal_state" },
+  { label: "SignalStateStopEvent", value: "signal_state_stop" },
+  { label: "TimeChangeDetailsEvent", value: "time_change_details" },
+  //   { label: "MapMinimumDataEvent", value: "All" },
+  //   { label: "SpatMinimumDataEvent", value: "All" },
+  //   { label: "MapBroadcastRateEvent", value: "All" },
+  //   { label: "SpatBroadcastRateEvent", value: "All" },
 ];
 
 const ASSESSMENT_TYPES = [
@@ -71,29 +71,34 @@ export const DataSelectorEditForm = (props) => {
 
       // type specific filters
       bsmVehicleId: null,
-      eventTypes: [] as string[],
+      eventTypes: [],
       assessmentTypes: [] as string[],
     },
     validationSchema: Yup.object({
-      type: Yup.string().required("Type is required"),
-      startDate: Yup.date().required("Start date is required"),
-      timeRange: Yup.number().required("Time interval is required"),
-      intersectionId: Yup.string().required("Intersection ID is required"),
-      roadRegulatorId: Yup.string().required("Road Regulator ID is required"),
-      bsmVehicleId: Yup.string(),
+      //   type: Yup.string().required("Type is required"),
+      //   startDate: Yup.date().required("Start date is required"),
+      //   timeRange: Yup.number().required("Time interval is required"),
+      //   intersectionId: Yup.string().required("Intersection ID is required"),
+      //   roadRegulatorId: Yup.string().required("Road Regulator ID is required"),
+      //   bsmVehicleId: Yup.string(),
     }),
     onSubmit: async (values, helpers) => {
+      console.log("submitting");
       try {
         helpers.setStatus({ success: true });
         helpers.setSubmitting(false);
-        onQuery({
-          type: values.type,
-          intersectionId: values.intersectionId,
-          roadRegulatorId: values.roadRegulatorId,
-          startDate: values.startDate,
-          timeRange: values.timeRange,
-          bsmVehicleId: values.bsmVehicleId,
-        });
+        console.log(
+          onQuery({
+            type: values.type,
+            intersectionId: values.intersectionId,
+            roadRegulatorId: values.roadRegulatorId,
+            startDate: values.startDate,
+            timeRange: values.timeRange,
+            eventTypes: values.eventTypes.map((e) => e.value),
+            assessmentTypes: values.assessmentTypes,
+            bsmVehicleId: values.bsmVehicleId,
+          })
+        );
       } catch (err) {
         console.error(err);
         toast.error("Something went wrong!");
@@ -232,7 +237,10 @@ export const DataSelectorEditForm = (props) => {
                     />
                   )}
                   value={formik.values.startDate}
-                  onChange={(e) => formik.setFieldValue("startDate", e, true)}
+                  onChange={(e) => {
+                    console.log(e);
+                    return formik.setFieldValue("startDate", e.toDate(), true);
+                  }}
                 />
               </LocalizationProvider>
             </Grid>
