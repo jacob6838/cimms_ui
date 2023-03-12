@@ -44,12 +44,13 @@ public class MapController {
             @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
             @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name= "latest", required = false, defaultValue = "false") boolean latest,
             @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
 
         if (testData) {
             return ResponseEntity.ok(MockMapGenerator.getProcessedMaps());
         } else {
-            Query query = processedMapRepo.getQuery(intersectionID, startTime, endTime);
+            Query query = processedMapRepo.getQuery(intersectionID, startTime, endTime, latest);
             long count = processedMapRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning ProcessedMap Response with Size: " + count);

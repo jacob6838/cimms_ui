@@ -62,6 +62,7 @@ public class AssessmentController {
             @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
             @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name = "latest", required = false, defaultValue = "false") boolean latest,
             @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
 
         if (testData) {
@@ -69,7 +70,7 @@ public class AssessmentController {
             list.add(MockAssessmentGenerator.getConnectionOfTravelAssessment());
             return ResponseEntity.ok(list);
         } else {
-            Query query = connectionOfTravelAssessmentRepo.getQuery(intersectionID, startTime, endTime);
+            Query query = connectionOfTravelAssessmentRepo.getQuery(intersectionID, startTime, endTime, latest);
             long count = connectionOfTravelAssessmentRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning ProcessedMap Response with Size: " + count);
@@ -88,6 +89,7 @@ public class AssessmentController {
             @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
             @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name = "latest", required = false, defaultValue = "false") boolean latest,
             @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
 
         if (testData) {
@@ -95,7 +97,7 @@ public class AssessmentController {
             list.add(MockAssessmentGenerator.getLaneDirectionOfTravelAssessment());
             return ResponseEntity.ok(list);
         } else {
-            Query query = laneDirectionOfTravelAssessmentRepo.getQuery(intersectionID, startTime, endTime);
+            Query query = laneDirectionOfTravelAssessmentRepo.getQuery(intersectionID, startTime, endTime, latest);
             long count = laneDirectionOfTravelAssessmentRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning LaneDirectionOfTravelAssessment Response with Size: " + count);
@@ -115,6 +117,7 @@ public class AssessmentController {
             @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
             @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name = "latest", required = false, defaultValue = "false") boolean latest,
             @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
 
         if (testData) {
@@ -122,7 +125,7 @@ public class AssessmentController {
             list.add(MockAssessmentGenerator.getSignalStateAssessment());
             return ResponseEntity.ok(list);
         } else {
-            Query query = signalStateAssessmentRepo.getQuery(intersectionID, startTime, endTime);
+            Query query = signalStateAssessmentRepo.getQuery(intersectionID, startTime, endTime, latest);
             long count = signalStateAssessmentRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning SignalStateAssessment Response with Size: " + count);
@@ -141,6 +144,7 @@ public class AssessmentController {
             @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
             @RequestParam(name = "start_time_utc_millis", required = false) Long startTime,
             @RequestParam(name = "end_time_utc_millis", required = false) Long endTime,
+            @RequestParam(name = "latest", required = false, defaultValue = "false") boolean latest,
             @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
 
         if (testData) {
@@ -148,7 +152,7 @@ public class AssessmentController {
             list.add(MockAssessmentGenerator.getSignalStateEventAssessment());
             return ResponseEntity.ok(list);
         } else {
-            Query query = signalStateEventAssessmentRepo.getQuery(intersectionID, startTime, endTime);
+            Query query = signalStateEventAssessmentRepo.getQuery(intersectionID, startTime, endTime, latest);
             long count = signalStateEventAssessmentRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning SignalStateEventAssessment Response with Size: " + count);

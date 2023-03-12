@@ -7,7 +7,7 @@
     import us.dot.its.jpo.conflictmonitor.monitor.models.events.LaneDirectionOfTravelEvent;
 
     public interface LaneDirectionOfTravelEventRepository{
-        Query getQuery(Integer intersectionID, Long startTime, Long endTime);
+        Query getQuery(Integer intersectionID, Long startTime, Long endTime, boolean latest);
 
         long getQueryResultCount(Query query);
         

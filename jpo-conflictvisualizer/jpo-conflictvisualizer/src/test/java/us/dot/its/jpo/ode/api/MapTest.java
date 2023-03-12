@@ -38,10 +38,10 @@ public class MapTest {
 
     List<ProcessedMap> list = MockMapGenerator.getProcessedMaps();
     
-    Query query = processedMapRepo.getQuery(null, null, null);
+    Query query = processedMapRepo.getQuery(null, null, null, false);
     when(processedMapRepo.findProcessedMaps(query)).thenReturn(list);
 
-    ResponseEntity<List<ProcessedMap>> result = controller.findMaps(null, null, null, false);
+    ResponseEntity<List<ProcessedMap>> result = controller.findMaps(null, null, null, false, false);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
     // assertThat(result.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
     assertThat(result.getBody()).isEqualTo(list);
