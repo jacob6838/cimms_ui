@@ -33,7 +33,7 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { FormikCheckboxList } from "./formik-checkbox-list";
 
 const EVENT_TYPES = [
-  { label: "All", value: "All" },
+  //   { label: "All", value: "All" },
   { label: "ConnectionOfTravelEvent", value: "connection_of_travel" },
   { label: "IntersectionReferenceAlignmentEvent", value: "intersection_reference_alignment" },
   { label: "LaneDirectionOfTravelEvent", value: "lane_direction_of_travel" },
@@ -50,11 +50,11 @@ const EVENT_TYPES = [
 ];
 
 const ASSESSMENT_TYPES = [
-  "All",
-  "SignalStateAssessment",
-  "LaneDirectionOfTravelAssessment",
-  "ConnectionOfTravelAssessment",
-  "VehicleStopAssessment",
+  //   { label: "All", value: "All" },
+  { label: "SignalStateEventAssessment", value: "signal_state_event_assessment" },
+  { label: "SignalStateAssessment", value: "signal_state_assessment" },
+  { label: "LaneDirectionOfTravelAssessment", value: "lane_direction_of_travel" },
+  { label: "ConnectionOfTravelAssessment", value: "connection_of_travel" },
 ];
 
 export const DataSelectorEditForm = (props) => {
@@ -72,7 +72,7 @@ export const DataSelectorEditForm = (props) => {
       // type specific filters
       bsmVehicleId: null,
       eventTypes: [],
-      assessmentTypes: [] as string[],
+      assessmentTypes: [],
     },
     validationSchema: Yup.object({
       //   type: Yup.string().required("Type is required"),
@@ -95,7 +95,7 @@ export const DataSelectorEditForm = (props) => {
             startDate: values.startDate,
             timeRange: values.timeRange,
             eventTypes: values.eventTypes.map((e) => e.value),
-            assessmentTypes: values.assessmentTypes,
+            assessmentTypes: values.assessmentTypes.map((e) => e.value),
             bsmVehicleId: values.bsmVehicleId,
           })
         );
@@ -215,12 +215,12 @@ export const DataSelectorEditForm = (props) => {
                 }}
                 onBlur={formik.handleBlur}
               >
-                <MenuItem value={"map"}>MAP</MenuItem>
+                {/* <MenuItem value={"map"}>MAP</MenuItem>
                 <MenuItem value={"spat"}>SPAT</MenuItem>
-                <MenuItem value={"bsm"}>BSM</MenuItem>
+                <MenuItem value={"bsm"}>BSM</MenuItem> */}
                 <MenuItem value={"events"}>Events</MenuItem>
                 <MenuItem value={"assessments"}>Assessments</MenuItem>
-                <MenuItem value={"notifications"}>Notifications</MenuItem>
+                {/* <MenuItem value={"notifications"}>Notifications</MenuItem> */}
               </Select>
             </Grid>
             <Grid item md={4} xs={12}>

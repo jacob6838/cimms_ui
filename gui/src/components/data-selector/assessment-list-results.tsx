@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import React from "react";
 
-export const EventListResults = ({
+export const AssessmentListResults = ({
   events,
   eventsCount,
   onPageChange,
@@ -29,7 +29,7 @@ export const EventListResults = ({
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Event Type</TableCell>
+                <TableCell>Assessment Type</TableCell>
                 <TableCell>Date</TableCell>
                 <TableCell>Message</TableCell>
               </TableRow>
@@ -46,12 +46,14 @@ export const EventListResults = ({
                         }}
                       >
                         <Typography color="textPrimary" variant="body1">
-                          {event.eventType}
+                          {event.assessmentType}
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell>{format(event.eventGeneratedAt, "dd/MM/yyyy HH:mm:ss")}</TableCell>
-                    <TableCell>{event.notificationText}</TableCell>
+                    <TableCell>
+                      {format(event.assessmentGeneratedAt, "dd/MM/yyyy HH:mm:ss")}
+                    </TableCell>
+                    <TableCell>{event.laneDirectionOfTravelAssessmentGroup.toString()}</TableCell>
                   </TableRow>
                 );
               })}
@@ -72,7 +74,7 @@ export const EventListResults = ({
   );
 };
 
-EventListResults.propTypes = {
+AssessmentListResults.propTypes = {
   events: PropTypes.array.isRequired,
   onSelectedItemsChanged: PropTypes.func,
 };

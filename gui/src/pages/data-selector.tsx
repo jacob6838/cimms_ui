@@ -3,18 +3,22 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { Box, Container, Typography } from "@mui/material";
 import EventsApi from "../apis/events-api";
+import AssessmentsApi from "../apis/assessments-api";
 import { DashboardLayout } from "../components/dashboard-layout";
 import { DataSelectorEditForm } from "../components/data-selector/data-selector-edit-form";
 import { EventDataTable } from "../components/data-selector/event-data-table";
+import { AssessmentDataTable } from "../components/data-selector/assessment-data-table";
 
 const DataSelectorPage = () => {
+  const [type, setType] = useState("");
   const [events, setEvents] = useState<MessageMonitor.Event[]>([]);
+  const [assessments, setAssessments] = useState<Assessment[]>([]);
 
-  const downloadTxtFile = (contents: string) => {
+  const downloadTxtFile = (contents: string, type: string) => {
     const element = document.createElement("a");
     const file = new Blob([contents], { type: "text/plain" });
     element.href = URL.createObjectURL(file);
-    element.download = "events.txt";
+    element.download = `${type}.txt`;
     document.body.appendChild(element); // Required for this to work in FireFox
     element.click();
   };
@@ -29,6 +33,7 @@ const DataSelectorPage = () => {
     assessmentTypes,
     bsmVehicleId,
   }) => {
+    setType(type);
     console.log("QUERYING DATA");
     const endTime = new Date(startDate.getTime() + timeRange * 60 * 1000);
     switch (type) {
@@ -50,7 +55,28 @@ const DataSelectorPage = () => {
         }
         console.log(events);
         setEvents(events);
+        setAssessments([]);
         return events;
+      case "assessments":
+        console.log("Assessments");
+        const assessments: Assessment[] = [];
+        // iterate through each event type in a for loop and add the events to events array
+        for (let i = 0; i < assessmentTypes.length; i++) {
+          const eventType = assessmentTypes[i];
+          const event = await AssessmentsApi.getAssessment(
+            "token",
+            eventType,
+            intersectionId,
+            startDate,
+            endTime
+          );
+          assessments.push(...event);
+          console.log(eventType, event);
+        }
+        console.log(assessments);
+        setAssessments(assessments);
+        setEvents([]);
+        return assessments;
     }
     return;
   };
@@ -58,7 +84,7 @@ const DataSelectorPage = () => {
   return (
     <>
       <Head>
-        <title>Parameter Edit</title>
+        <title>Data Selector</title>
       </Head>
       <Box
         component="main"
@@ -109,12 +135,25 @@ const DataSelectorPage = () => {
           </Box>
         </Container>
 
-        <EventDataTable
-          events={events}
-          onDownload={() => {
-            return downloadTxtFile(events.map((e) => JSON.stringify(e)).join("\n"));
-          }}
-        />
+        {type == "events" && (
+          <EventDataTable
+            events={events}
+            onDownload={() => {
+              return downloadTxtFile(events.map((e) => JSON.stringify(e)).join("\n"), "events");
+            }}
+          />
+        )}
+        {type == "assessments" && (
+          <AssessmentDataTable
+            events={assessments}
+            onDownload={() => {
+              return downloadTxtFile(
+                assessments.map((e) => JSON.stringify(e)).join("\n"),
+                "assessments"
+              );
+            }}
+          />
+        )}
       </Box>
     </>
   );
