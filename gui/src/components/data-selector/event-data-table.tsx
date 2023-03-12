@@ -25,8 +25,11 @@ import React, { useEffect, useState, useRef } from "react";
 const applyPagination = (parameters, page, rowsPerPage) =>
   parameters.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
-export const EventDataTable = (props: { events: MessageMonitor.Event[] }) => {
-  const { events } = props;
+export const EventDataTable = (props: {
+  events: MessageMonitor.Event[];
+  onDownload: () => void;
+}) => {
+  const { events, onDownload } = props;
   const queryRef = useRef<TextFieldProps>(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -61,6 +64,27 @@ export const EventDataTable = (props: { events: MessageMonitor.Event[] }) => {
             page={page}
           />
         </Card>
+        <Box sx={{ mb: 4 }}>
+          <Box
+            sx={{
+              m: -1,
+              mt: 3,
+            }}
+          >
+            <Grid container justifyContent="left" spacing={3}>
+              <Grid item>
+                <Button
+                  sx={{ m: 1 }}
+                  variant="contained"
+                  onClick={onDownload}
+                  disabled={events.length <= 0 ? true : false}
+                >
+                  Download
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
       </Container>
     </>
   );

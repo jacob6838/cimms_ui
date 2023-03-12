@@ -9,27 +9,15 @@ import { EventDataTable } from "../components/data-selector/event-data-table";
 
 const DataSelectorPage = () => {
   const [events, setEvents] = useState<MessageMonitor.Event[]>([]);
-  //   const getParameter = async (name: string) => {
-  //     try {
-  //       const data = await configParamApi.getParameter("token", name);
 
-  //       setParameter(data);
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   };
-
-  //   useEffect(() => {
-  //     getParameter(parameterName as string);
-  //   }, []);
-
-  //   if (!parameter) {
-  //     return null;
-  //   }
-
-  useEffect(() => {
-    console.log("EVENT CHANGED", events);
-  }, events);
+  const downloadTxtFile = (contents: string) => {
+    const element = document.createElement("a");
+    const file = new Blob([contents], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+    element.download = "events.txt";
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+  };
 
   const query = async ({
     type,
@@ -121,7 +109,12 @@ const DataSelectorPage = () => {
           </Box>
         </Container>
 
-        <EventDataTable events={events} />
+        <EventDataTable
+          events={events}
+          onDownload={() => {
+            return downloadTxtFile(events.map((e) => JSON.stringify(e)).join("\n"));
+          }}
+        />
       </Box>
     </>
   );
