@@ -129,8 +129,8 @@ export const CustomerListResults = ({
                         </IconButton>
                       </NextLink> */}
                       <NextLink
-                        href={`/map/${customer.notificationGeneratedAt - 1000 * 20}/${
-                          customer.notificationGeneratedAt + 1000 * 20
+                        href={`/map/${customer.notificationGeneratedAt - 1000 * 60}/${
+                          customer.notificationGeneratedAt + 1000 * 60
                         }/${customer.notificationGeneratedAt}/${customer.notificationType}`}
                         passHref
                       >

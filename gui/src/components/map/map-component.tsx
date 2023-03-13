@@ -117,7 +117,7 @@ const bsmLayer: LayerProps = {
 type MyProps = {
   startDate: Date;
   endDate: Date;
-  eventDate?: Date;
+  eventDate: Date;
   vehicleId?: string;
   displayText: string;
 };
@@ -126,7 +126,13 @@ const MapTab = (props: MyProps) => {
   const MAPBOX_TOKEN =
     "pk.eyJ1IjoidG9ueWVuZ2xpc2giLCJhIjoiY2tzajQwcDJvMGQ3bjJucW0yaDMxbThwYSJ9.ff26IdP_Y9hiE82AGx_wCg"; //process.env.MAPBOX_TOKEN!;
 
-  const [marks, setMarks] = useState<{ value: number; label: string }[]>([]);
+  const [queryParams, setQueryParams] = useState<{
+    startDate: Date;
+    endDate: Date;
+    eventDate: Date;
+    vehicleId?: string;
+    timeWindowSeconds: number;
+  }>({ ...props, timeWindowSeconds: 60 });
   const [mapData, setMapData] = useState<ProcessedMap>();
   const [mapSignalGroups, setMapSignalGroups] = useState<SignalStateFeatureCollection>();
   const [signalStateData, setSignalStateData] = useState<SignalStateFeatureCollection[]>();
@@ -151,7 +157,6 @@ const MapTab = (props: MyProps) => {
   const [renderTimeInterval, setRenderTimeInterval] = React.useState<number[]>([0, 0]);
   const mapRef = React.useRef<any>(null);
   const { intersectionId: dbIntersectionId } = useDashboardContext();
-  const sliderTimeWindow = 10;
 
   const parseMapSignalGroups = (mapMessage: ProcessedMap): SignalStateFeatureCollection => {
     const features: SignalStateFeature[] = [];
@@ -278,27 +283,32 @@ const MapTab = (props: MyProps) => {
   //   }, []);
 
   const pullInitialData = async () => {
-    const mapMessage: ProcessedMap = (
-      await MessageMonitorApi.getMapMessages({
-        token: "token",
-        intersection_id: dbIntersectionId,
-        startTime: props.startDate,
-        endTime: props.endDate,
-        latest: true,
-      })
-    ).at(-1)!;
-    const mapSignalGroupsLocal = parseMapSignalGroups(mapMessage);
-    setMapData(mapMessage);
+    console.log(queryParams);
+    const mapMessages: ProcessedMap[] = await MessageMonitorApi.getMapMessages({
+      token: "token",
+      intersection_id: dbIntersectionId,
+      startTime: new Date(queryParams.startDate.getTime() - 1000 * 60 * 60 * 1),
+      endTime: queryParams.endDate,
+      latest: true,
+    });
+    console.log(mapMessages);
+    if (!mapMessages || mapMessages.length == 0) {
+      console.log("NO MAP MESSAGES WITHIN TIME");
+      return;
+    }
+    const latestMapMessage: ProcessedMap = mapMessages.at(-1)!;
+    const mapSignalGroupsLocal = parseMapSignalGroups(latestMapMessage);
+    setMapData(latestMapMessage);
     setMapSignalGroups(mapSignalGroupsLocal);
 
-    setCollectingLanes(mapMessage.connectingLanesFeatureCollection);
+    setCollectingLanes(latestMapMessage.connectingLanesFeatureCollection);
 
     const spatSignalGroupsLocal = parseSpatSignalGroups(
       await MessageMonitorApi.getSpatMessages({
         token: "token",
         intersection_id: dbIntersectionId,
-        startTime: props.startDate,
-        endTime: props.endDate,
+        startTime: queryParams.startDate,
+        endTime: queryParams.endDate,
       })
     );
 
@@ -308,28 +318,28 @@ const MapTab = (props: MyProps) => {
       parseBsmToGeojson(
         await MessageMonitorApi.getBsmMessages({
           token: "token",
-          vehicleId: props.vehicleId,
-          startTime: props.startDate,
-          endTime: props.endDate,
+          vehicleId: queryParams.vehicleId,
+          startTime: queryParams.startDate,
+          endTime: queryParams.endDate,
         })
       )
     );
 
     setSliderValue(
       Math.min(
-        getTimeRange(props.startDate, props.eventDate ?? new Date()),
-        getTimeRange(props.startDate, props.endDate)
+        getTimeRange(queryParams.startDate, queryParams.eventDate ?? new Date()),
+        getTimeRange(queryParams.startDate, queryParams.endDate)
       )
     );
   };
 
   useEffect(() => {
-    console.log("SLIDER VALUE", sliderValue);
-  }, [sliderValue]);
+    pullInitialData();
+  }, [queryParams]);
 
   useEffect(() => {
-    pullInitialData();
-  }, []);
+    console.log("SLIDER VALUE", sliderValue);
+  }, [sliderValue]);
 
   useEffect(() => {
     if (!mapSignalGroups || !spatSignalGroups) {
@@ -379,15 +389,15 @@ const MapTab = (props: MyProps) => {
   }, [mapSignalGroups, renderTimeInterval, spatSignalGroups]);
 
   useEffect(() => {
-    const startTime = props.startDate.getTime() / 1000;
-    const timeRange = getTimeRange(props.startDate, props.endDate);
-    console.log(timeRange, sliderValue, sliderTimeWindow);
+    const startTime = queryParams.startDate.getTime() / 1000;
+    const timeRange = getTimeRange(queryParams.startDate, queryParams.endDate);
+    console.log(timeRange, sliderValue);
 
     const filteredStartTime = startTime + sliderValue;
-    const filteredEndTime = startTime + sliderValue + sliderTimeWindow;
+    const filteredEndTime = startTime + sliderValue + queryParams.timeWindowSeconds;
 
     setRenderTimeInterval([filteredStartTime, filteredEndTime]);
-  }, [sliderValue]);
+  }, [sliderValue, queryParams]);
 
   const getTimeRange = (startDate: Date, endDate: Date) => {
     return (endDate.getTime() - startDate.getTime()) / 1000;
@@ -419,6 +429,23 @@ const MapTab = (props: MyProps) => {
     downloadJsonFile(data, fileName);
   };
 
+  const onTimeQueryChanged = (
+    eventTime: Date = new Date(),
+    timeBefore?: number,
+    timeAfter?: number,
+    timeWindowSeconds?: number
+  ) => {
+    console.log("UPDATING QUERY PARAMS", eventTime, timeBefore, timeAfter, timeWindowSeconds);
+    setQueryParams((prevState) => {
+      return {
+        startDate: new Date(eventTime.getTime() - (timeBefore ?? 0) * 1000),
+        endDate: new Date(eventTime.getTime() + (timeAfter ?? 0) * 1000),
+        eventDate: eventTime,
+        timeWindowSeconds: timeWindowSeconds ?? prevState.timeWindowSeconds,
+      };
+    });
+  };
+
   return (
     <Container fluid={true} style={{ width: "100%", height: "100%", display: "flex" }}>
       <Col className="mapContainer" style={{ overflow: "hidden" }}>
@@ -446,7 +473,9 @@ const MapTab = (props: MyProps) => {
                 sliderValue={sliderValue}
                 setSlider={handleSliderChange}
                 downloadAllData={downloadAllData}
-                max={getTimeRange(props.startDate, props.endDate)}
+                timeQueryParams={queryParams}
+                onTimeQueryChanged={onTimeQueryChanged}
+                max={getTimeRange(queryParams.startDate, queryParams.endDate)}
               />
             </Paper>
           </Box>
