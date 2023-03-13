@@ -18,6 +18,7 @@ import {
   Select,
   MenuItem,
   TextField,
+  Button,
 } from "@mui/material";
 
 function ControlPanel(props) {
@@ -36,13 +37,19 @@ function ControlPanel(props) {
         <h3>Visualization Time</h3>
         <Slider
           aria-label="Volume"
+          //   value={[20, 37]}
+          //   onChange={() => {}}
           value={props.sliderValue}
           onChange={props.setSlider}
-          marks={props.marks}
+          //   marks={props.marks}
           min={0}
-          max={props.marks.at(-1)?.value}
+          max={props.max}
           valueLabelDisplay="auto"
+          disableSwap
         />
+        <Button sx={{ m: 1 }} variant="contained" onClick={props.downloadAllData}>
+          Download
+        </Button>
       </div>
     </div>
   );

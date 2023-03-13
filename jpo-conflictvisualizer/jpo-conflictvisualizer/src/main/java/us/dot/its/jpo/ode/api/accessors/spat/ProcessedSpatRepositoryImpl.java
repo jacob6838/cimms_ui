@@ -11,40 +11,39 @@ import org.springframework.stereotype.Component;
 
 import us.dot.its.jpo.geojsonconverter.pojos.spat.ProcessedSpat;
 
-
 @Component
-public class ProcessedSpatRepositoryImpl implements ProcessedSpatRepository{
+public class ProcessedSpatRepositoryImpl implements ProcessedSpatRepository {
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public Query getQuery(Integer intersectionID, Long startTime, Long endTime){
+    public Query getQuery(Integer intersectionID, Long startTime, Long endTime) {
         Query query = new Query();
 
-        if(intersectionID != null){
+        if (intersectionID != null) {
             query.addCriteria(Criteria.where("intersectionId").is(intersectionID));
         }
 
         String startTimeString = Instant.ofEpochMilli(0).toString();
         String endTimeString = Instant.now().toString();
 
-        if(startTime != null){
-            startTimeString = Instant.ofEpochMilli(startTime).toString(); 
+        if (startTime != null) {
+            startTimeString = Instant.ofEpochMilli(startTime).toString();
         }
-        if(endTime != null){
+        if (endTime != null) {
             endTimeString = Instant.ofEpochMilli(endTime).toString();
         }
 
-        query.addCriteria(Criteria.where("utcTimeStamp").gte(startTimeString).lte(endTimeString));
+        query.addCriteria(Criteria.where("odeReceivedAt").gte(startTimeString).lte(endTimeString));
         return query;
     }
 
-    public long getQueryResultCount(Query query){
-        return mongoTemplate.count(query, ProcessedSpat.class);
+    public long getQueryResultCount(Query query) {
+        return mongoTemplate.count(query, ProcessedSpat.class, "ProcessedSpat");
     }
 
     public List<ProcessedSpat> findProcessedMaps(Query query) {
-        return mongoTemplate.find(query, ProcessedSpat.class);
+        return mongoTemplate.find(query, ProcessedSpat.class, "ProcessedSpat");
     }
 
 }

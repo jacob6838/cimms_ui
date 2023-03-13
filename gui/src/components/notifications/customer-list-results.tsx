@@ -85,20 +85,24 @@ export const CustomerListResults = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.map((customer) => {
+              {customers.map((customer: MessageMonitor.Notification) => {
                 const isNotificationSelected =
-                  [...selectedNotifications].indexOf(customer.id) !== -1;
+                  [...selectedNotifications].indexOf(customer.notificationGeneratedAt) !== -1;
 
                 return (
                   <TableRow
                     hover
-                    key={customer.id}
-                    selected={[...selectedNotifications].indexOf(customer.message) !== -1}
+                    key={customer.notificationGeneratedAt}
+                    selected={
+                      [...selectedNotifications].indexOf(customer.notificationGeneratedAt) !== -1
+                    }
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
                         checked={isNotificationSelected}
-                        onChange={(event) => handleSelectOne(event, customer.id)}
+                        onChange={(event) =>
+                          handleSelectOne(event, customer.notificationGeneratedAt)
+                        }
                         value="true"
                       />
                     </TableCell>
@@ -114,15 +118,22 @@ export const CustomerListResults = ({
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell>{format(customer.notificationGeneratedAt, "dd/MM/yyyy")}</TableCell>
+                    <TableCell>
+                      {format(customer.notificationGeneratedAt, "dd/MM/yyyy HH:mm:ss")}
+                    </TableCell>
                     <TableCell>{customer.notificationText}</TableCell>
                     <TableCell align="right">
-                      <NextLink href={`/notifications/${customer.id}`} passHref>
+                      {/* <NextLink href={`/notifications/${customer.notificationType}`} passHref>
                         <IconButton component="a">
                           <MapRoundedIcon fontSize="medium" />
                         </IconButton>
-                      </NextLink>
-                      <NextLink href={`/map/notification/${customer.id}`} passHref>
+                      </NextLink> */}
+                      <NextLink
+                        href={`/map/${customer.notificationGeneratedAt - 1000 * 20}/${
+                          customer.notificationGeneratedAt + 1000 * 20
+                        }/${customer.notificationGeneratedAt}/${customer.notificationType}`}
+                        passHref
+                      >
                         <IconButton component="a">
                           <MapRoundedIcon fontSize="medium" />
                         </IconButton>

@@ -117,6 +117,7 @@ const bsmLayer: LayerProps = {
 type MyProps = {
   startDate: Date;
   endDate: Date;
+  eventDate?: Date;
   vehicleId?: string;
   displayText: string;
 };
@@ -131,17 +132,26 @@ const MapTab = (props: MyProps) => {
   const [signalStateData, setSignalStateData] = useState<SignalStateFeatureCollection[]>();
   const [spatSignalGroups, setSpatSignalGroups] = useState<SpatSignalGroups>();
   const [currentSignalGroups, setCurrentSignalGroups] = useState<SpatSignalGroup[]>();
+  const [currentBsms, setCurrentBsms] = useState<BsmFeatureCollection>({
+    type: "FeatureCollection",
+    features: [],
+  });
   const [connectingLanes, setCollectingLanes] = useState<ConnectingLanesFeatureCollection>();
-  const [bsmData, setBsmData] = useState<BsmFeatureCollection>();
+  const [bsmData, setBsmData] = useState<BsmFeatureCollection>({
+    type: "FeatureCollection",
+    features: [],
+  });
   //   const mapRef = useRef<mapboxgl.Map>();
   const [viewState, setViewState] = React.useState({
     latitude: 39.587905,
     longitude: -105.0907089,
     zoom: 19,
   });
-  const [sliderValue, setSliderValue] = React.useState<number>(30);
+  const [sliderValue, setSliderValue] = React.useState<number>(0);
+  const [renderTimeInterval, setRenderTimeInterval] = React.useState<number[]>([0, 0]);
   const mapRef = React.useRef<any>(null);
   const { intersectionId: dbIntersectionId } = useDashboardContext();
+  const sliderTimeWindow = 10;
 
   const parseMapSignalGroups = (mapMessage: ProcessedMap): SignalStateFeatureCollection => {
     const features: SignalStateFeature[] = [];
@@ -205,7 +215,10 @@ const MapTab = (props: MyProps) => {
       features: bsmData.map((bsm) => {
         return {
           type: "Feature",
-          properties: bsm.payload.data.coreData,
+          properties: {
+            ...bsm.payload.data.coreData,
+            odeReceivedAt: new Date(bsm.metadata.odeReceivedAt).getTime() / 1000,
+          },
           geometry: {
             type: "Point",
             coordinates: [
@@ -288,16 +301,31 @@ const MapTab = (props: MyProps) => {
         endTime: props.endDate,
       })
     );
-    setSpatSignalGroups(spatSignalGroupsLocal);
-    setSliderValue(Number(Object.keys(spatSignalGroupsLocal)?.[0] ?? 0));
 
-    MessageMonitorApi.getBsmMessages({
-      token: "token",
-      vehicleId: props.vehicleId,
-      startTime: props.startDate,
-      endTime: props.endDate,
-    }).then((bsmData) => setBsmData(parseBsmToGeojson(bsmData)));
+    setSpatSignalGroups(spatSignalGroupsLocal);
+
+    setBsmData(
+      parseBsmToGeojson(
+        await MessageMonitorApi.getBsmMessages({
+          token: "token",
+          vehicleId: props.vehicleId,
+          startTime: props.startDate,
+          endTime: props.endDate,
+        })
+      )
+    );
+
+    setSliderValue(
+      Math.min(
+        getTimeRange(props.startDate, props.eventDate ?? new Date()),
+        getTimeRange(props.startDate, props.endDate)
+      )
+    );
   };
+
+  useEffect(() => {
+    console.log("SLIDER VALUE", sliderValue);
+  }, [sliderValue]);
 
   useEffect(() => {
     pullInitialData();
@@ -309,24 +337,86 @@ const MapTab = (props: MyProps) => {
       console.log(mapSignalGroups, spatSignalGroups);
       return;
     }
-    const keys: string[] = Object.keys(spatSignalGroups ?? {});
-    const signalGroupsKey = Number(keys[sliderValue]);
-    const currentSignalGroupsLocal = spatSignalGroups?.[signalGroupsKey];
-    setCurrentSignalGroups(currentSignalGroupsLocal);
-    setSignalStateData(
-      generateSignalStateFeatureCollection(mapSignalGroups, spatSignalGroups?.[signalGroupsKey])
-    );
-    const marksLocal: { value: number; label: string }[] = [];
-    for (let i = 0; i < keys.length; i += parseInt((keys.length / 5).toString())) {
-      marksLocal.push({ value: i, label: new Date(Number(keys[i])).toISOString() });
+
+    // retrieve filtered SPATs
+    let closestSignalGroup: { spat: SpatSignalGroup[]; datetime: number } | null = null;
+    for (const datetime in spatSignalGroups) {
+      const datetimeNum = Number(datetime) / 1000;
+      if (datetimeNum >= renderTimeInterval[0] && datetimeNum <= renderTimeInterval[1]) {
+        if (
+          closestSignalGroup === null ||
+          Math.abs(datetimeNum - renderTimeInterval[0]) <
+            Math.abs(closestSignalGroup.datetime - renderTimeInterval[0])
+        ) {
+          closestSignalGroup = { datetime: datetimeNum, spat: spatSignalGroups[datetime] };
+        }
+      }
     }
-    setMarks(marksLocal);
-  }, [mapSignalGroups, sliderValue, spatSignalGroups]);
+    if (closestSignalGroup !== null) {
+      setCurrentSignalGroups(closestSignalGroup.spat);
+      setSignalStateData(
+        generateSignalStateFeatureCollection(mapSignalGroups, closestSignalGroup.spat)
+      );
+    } else {
+      setCurrentSignalGroups(undefined);
+      setSignalStateData(undefined);
+    }
+
+    console.log("FILTERING ALL DATA", bsmData);
+
+    // retrieve filtered BSMs
+    const filteredBsms: BsmFeature[] = [];
+    (bsmData?.features ?? []).forEach((feature) => {
+      if (
+        feature.properties?.odeReceivedAt >= renderTimeInterval[0] &&
+        feature.properties?.odeReceivedAt <= renderTimeInterval[1]
+      ) {
+        filteredBsms.push(feature);
+      }
+    });
+
+    setCurrentBsms({ ...bsmData, features: filteredBsms });
+  }, [mapSignalGroups, renderTimeInterval, spatSignalGroups]);
+
+  useEffect(() => {
+    const startTime = props.startDate.getTime() / 1000;
+    const timeRange = getTimeRange(props.startDate, props.endDate);
+    console.log(timeRange, sliderValue, sliderTimeWindow);
+
+    const filteredStartTime = startTime + sliderValue;
+    const filteredEndTime = startTime + sliderValue + sliderTimeWindow;
+
+    setRenderTimeInterval([filteredStartTime, filteredEndTime]);
+  }, [sliderValue]);
+
+  const getTimeRange = (startDate: Date, endDate: Date) => {
+    return (endDate.getTime() - startDate.getTime()) / 1000;
+  };
 
   const getSignalGroups = () => {};
 
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
     setSliderValue(newValue as number);
+  };
+
+  const downloadJsonFile = (contents: any, name: string) => {
+    const element = document.createElement("a");
+    const file = new Blob([JSON.stringify(contents)], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+    element.download = `${name}.json`;
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+  };
+
+  const downloadAllData = () => {
+    const fileName = `intersection_${dbIntersectionId}_data`;
+    const data = {
+      mapData: mapData,
+      spatSignalGroups: spatSignalGroups,
+      mapSignalGroups: mapSignalGroups,
+      bsmData: bsmData,
+    };
+    downloadJsonFile(data, fileName);
   };
 
   return (
@@ -353,9 +443,10 @@ const MapTab = (props: MyProps) => {
             <Paper sx={{ pt: 1, pb: 1, opacity: 0.85 }}>
               <ControlPanel
                 sx={{ flex: 0 }}
-                slider={sliderValue}
+                sliderValue={sliderValue}
                 setSlider={handleSliderChange}
-                marks={marks}
+                downloadAllData={downloadAllData}
+                max={getTimeRange(props.startDate, props.endDate)}
               />
             </Paper>
           </Box>
@@ -417,8 +508,8 @@ const MapTab = (props: MyProps) => {
               <Layer {...connectingLanesLayerMissing} />
             </Source>
           )}
-          {bsmData && (
-            <Source type="geojson" data={bsmData}>
+          {currentBsms && (
+            <Source type="geojson" data={currentBsms}>
               <Layer {...bsmLayer} />
             </Source>
           )}
