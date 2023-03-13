@@ -14,9 +14,10 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
+import { configParamApi } from "../../apis/configuration-param-api";
 
 export const ConfigParamRemoveForm = (props) => {
-  const { parameter, defaultParameter, configParamApi, ...other } = props;
+  const { parameter, defaultParameter, ...other } = props;
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
@@ -30,7 +31,7 @@ export const ConfigParamRemoveForm = (props) => {
     validationSchema: Yup.object({}),
     onSubmit: async (values, helpers) => {
       try {
-        await configParamApi.updateParameter(values.name, values.value);
+        await configParamApi.removeOverriddenParameter("token", values.name, parameter, 12109);
         helpers.setStatus({ success: true });
         helpers.setSubmitting(false);
         router
@@ -155,5 +156,4 @@ export const ConfigParamRemoveForm = (props) => {
 ConfigParamRemoveForm.propTypes = {
   parameter: PropTypes.object.isRequired,
   defaultParameter: PropTypes.object.isRequired,
-  configParamApi: PropTypes.object.isRequired,
 };

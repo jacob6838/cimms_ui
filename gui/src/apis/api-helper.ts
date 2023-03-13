@@ -13,7 +13,7 @@ class AuthApiHelper {
     method = "GET",
     headers = {},
     queryParams,
-    body = {},
+    body,
     token,
     toastOnFailure = true,
     toastOnSuccess = false,
@@ -43,8 +43,9 @@ class AuthApiHelper {
     const options: RequestInit = {
       method: method,
       headers: localHeaders,
-      //   body: body ? JSON.stringify(body) : null,
+      body: body ? JSON.stringify(body) : null,
     };
+    console.log(options);
 
     return await fetch(url, options).then((response: Response) => {
       if (response.ok) {

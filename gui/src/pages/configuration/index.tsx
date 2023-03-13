@@ -94,7 +94,7 @@ const Page = () => {
 
   const getParameters = async () => {
     try {
-      const data = await configParamApi.getAllParameters("token", "12012");
+      const data = await configParamApi.getAllParameters("token", "12109");
       console.log(data);
 
       setParameters(data);

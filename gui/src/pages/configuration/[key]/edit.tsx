@@ -58,7 +58,7 @@ const ConfigParamEdit = () => {
             </div>
           </Box>
           <Box mt={3}>
-            <ConfigParamEditForm parameter={parameter} configParamApi={configParamApi} />
+            <ConfigParamEditForm parameter={parameter} />
           </Box>
         </Container>
       </Box>

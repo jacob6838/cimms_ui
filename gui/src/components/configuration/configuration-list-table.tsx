@@ -27,8 +27,8 @@ export const ConfigParamListTable = (props) => {
     return (
       <TableRow hover key={param.id}>
         <TableCell>{param.key}</TableCell>
-        <TableCell>{param.value}</TableCell>
-        <TableCell>{param.unit}</TableCell>
+        <TableCell>{param.value.toString()}</TableCell>
+        <TableCell>{param.unit?.toString()}</TableCell>
         <TableCell>{param.description}</TableCell>
         <TableCell align="right">
           <NextLink href={`/configuration/${param.key}/create`} passHref>
@@ -46,7 +46,7 @@ export const ConfigParamListTable = (props) => {
       <TableRow hover key={param.id}>
         <TableCell>{param.key}</TableCell>
         <TableCell>
-          {param.value}
+          {param.value.toString()}
           {
             <Chip
               color="secondary"

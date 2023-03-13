@@ -14,25 +14,33 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
+import { configParamApi } from "../../apis/configuration-param-api";
 
 export const ConfigParamEditForm = (props) => {
-  const { parameter, configParamApi, ...other } = props;
+  const { parameter }: { parameter: IntersectionConfig } = props;
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
       name: parameter.key,
-      unit: parameter.unit,
+      unit: parameter.units,
       value: parameter.value,
       description: parameter.description,
       submit: null,
     },
     validationSchema: Yup.object({
       name: Yup.string(),
-      value: Yup.number().required("New value is required"),
+      value: Yup.string().required("New value is required"),
     }),
     onSubmit: async (values, helpers) => {
       try {
-        await configParamApi.updateParameter(values.name, values.value);
+        const updatedConfig: IntersectionConfig = {
+          ...parameter,
+          value: values.value,
+          intersectionID: 12109,
+          roadRegulatorID: -1,
+          rsuID: "",
+        };
+        await configParamApi.updateIntersectionParameter("token", values.name, updatedConfig);
         helpers.setStatus({ success: true });
         helpers.setSubmitting(false);
         router
@@ -52,7 +60,7 @@ export const ConfigParamEditForm = (props) => {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} {...other}>
+    <form onSubmit={formik.handleSubmit}>
       <Card>
         <CardHeader title="Edit Configuration Parameter" />
         <Divider />
@@ -143,5 +151,4 @@ export const ConfigParamEditForm = (props) => {
 
 ConfigParamEditForm.propTypes = {
   parameter: PropTypes.object.isRequired,
-  configParamApi: PropTypes.object.isRequired,
 };

@@ -58,11 +58,7 @@ const ConfigParamRemove = () => {
             </div>
           </Box>
           <Box mt={3}>
-            <ConfigParamRemoveForm
-              parameter={parameter}
-              defaultParameter={parameter}
-              configParamApi={configParamApi}
-            />
+            <ConfigParamRemoveForm parameter={parameter} defaultParameter={parameter} />
           </Box>
         </Container>
       </Box>
