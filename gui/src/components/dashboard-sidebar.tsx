@@ -26,6 +26,7 @@ import { Logo } from "./logo";
 import { NavItem } from "./nav-item";
 import React from "react";
 import { DashboardSidebarSection } from "./dashboard-sidebar-section";
+import { useDashboardContext } from "../contexts/dashboard-context";
 
 const generalItems = [
   {

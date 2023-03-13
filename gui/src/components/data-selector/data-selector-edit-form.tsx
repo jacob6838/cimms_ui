@@ -32,8 +32,13 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { FormikCheckboxList } from "./formik-checkbox-list";
 
-const EVENT_TYPES = [
-  //   { label: "All", value: "All" },
+interface Item {
+  label: string;
+  value: string;
+}
+
+const EVENT_TYPES: Item[] = [
+  { label: "All", value: "All" },
   { label: "ConnectionOfTravelEvent", value: "connection_of_travel" },
   { label: "IntersectionReferenceAlignmentEvent", value: "intersection_reference_alignment" },
   { label: "LaneDirectionOfTravelEvent", value: "lane_direction_of_travel" },
@@ -49,8 +54,8 @@ const EVENT_TYPES = [
   //   { label: "SpatBroadcastRateEvent", value: "All" },
 ];
 
-const ASSESSMENT_TYPES = [
-  //   { label: "All", value: "All" },
+const ASSESSMENT_TYPES: Item[] = [
+  { label: "All", value: "All" },
   { label: "SignalStateEventAssessment", value: "signal_state_event_assessment" },
   { label: "SignalStateAssessment", value: "signal_state_assessment" },
   { label: "LaneDirectionOfTravelAssessment", value: "lane_direction_of_travel" },
@@ -58,21 +63,21 @@ const ASSESSMENT_TYPES = [
 ];
 
 export const DataSelectorEditForm = (props) => {
-  const { onQuery, ...other } = props;
+  const { onQuery, dbIntersectionId, ...other } = props;
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      type: "map",
+      type: "events",
       startDate: new Date(),
       timeRange: 0,
-      intersectionId: "",
-      roadRegulatorId: "",
+      intersectionId: dbIntersectionId,
+      roadRegulatorId: -1,
       submit: null,
 
       // type specific filters
       bsmVehicleId: null,
-      eventTypes: [],
-      assessmentTypes: [],
+      eventTypes: [] as Item[],
+      assessmentTypes: [] as Item[],
     },
     validationSchema: Yup.object({
       //   type: Yup.string().required("Type is required"),
@@ -180,7 +185,7 @@ export const DataSelectorEditForm = (props) => {
               <TextField
                 error={Boolean(formik.touched.intersectionId && formik.errors.intersectionId)}
                 fullWidth
-                helperText={formik.touched.intersectionId && formik.errors.intersectionId}
+                // helperText={formik.touched.intersectionId && formik.errors.intersectionId}
                 label="Intersection ID"
                 name="intersectionId"
                 onChange={formik.handleChange}
@@ -208,7 +213,7 @@ export const DataSelectorEditForm = (props) => {
                 value={formik.values.type}
                 // label="Query Type"
                 label="Type"
-                helperText={formik.touched.type && formik.errors.type}
+                // helperText={formik.touched.type && formik.errors.type}
                 onChange={(e) => {
                   onTypeChange(e.target.value);
                   formik.setFieldValue("type", e.target.value);
@@ -230,7 +235,7 @@ export const DataSelectorEditForm = (props) => {
                     <TextField
                       {...props}
                       error={Boolean(formik.touched.startDate && formik.errors.startDate)}
-                      helperText={formik.touched.startDate && formik.errors.startDate}
+                      //   helperText={formik.touched.startDate && formik.errors.startDate}
                       name="startDate"
                       label="Start Date"
                       //   fullWidth
@@ -239,7 +244,7 @@ export const DataSelectorEditForm = (props) => {
                   value={formik.values.startDate}
                   onChange={(e) => {
                     console.log(e);
-                    return formik.setFieldValue("startDate", e.toDate(), true);
+                    return formik.setFieldValue("startDate", (e as Dayjs | null)?.toDate(), true);
                   }}
                 />
               </LocalizationProvider>
@@ -292,4 +297,5 @@ export const DataSelectorEditForm = (props) => {
 
 DataSelectorEditForm.propTypes = {
   onQuery: PropTypes.func.isRequired,
+  dbIntersectionId: PropTypes.number,
 };

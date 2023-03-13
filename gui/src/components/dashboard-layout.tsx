@@ -4,6 +4,7 @@ import { styled } from "@mui/material/styles";
 import { AuthGuard } from "./auth-guard";
 import { DashboardNavbar } from "./dashboard-navbar";
 import { DashboardSidebar } from "./dashboard-sidebar";
+import { DashboardProvider, useDashboardContext } from "../contexts/dashboard-context";
 import React from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import MessageMonitorApi from "../apis/mm-api";
@@ -22,24 +23,9 @@ const DashboardLayoutRoot = styled("div")(({ theme }) => ({
 export const DashboardLayout = (props) => {
   const { children } = props;
   const [isSidebarOpen, setSidebarOpen] = useState(true);
-  const { data: session } = useSession();
-  const [intersectionId, setIntersectionId] = useState(12109);
-  const [selectedNotification, setSelectedNotification] = useState(null);
   const [intersections, setIntersections] = useState<IntersectionReferenceData[]>([]);
 
-  const getTimeChangeDetails = async () => {
-    console.log("getTimeChangeDetails");
-    const details = await EventsApi.getTimeChangeDetails(
-      "token",
-      intersectionId,
-      new Date(),
-      new Date()
-    );
-    console.log("TimeChangeDetails", details);
-  };
-
   useEffect(() => {
-    getTimeChangeDetails();
     MessageMonitorApi.getIntersections({ token: "token" }).then((intersections) =>
       setIntersections(intersections)
     );
@@ -47,25 +33,22 @@ export const DashboardLayout = (props) => {
 
   return (
     <AuthGuard>
-      <DashboardLayoutRoot>
-        <Box
-          sx={{
-            display: "flex",
-            flex: "1 1 auto",
-            flexDirection: "column",
-            width: "100%",
-          }}
-        >
-          {children}
-        </Box>
-      </DashboardLayoutRoot>
-      <DashboardNavbar
-        onSidebarOpen={() => setSidebarOpen(true)}
-        intersections={intersections}
-        intersectionId={intersectionId}
-        setIntersectionId={setIntersectionId}
-      />
-      <DashboardSidebar onClose={() => setSidebarOpen(false)} open={isSidebarOpen} />
+      <DashboardProvider>
+        <DashboardLayoutRoot>
+          <Box
+            sx={{
+              display: "flex",
+              flex: "1 1 auto",
+              flexDirection: "column",
+              width: "100%",
+            }}
+          >
+            {children}
+          </Box>
+        </DashboardLayoutRoot>
+        <DashboardNavbar onSidebarOpen={() => setSidebarOpen(true)} intersections={intersections} />
+        <DashboardSidebar onClose={() => setSidebarOpen(false)} open={isSidebarOpen} />
+      </DashboardProvider>
     </AuthGuard>
   );
 };

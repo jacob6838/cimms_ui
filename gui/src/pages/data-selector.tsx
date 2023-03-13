@@ -8,11 +8,13 @@ import { DashboardLayout } from "../components/dashboard-layout";
 import { DataSelectorEditForm } from "../components/data-selector/data-selector-edit-form";
 import { EventDataTable } from "../components/data-selector/event-data-table";
 import { AssessmentDataTable } from "../components/data-selector/assessment-data-table";
+import { useDashboardContext } from "../contexts/dashboard-context";
 
 const DataSelectorPage = () => {
   const [type, setType] = useState("");
   const [events, setEvents] = useState<MessageMonitor.Event[]>([]);
   const [assessments, setAssessments] = useState<Assessment[]>([]);
+  const { intersectionId: dbIntersectionId } = useDashboardContext();
 
   const downloadTxtFile = (contents: string, type: string) => {
     const element = document.createElement("a");
@@ -131,6 +133,7 @@ const DataSelectorPage = () => {
                   bsmVehicleId,
                 })
               }
+              dbIntersectionId={dbIntersectionId}
             />
           </Box>
         </Container>

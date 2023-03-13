@@ -22,6 +22,15 @@ export const EventListResults = ({
   page,
   rowsPerPage,
 }) => {
+  const getEventDescription = (event: MessageMonitor.Event) => {
+    // convert event to JSON string
+    const newEvent = { ...event };
+    delete newEvent["eventType"];
+    delete newEvent["eventGeneratedAt"];
+    const eventString = JSON.stringify(newEvent);
+    return eventString.substring(1, eventString.length - 1);
+  };
+
   return (
     <Card>
       <PerfectScrollbar>
@@ -51,7 +60,7 @@ export const EventListResults = ({
                       </Box>
                     </TableCell>
                     <TableCell>{format(event.eventGeneratedAt, "dd/MM/yyyy HH:mm:ss")}</TableCell>
-                    <TableCell>{event.notificationText}</TableCell>
+                    <TableCell>{getEventDescription(event)}</TableCell>
                   </TableRow>
                 );
               })}

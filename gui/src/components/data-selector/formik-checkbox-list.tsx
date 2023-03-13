@@ -12,15 +12,15 @@ export const FormikCheckboxList = (props) => {
         onChange={(e) => {
           const newEventTypes = [...selectedValues];
           // if value is All, check or uncheck all
-          if (eventType === "All") {
+          if (eventType.label === "All") {
             if (e.target.checked) {
-              newEventTypes.push(...values);
+              newEventTypes.push(...values.filter((e) => e.label !== "All"));
             } else {
               newEventTypes.splice(0, newEventTypes.length);
             }
           } else {
             // if value is not All, uncheck All
-            const index = newEventTypes.indexOf("All");
+            const index = newEventTypes.findIndex((val) => val.label === "All");
             if (index > -1) {
               newEventTypes.splice(index, 1);
             }
@@ -31,6 +31,7 @@ export const FormikCheckboxList = (props) => {
               newEventTypes.splice(newEventTypes.indexOf(eventType), 1);
             }
           }
+          console.log(newEventTypes);
           setValues(newEventTypes);
         }}
       />

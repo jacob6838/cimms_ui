@@ -31,12 +31,12 @@ class MessageMonitorApi {
     endTime,
   }: {
     token: string;
-    intersection_id?: string;
+    intersection_id?: number;
     startTime?: Date;
     endTime?: Date;
   }): Promise<ProcessedSpat[]> {
     const queryParams: Record<string, string> = {};
-    if (intersection_id) queryParams["intersection_id"] = intersection_id;
+    if (intersection_id) queryParams["intersection_id"] = intersection_id.toString();
     if (startTime) queryParams["start_time_utc_millis"] = startTime.getTime().toString();
     if (endTime) queryParams["end_time_utc_millis"] = endTime.getTime().toString();
 
@@ -70,16 +70,19 @@ class MessageMonitorApi {
     intersection_id,
     startTime,
     endTime,
+    latest,
   }: {
     token: string;
-    intersection_id?: string;
+    intersection_id?: number;
     startTime?: Date;
     endTime?: Date;
+    latest?: boolean;
   }): Promise<ProcessedMap[]> {
     const queryParams: Record<string, string> = {};
-    if (intersection_id) queryParams["intersection_id"] = intersection_id;
+    if (intersection_id) queryParams["intersection_id"] = intersection_id.toString();
     if (startTime) queryParams["start_time_utc_millis"] = startTime.getTime().toString();
     if (endTime) queryParams["end_time_utc_millis"] = endTime.getTime().toString();
+    if (latest !== undefined) queryParams["latest"] = latest.toString();
 
     var response = await authApiHelper.invokeApi({
       path: "/map/json",
@@ -91,17 +94,17 @@ class MessageMonitorApi {
 
   async getBsmMessages({
     token,
-    origin_ip,
+    vehicleId,
     startTime,
     endTime,
   }: {
     token: string;
-    origin_ip?: string;
+    vehicleId?: string;
     startTime?: Date;
     endTime?: Date;
   }): Promise<OdeBsmData[]> {
     const queryParams: Record<string, string> = {};
-    if (origin_ip) queryParams["origin_ip"] = origin_ip;
+    if (vehicleId) queryParams["origin_ip"] = vehicleId;
     if (startTime) queryParams["start_time_utc_millis"] = startTime.getTime().toString();
     if (endTime) queryParams["end_time_utc_millis"] = endTime.getTime().toString();
 

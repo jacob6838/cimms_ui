@@ -54,7 +54,6 @@ export const EventDataTable = (props: {
             <CardHeader title="Data" />
             <Divider />
           </>
-
           <EventListResults
             events={paginatedNotifications}
             eventsCount={events.length}

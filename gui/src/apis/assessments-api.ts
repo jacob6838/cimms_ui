@@ -18,7 +18,7 @@ class AssessmentsApi {
           intersection_id: intersectionId.toString(),
           start_time_utc_millis: startTime.getTime().toString(),
           end_time_utc_millis: endTime.getTime().toString(),
-          //   latest: "true",
+          latest: "true",
         },
       });
       console.log(response);

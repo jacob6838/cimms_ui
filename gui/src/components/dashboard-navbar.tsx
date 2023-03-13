@@ -24,6 +24,7 @@ import { AccountPopover } from "./account-popover";
 import React from "react";
 import { useSession } from "next-auth/react";
 import { getInitials } from "../utils/get-initials";
+import { useDashboardContext } from "../contexts/dashboard-context";
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }: { theme: Theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -33,8 +34,6 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }: { theme: Theme }) => ({
 interface Props {
   onSidebarOpen: () => void;
   intersections: IntersectionReferenceData[];
-  intersectionId: number;
-  setIntersectionId: (val: number) => void;
 }
 
 function stringToColor(string?: string) {
@@ -74,8 +73,10 @@ function stringAvatar(name?: string) {
 }
 
 export const DashboardNavbar = (props: Props) => {
-  const { onSidebarOpen, intersections, intersectionId, setIntersectionId, ...other } = props;
+  const { onSidebarOpen, intersections, ...other } = props;
   const settingsRef = useRef(null);
+  const dashboardContext = useDashboardContext();
+  const { intersectionId, roadRegulatorId } = useDashboardContext();
   const [openAccountPopover, setOpenAccountPopover] = useState(false);
   const { data: session } = useSession();
 
@@ -119,7 +120,7 @@ export const DashboardNavbar = (props: Props) => {
                 id="demo-simple-select"
                 value={intersectionId}
                 label="Age"
-                onChange={(e) => setIntersectionId(e.target.value as number)}
+                onChange={(e) => dashboardContext.setIntersection(e.target.value as number)}
               >
                 {intersections.map((intersection) => {
                   return (

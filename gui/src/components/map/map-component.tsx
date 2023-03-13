@@ -5,10 +5,11 @@ import { Container, Col } from "reactstrap";
 
 import { Paper, Box } from "@mui/material";
 
-import mapMessageData from "./processed_map_v4.json";
+// import mapMessageData from "./processed_map_v4.json";
 import type { LayerProps } from "react-map-gl";
 import ControlPanel from "./control-panel";
 import MessageMonitorApi from "../../apis/mm-api";
+import { useDashboardContext } from "../../contexts/dashboard-context";
 
 const emptyFeatureCollection = {
   type: "FeatureCollection",
@@ -113,13 +114,17 @@ const bsmLayer: LayerProps = {
   },
 };
 
-type MyProps = {};
+type MyProps = {
+  startDate: Date;
+  endDate: Date;
+  vehicleId?: string;
+  displayText: string;
+};
 
 const MapTab = (props: MyProps) => {
   const MAPBOX_TOKEN =
     "pk.eyJ1IjoidG9ueWVuZ2xpc2giLCJhIjoiY2tzajQwcDJvMGQ3bjJucW0yaDMxbThwYSJ9.ff26IdP_Y9hiE82AGx_wCg"; //process.env.MAPBOX_TOKEN!;
 
-  const [pointData, setPointData] = useState<any>(null);
   const [marks, setMarks] = useState<{ value: number; label: string }[]>([]);
   const [mapData, setMapData] = useState<ProcessedMap>();
   const [mapSignalGroups, setMapSignalGroups] = useState<SignalStateFeatureCollection>();
@@ -136,6 +141,7 @@ const MapTab = (props: MyProps) => {
   });
   const [sliderValue, setSliderValue] = React.useState<number>(30);
   const mapRef = React.useRef<any>(null);
+  const { intersectionId: dbIntersectionId } = useDashboardContext();
 
   const parseMapSignalGroups = (mapMessage: ProcessedMap): SignalStateFeatureCollection => {
     const features: SignalStateFeature[] = [];
@@ -258,21 +264,43 @@ const MapTab = (props: MyProps) => {
   //     setPointData(mapMessageData.mapFeatureCollection)
   //   }, []);
 
-  useEffect(() => {
-    setPointData(mapMessageData.mapFeatureCollection);
-
-    const mapMessage: ProcessedMap = MessageMonitorApi.getMapMessage();
+  const pullInitialData = async () => {
+    const mapMessage: ProcessedMap = (
+      await MessageMonitorApi.getMapMessages({
+        token: "token",
+        intersection_id: dbIntersectionId,
+        startTime: props.startDate,
+        endTime: props.endDate,
+        latest: true,
+      })
+    ).at(-1)!;
     const mapSignalGroupsLocal = parseMapSignalGroups(mapMessage);
     setMapData(mapMessage);
     setMapSignalGroups(mapSignalGroupsLocal);
 
     setCollectingLanes(mapMessage.connectingLanesFeatureCollection);
 
-    const spatSignalGroupsLocal = parseSpatSignalGroups(MessageMonitorApi.getSpatMessages());
+    const spatSignalGroupsLocal = parseSpatSignalGroups(
+      await MessageMonitorApi.getSpatMessages({
+        token: "token",
+        intersection_id: dbIntersectionId,
+        startTime: props.startDate,
+        endTime: props.endDate,
+      })
+    );
     setSpatSignalGroups(spatSignalGroupsLocal);
     setSliderValue(Number(Object.keys(spatSignalGroupsLocal)?.[0] ?? 0));
 
-    MessageMonitorApi.getBsmMessages({token: "token"}).then((bsmData) => setBsmData(parseBsmToGeojson(bsmData)));
+    MessageMonitorApi.getBsmMessages({
+      token: "token",
+      vehicleId: props.vehicleId,
+      startTime: props.startDate,
+      endTime: props.endDate,
+    }).then((bsmData) => setBsmData(parseBsmToGeojson(bsmData)));
+  };
+
+  useEffect(() => {
+    pullInitialData();
   }, []);
 
   useEffect(() => {

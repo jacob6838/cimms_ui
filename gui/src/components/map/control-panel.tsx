@@ -27,44 +27,6 @@ function ControlPanel(props) {
         padding: "20px 20px 20px 20px",
       }}
     >
-      <Box>
-        <FormControl sx={{ width: 400, ml: 1, mt: 1 }} variant="filled">
-          <InputLabel id="demo-simple-select-label">Event Type</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={props.eventType}
-            label="Age"
-            onChange={(e) => {}}
-          >
-            {EVENT_TYPES.map((val) => {
-              return <MenuItem value={val}>{val}</MenuItem>;
-            })}
-          </Select>
-        </FormControl>
-      </Box>
-
-      <Box sx={{ mt: 1 }}>
-        <h3>Time Interval</h3>
-        <Box sx={{ mt: 1 }}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateTimePicker
-              label="Start date"
-              value={dayjs(props.startDate ?? new Date())}
-              onChange={(e) => {}}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateTimePicker
-              label="End date"
-              value={dayjs(props.endDate ?? new Date())}
-              onChange={(e) => {}}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
-        </Box>
-      </Box>
       <div
         className="control-panel"
         style={{
