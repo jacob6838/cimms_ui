@@ -46,7 +46,17 @@ const connectingLanesLayer: LayerProps = {
   type: "line",
   paint: {
     "line-width": 5,
-    "line-color": "#43eb34",
+    "line-color": "#30af25",
+    "line-dasharray": [2, 1],
+  },
+};
+
+const connectingLanesLayerYellow: LayerProps = {
+  id: "connectingLanesYellow",
+  type: "line",
+  paint: {
+    "line-width": 5,
+    "line-color": "#c5b800",
     "line-dasharray": [2, 1],
   },
 };
@@ -56,7 +66,7 @@ const connectingLanesLayerInactive: LayerProps = {
   type: "line",
   paint: {
     "line-width": 5,
-    "line-color": "#545454",
+    "line-color": "#da2f2f",
     "line-dasharray": [2, 1],
   },
 };
@@ -80,7 +90,7 @@ const signalStateLayerGreen: LayerProps = {
   type: "symbol",
   layout: {
     "icon-image": "traffic-light-icon-green-1",
-    "icon-allow-overlap": false,
+    "icon-allow-overlap": true,
     "icon-size": ["interpolate", ["linear"], ["zoom"], 0, 0, 6, 0.5, 9, 0.4, 22, 0.08],
   },
 };
@@ -90,7 +100,7 @@ const signalStateLayerRed: LayerProps = {
   type: "symbol",
   layout: {
     "icon-image": "traffic-light-icon-red-1",
-    "icon-allow-overlap": false,
+    "icon-allow-overlap": true,
     "icon-size": ["interpolate", ["linear"], ["zoom"], 0, 0, 6, 0.5, 9, 0.4, 22, 0.08],
   },
 };
@@ -100,7 +110,7 @@ const signalStateLayerYellow: LayerProps = {
   type: "symbol",
   layout: {
     "icon-image": "traffic-light-icon-yellow-1",
-    "icon-allow-overlap": false,
+    "icon-allow-overlap": true,
     "icon-size": ["interpolate", ["linear"], ["zoom"], 0, 0, 6, 0.5, 9, 0.4, 22, 0.08],
   },
 };
@@ -239,7 +249,7 @@ const MapTab = (props: MyProps) => {
   const filterConnections = (
     connectingLanes: ConnectingLanesFeatureCollection,
     signalGroups: SpatSignalGroup[],
-    active: boolean | null
+    state: SignalState | null
   ): ConnectingLanesFeatureCollection => {
     return {
       ...connectingLanes,
@@ -248,12 +258,9 @@ const MapTab = (props: MyProps) => {
           signalGroups.find(
             (signalGroup) =>
               signalGroup.signalGroup == feature.properties.signalGroupId &&
-              signalGroup.state != "STOP_AND_REMAIN"
+              signalGroup.state != state
           ) !== undefined;
-        if (active === null) {
-          return feature.properties.signalGroupId === null;
-        }
-        return active ? val : !val;
+        return !val;
       }),
     };
   };
@@ -516,7 +523,11 @@ const MapTab = (props: MyProps) => {
           {connectingLanes && currentSignalGroups && (
             <Source
               type="geojson"
-              data={filterConnections(connectingLanes, currentSignalGroups, true)}
+              data={filterConnections(
+                connectingLanes,
+                currentSignalGroups,
+                "PROTECTED_MOVEMENT_ALLOWED"
+              )}
             >
               <Layer {...connectingLanesLayer} />
             </Source>
@@ -524,7 +535,15 @@ const MapTab = (props: MyProps) => {
           {connectingLanes && currentSignalGroups && (
             <Source
               type="geojson"
-              data={filterConnections(connectingLanes, currentSignalGroups, false)}
+              data={filterConnections(connectingLanes, currentSignalGroups, "PROTECTED_CLEARANCE")}
+            >
+              <Layer {...connectingLanesLayerYellow} />
+            </Source>
+          )}
+          {connectingLanes && currentSignalGroups && (
+            <Source
+              type="geojson"
+              data={filterConnections(connectingLanes, currentSignalGroups, "STOP_AND_REMAIN")}
             >
               <Layer {...connectingLanesLayerInactive} />
             </Source>
