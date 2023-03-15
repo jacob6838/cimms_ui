@@ -1,6 +1,6 @@
 declare namespace MessageMonitor {
-  type Event = {
-    eventGeneratedAt: number;
-    eventType: str;
-  };
+type Event = {
+  eventGeneratedAt: number
+  eventType: str
+}
 }

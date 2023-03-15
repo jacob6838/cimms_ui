@@ -79,6 +79,9 @@ for file_path in files:
         if extension_match[0][1].strip() == "Notification":
             imports = '/// <reference path="Notification.d.ts" />'
             extension = f"MessageMonitor.{extension_match[0][1]} & " if extension_match else ""
+        elif extension_match[0][1].strip() == "Event":
+            imports = '/// <reference path="Event.d.ts" />'
+            extension = f"MessageMonitor.{extension_match[0][1]} & " if extension_match else ""
         else:
             extension = f"{extension_match[0][1]} & " if extension_match else ""
     matches = re.findall(matching_expr, file_contents)
@@ -93,6 +96,9 @@ for file_path in files:
 
     contents = '\n'.join(lines)
     if CLASS_NAME == "Notification":
+        imports = "declare namespace MessageMonitor {"
+        contents += "\n}"
+    if CLASS_NAME == "Event":
         imports = "declare namespace MessageMonitor {"
         contents += "\n}"
 
