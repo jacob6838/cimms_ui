@@ -19,11 +19,15 @@ public class DefaultConfigRepositoryImpl implements DefaultConfigRepository {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public Query getQuery(String key) {
+    public Query getQuery(String key, String updateType) {
         Query query = new Query();
 
         if (key != null) {
             query.addCriteria(Criteria.where("_id").is(key));
+        }
+
+        if(updateType != null){
+            query.addCriteria(Criteria.where("updateType").is(updateType));
         }
 
         return query;
@@ -40,6 +44,8 @@ public class DefaultConfigRepositoryImpl implements DefaultConfigRepository {
     @Override
     public void save(DefaultConfig config) {
         Query query = getQuery(config.getKey());
+
+
         Update update = new Update();
         update.set("value", config.getValue());
         update.set("category", config.getCategory());
