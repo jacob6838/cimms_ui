@@ -39,11 +39,11 @@ const generalItems = [
     icon: <ChartBarIcon fontSize="small" />,
     title: "Notifications",
   },
-  {
-    path: "/performanceReports",
-    icon: <ChartBarIcon fontSize="small" />,
-    title: "Performance Reports",
-  },
+  //   {
+  //     path: "/performanceReports",
+  //     icon: <ChartBarIcon fontSize="small" />,
+  //     title: "Performance Reports",
+  //   },
   {
     path: "/map",
     icon: <MapIcon fontSize="small" />,
@@ -54,11 +54,11 @@ const generalItems = [
     icon: <ChartBarIcon fontSize="small" />,
     title: "Data Selector",
   },
-  {
-    path: "/users",
-    icon: <UsersIcon fontSize="small" />,
-    title: "Users",
-  },
+  //   {
+  //     path: "/users",
+  //     icon: <UsersIcon fontSize="small" />,
+  //     title: "Users",
+  //   },
   {
     path: "/configuration",
     icon: <CogIcon fontSize="small" />,

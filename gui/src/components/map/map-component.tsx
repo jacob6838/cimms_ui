@@ -10,6 +10,7 @@ import type { LayerProps } from "react-map-gl";
 import ControlPanel from "./control-panel";
 import MessageMonitorApi from "../../apis/mm-api";
 import { useDashboardContext } from "../../contexts/dashboard-context";
+import { Marker } from "mapbox-gl";
 
 const emptyFeatureCollection = {
   type: "FeatureCollection",
@@ -124,6 +125,16 @@ const bsmLayer: LayerProps = {
   },
 };
 
+const markerLayer: LayerProps = {
+  id: "invalidLaneCollection",
+  type: "line",
+  paint: {
+    "line-width": 20,
+    "line-color": "#da2f2f",
+    "line-dasharray": [2, 1],
+  },
+};
+
 type MyProps = {
   startDate: Date;
   endDate: Date;
@@ -152,7 +163,7 @@ const MapTab = (props: MyProps) => {
     type: "FeatureCollection",
     features: [],
   });
-  const [connectingLanes, setCollectingLanes] = useState<ConnectingLanesFeatureCollection>();
+  const [connectingLanes, setConnectingLanes] = useState<ConnectingLanesFeatureCollection>();
   const [bsmData, setBsmData] = useState<BsmFeatureCollection>({
     type: "FeatureCollection",
     features: [],
@@ -196,6 +207,49 @@ const MapTab = (props: MyProps) => {
       type: "FeatureCollection",
       features: features,
     };
+  };
+
+  const createMarkerForNotification = (
+    notification: MessageMonitor.Notification,
+    connectingLanes: ConnectingLanesFeatureCollection
+  ) => {
+    if (!connectingLanes) return;
+    const markerCollection = { type: "FeatureCollection", features: [] };
+    switch (notification.notificationType) {
+      case "ConnectionOfTravelNotification":
+        console.log("CONNECTION OF TRAVEL");
+        const notificationVal = notification as ConnectionOfTravelNotification;
+        const assessmentGroups = notificationVal.assessment.connectionOfTravelAssessment;
+        assessmentGroups.forEach((assessmentGroup) => {
+          const ingressLocation: number[] | undefined = connectingLanes.features.find(
+            (connectingLaneFeature: ConnectingLanesFeature) => {
+              return (
+                connectingLaneFeature.properties.ingressLaneId === assessmentGroup.ingressLaneID
+              );
+            }
+          )?.geometry.coordinates[0];
+          const egressLocation: number[] | undefined = connectingLanes.features.find(
+            (connectingLaneFeature: ConnectingLanesFeature) => {
+              return connectingLaneFeature.properties.egressLaneId === assessmentGroup.egressLaneID;
+            }
+          )?.geometry.coordinates[0];
+          console.log("Location", location, connectingLanes);
+          if (!ingressLocation || !egressLocation) return;
+          const marker = {
+            type: "Feature",
+            properties: {
+              description: `${notificationVal.notificationText}, egress lane ${assessmentGroup.egressLaneID}, incress lane ${assessmentGroup.ingressLaneID}, connection ID ${assessmentGroup.connectionID}, event count ${assessmentGroup.eventCount}`,
+              title: notificationVal.notificationType,
+            },
+            geometry: {
+              type: "LineString",
+              coordinates: [ingressLocation, egressLocation],
+            },
+          };
+          markerCollection.features.push(marker);
+        });
+    }
+    return markerCollection;
   };
 
   const parseSignalStateToColor = (state?: SignalState): string => {
@@ -308,7 +362,7 @@ const MapTab = (props: MyProps) => {
     setMapData(latestMapMessage);
     setMapSignalGroups(mapSignalGroupsLocal);
 
-    setCollectingLanes(latestMapMessage.connectingLanesFeatureCollection);
+    setConnectingLanes(latestMapMessage.connectingLanesFeatureCollection);
 
     const spatSignalGroupsLocal = parseSpatSignalGroups(
       await MessageMonitorApi.getSpatMessages({
@@ -581,6 +635,36 @@ const MapTab = (props: MyProps) => {
               <Layer {...signalStateLayerGreen} />
             </Source>
           )}
+          {/* {connectingLanes && (
+            <Source
+              type="geojson"
+              data={createMarkerForNotification(
+                {
+                  notificationGeneratedAt: 1678491340046,
+                  assessment: {
+                    assessmentGeneratedAt: 1678491339928,
+                    assessmentType: "ConnectionOfTravel",
+                    connectionOfTravelAssessment: [
+                      {
+                        egressLaneID: 5,
+                        ingressLaneID: 3,
+                        connectionID: -1,
+                        eventCount: 1,
+                      },
+                    ],
+                    timestamp: 1678491339931,
+                  },
+                  notificationText:
+                    "Connection of Travel Notification, Unknown Lane connection between ingress lane 3and egress Lane 5.",
+                  notificationHeading: "Connection of Travel Notification",
+                  notificationType: "ConnectionOfTravelNotification",
+                },
+                connectingLanes
+              )}
+            >
+              <Layer {...markerLayer} />
+            </Source>
+          )} */}
         </Map>
       </Col>
       <div>{}</div>
