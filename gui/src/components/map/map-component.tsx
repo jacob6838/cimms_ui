@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Map, { Source, Layer } from "react-map-gl";
+import Map, { Source, Layer, Popup } from "react-map-gl";
 
 import { Container, Col } from "reactstrap";
 
-import { Paper, Box } from "@mui/material";
+import { Paper, Box, Typography } from "@mui/material";
 
 // import mapMessageData from "./processed_map_v4.json";
 import type { LayerProps } from "react-map-gl";
@@ -12,6 +12,7 @@ import MessageMonitorApi from "../../apis/mm-api";
 import { useDashboardContext } from "../../contexts/dashboard-context";
 import { Marker } from "mapbox-gl";
 import { SidePanel } from "./side-panel";
+import { CustomTable } from "./custom-table";
 
 const allInteractiveLayerIds = [
   "mapMessage",
@@ -32,6 +33,15 @@ const mapMessageLayer: LayerProps = {
   paint: {
     "line-width": 5,
     "line-color": "#eb34e8",
+  },
+};
+
+const mapMessageHighlightLayer: LayerProps = {
+  id: "mapMessageHighlight",
+  type: "line",
+  paint: {
+    "line-width": 5,
+    "line-color": "#fffc50",
   },
 };
 
@@ -71,6 +81,16 @@ const connectingLanesLayerMissing: LayerProps = {
   paint: {
     "line-width": 5,
     "line-color": "#000000",
+    "line-dasharray": [2, 1],
+  },
+};
+
+const connectingLanesHighlightLayer: LayerProps = {
+  id: "connectingLanesHighlight",
+  type: "line",
+  paint: {
+    "line-width": 5,
+    "line-color": "#fffc50",
     "line-dasharray": [2, 1],
   },
 };
@@ -118,12 +138,31 @@ const bsmLayer: LayerProps = {
   },
 };
 
+const bsmHighlightLayer: LayerProps = {
+  id: "bsmHighlight",
+  type: "circle",
+  paint: {
+    "circle-color": "#0000FF",
+    "circle-radius": 8,
+  },
+};
+
 const markerLayer: LayerProps = {
   id: "invalidLaneCollection",
   type: "line",
   paint: {
     "line-width": 20,
     "line-color": "#d40000",
+    // "line-dasharray": [2, 1],
+  },
+};
+
+const markerHighlightLayer: LayerProps = {
+  id: "invalidLaneCollectionHighlight",
+  type: "line",
+  paint: {
+    "line-width": 20,
+    "line-color": "#fffc50",
     // "line-dasharray": [2, 1],
   },
 };
@@ -527,10 +566,92 @@ const MapTab = (props: MyProps) => {
     });
     console.log("CLICKED", features, e);
 
-    const feature = features.pop();
-    if (feature) {
+    const feature = features?.[0];
+    if (feature && allInteractiveLayerIds.includes(feature.layer.id)) {
+      console.log("SELECTING", feature);
       setSelectedFeature({ clickedLocation: e.lngLat, feature });
+    } else {
+      setSelectedFeature(undefined);
     }
+  };
+
+  const getPopupContent = (feature: any) => {
+    switch (feature.layer.id) {
+      case "bsm":
+        let bsm = feature.properties;
+        return (
+          <CustomTable
+            headers={["Field", "Value"]}
+            data={[
+              ["time", bsm.secMark / 1000],
+              ["speed", bsm.speed],
+              ["heading", bsm.heading],
+            ]}
+          />
+        );
+      case "mapMessage":
+        let map = feature.properties;
+        let connectedObjs: any[] = [];
+        console.log("Map MESSAGE", map.connectsTo);
+        JSON.parse(map?.connectsTo ?? "[]")?.forEach((connectsTo) => {
+          connectedObjs.push(["connectsTo", connectsTo.lane]);
+          connectedObjs.push(["signalGroup", connectsTo.signalGroup]);
+          connectedObjs.push(["connectionID", connectsTo.connectionID]);
+        });
+        return (
+          <CustomTable
+            headers={["Field", "Value"]}
+            data={[["laneId", map.laneId], ...connectedObjs]}
+          />
+        );
+
+      case "connectingLanes":
+        return <Typography>Connecting Lane: Green</Typography>;
+      case "connectingLanesYellow":
+        return <Typography>Connecting Lane: Yellow</Typography>;
+      case "connectingLanesInactive":
+        return <Typography>Connecting Lane: Red</Typography>;
+      case "connectingLanesMissing":
+        return <Typography>Connecting Lane: No Signal State</Typography>;
+        let connectingLane = feature.properties;
+        return (
+          <CustomTable headers={["Field", "Value"]} data={[["laneId", connectingLane.laneId]]} />
+        );
+      case "signalStatesGreen":
+        return (
+          <CustomTable
+            headers={["Field", "Value"]}
+            data={[
+              ["State", "PROTECTED_MOVEMENT_ALLOWED"],
+              ["Color", "Green"],
+            ]}
+          />
+        );
+      case "signalStatesYellow":
+        return (
+          <CustomTable
+            headers={["Field", "Value"]}
+            data={[
+              ["State", "PROTECTED_CLEARANCE"],
+              ["Color", "Yellow"],
+            ]}
+          />
+        );
+      case "signalStatesRed":
+        return (
+          <CustomTable
+            headers={["Field", "Value"]}
+            data={[
+              ["State", "STOP_AND_REMAIN"],
+              ["Color", "Red"],
+            ]}
+          />
+        );
+      case "invalidLaneCollection":
+        let invalidLaneCollection = feature.properties;
+        return <Typography>{invalidLaneCollection.description}</Typography>;
+    }
+    return <Typography>No Data</Typography>;
   };
 
   return (
@@ -668,6 +789,19 @@ const MapTab = (props: MyProps) => {
             >
               <Layer {...markerLayer} />
             </Source>
+          )}
+          {selectedFeature && (
+            <Popup
+              longitude={selectedFeature.clickedLocation.lng}
+              latitude={selectedFeature.clickedLocation.lat}
+              anchor="bottom"
+              onClose={() => setSelectedFeature(undefined)}
+              onOpen={() => {
+                console.log("OPENING");
+              }}
+            >
+              {getPopupContent(selectedFeature.feature)}
+            </Popup>
           )}
         </Map>
         <SidePanel
