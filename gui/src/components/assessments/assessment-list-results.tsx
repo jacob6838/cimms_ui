@@ -39,10 +39,6 @@ export const AssessmentListResults = ({
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds: uuid[] = [];
 
-    console.log(event.target.indeterminate);
-    console.log(event.target["indeterminate"]);
-    console.log(event.target["checked"]);
-
     if (event.target.checked) {
       newSelectedCustomerIds = allTabNotifications.map((customer) => customer.id);
     } else {
@@ -50,7 +46,6 @@ export const AssessmentListResults = ({
     }
 
     onSelectedItemsChanged(newSelectedCustomerIds);
-    console.log(newSelectedCustomerIds);
   };
 
   const handleSelectOne = (event, notificationId) => {

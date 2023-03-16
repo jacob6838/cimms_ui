@@ -89,6 +89,11 @@ function ControlPanel(props) {
   }>(getQueryParams(props.timeQueryParams));
 
   useEffect(() => {
+    const newDateParams = getQueryParams(props.timeQueryParams);
+    if (newDateParams.eventTime != dateParams.eventTime) setDateParams(newDateParams);
+  }, [props.timeQueryParams]);
+
+  useEffect(() => {
     props.onTimeQueryChanged(dateParams.eventTime, dateParams.timeBefore, dateParams.timeAfter);
   }, [dateParams]);
 
@@ -201,4 +206,4 @@ function ControlPanel(props) {
   );
 }
 
-export default React.memo(ControlPanel);
+export default ControlPanel;

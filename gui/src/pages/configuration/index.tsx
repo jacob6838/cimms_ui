@@ -21,7 +21,7 @@ import { DashboardLayout } from "../../components/dashboard-layout";
 import { ConfigParamListTable } from "../../components/configuration/configuration-list-table";
 import { Refresh as RefreshIcon } from "../../icons/refresh";
 import { Search as SearchIcon } from "../../icons/search";
-import toast from "react-hot-toast";
+import { useDashboardContext } from "../../contexts/dashboard-context";
 
 const tabs = [
   {
@@ -87,6 +87,7 @@ const applyPagination = (parameters, page, rowsPerPage) =>
   parameters.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
 const Page = () => {
+  const { intersectionId: dbIntersectionId } = useDashboardContext();
   const queryRef = useRef<TextFieldProps>(null);
   const [parameters, setParameters] = useState<Config[]>([]);
   const [currentTab, setCurrentTab] = useState("GENERAL");
@@ -104,8 +105,7 @@ const Page = () => {
 
   const getParameters = async () => {
     try {
-      const data = await configParamApi.getAllParameters("token", "12109");
-      console.log(data);
+      const data = await configParamApi.getAllParameters("token", dbIntersectionId);
 
       setParameters(data);
     } catch (err) {

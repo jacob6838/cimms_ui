@@ -23,7 +23,7 @@ export const AuthGuard = (props) => {
 
     if (!session) {
       // session == null
-      console.log("Forcing Sign In");
+      console.info("Forcing Sign In");
       //   signIn();
       // console.log('Not authenticated, redirecting');
       // router
@@ -34,7 +34,6 @@ export const AuthGuard = (props) => {
       //   .catch(console.error);
       setChecked(true);
     } else {
-      console.log("Logged In");
       setChecked(true);
     }
   }, [status]);

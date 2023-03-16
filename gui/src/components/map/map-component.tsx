@@ -129,7 +129,6 @@ const markerLayer: LayerProps = {
 };
 
 const generateQueryParams = (notification: MessageMonitor.Notification | undefined) => {
-  console.log("NOTIFICATION 2", notification);
   const startOffset = 1000 * 60 * 5;
   const endOffset = 1000 * 60 * 1;
   if (!notification) {
@@ -236,18 +235,11 @@ const MapTab = (props: MyProps) => {
     const markerCollection = { type: "FeatureCollection", features: [] };
     switch (notification.notificationType) {
       case "ConnectionOfTravelNotification":
-        console.log("CONNECTION OF TRAVEL");
         const notificationVal = notification as ConnectionOfTravelNotification;
         const assessmentGroups = notificationVal.assessment.connectionOfTravelAssessment;
-        console.log("ASSESSMENT GROUPS", assessmentGroups, "Notification", notificationVal);
         assessmentGroups.forEach((assessmentGroup) => {
           const ingressLocation: number[] | undefined = connectingLanes.features.find(
             (connectingLaneFeature: MapFeature) => {
-              console.log(
-                "CONNECTING LANE",
-                connectingLaneFeature.properties,
-                assessmentGroup.ingressLaneID
-              );
               return connectingLaneFeature.properties.laneId === assessmentGroup.ingressLaneID;
             }
           )?.geometry.coordinates[0];
@@ -256,7 +248,6 @@ const MapTab = (props: MyProps) => {
               return connectingLaneFeature.properties.laneId === assessmentGroup.egressLaneID;
             }
           )?.geometry.coordinates[0];
-          console.log("Location", ingressLocation, egressLocation, connectingLanes);
           if (!ingressLocation || !egressLocation) return;
           const marker = {
             type: "Feature",
@@ -367,7 +358,6 @@ const MapTab = (props: MyProps) => {
   //   }, []);
 
   const pullInitialData = async () => {
-    console.log("QUERY PARAMS 372", queryParams);
     const rawMap: ProcessedMap[] = await MessageMonitorApi.getMapMessages({
       token: "token",
       intersection_id: dbIntersectionId,
@@ -375,11 +365,11 @@ const MapTab = (props: MyProps) => {
       endTime: queryParams.endDate,
       latest: true,
     });
-    console.log(rawMap);
     if (!rawMap || rawMap.length == 0) {
-      console.log("NO MAP MESSAGES WITHIN TIME");
+      console.info("NO MAP MESSAGES WITHIN TIME");
       return;
     }
+    console.log(rawMap);
     const latestMapMessage: ProcessedMap = rawMap.at(-1)!;
     const mapSignalGroupsLocal = parseMapSignalGroups(latestMapMessage);
     setMapData(latestMapMessage);
@@ -422,23 +412,17 @@ const MapTab = (props: MyProps) => {
 
   useEffect(() => {
     const query_params = generateQueryParams(props.notification);
-    console.log("QUERY PARAMS 424", query_params);
     setQueryParams(query_params);
   }, [props.notification]);
 
   useEffect(() => {
     pullInitialData();
-    console.log("PULLING INITIAL DATA");
   }, [queryParams]);
 
-  useEffect(() => {
-    console.log("SLIDER VALUE", sliderValue);
-  }, [sliderValue]);
+  useEffect(() => {}, [sliderValue]);
 
   useEffect(() => {
     if (!mapSignalGroups || !spatSignalGroups) {
-      console.log("RETURNING");
-      console.log(mapSignalGroups, spatSignalGroups);
       return;
     }
 
@@ -466,8 +450,6 @@ const MapTab = (props: MyProps) => {
       setSignalStateData(undefined);
     }
 
-    console.log("FILTERING ALL DATA", bsmData);
-
     // retrieve filtered BSMs
     const filteredBsms: BsmFeature[] = [];
     (bsmData?.features ?? []).forEach((feature) => {
@@ -485,7 +467,6 @@ const MapTab = (props: MyProps) => {
   useEffect(() => {
     const startTime = queryParams.startDate.getTime() / 1000;
     const timeRange = getTimeRange(queryParams.startDate, queryParams.endDate);
-    console.log(timeRange, sliderValue);
 
     const filteredStartTime = startTime + sliderValue - queryParams.timeWindowSeconds;
     const filteredEndTime = startTime + sliderValue;
@@ -530,7 +511,6 @@ const MapTab = (props: MyProps) => {
     timeAfter?: number,
     timeWindowSeconds?: number
   ) => {
-    console.log("UPDATING QUERY PARAMS", eventTime, timeBefore, timeAfter, timeWindowSeconds);
     setQueryParams((prevState) => {
       return {
         startDate: new Date(eventTime.getTime() - (timeBefore ?? 0) * 1000),
@@ -542,8 +522,6 @@ const MapTab = (props: MyProps) => {
   };
 
   const onClickMap = (e) => {
-    //console.log(JSON.stringify(this.myRef.current.getCenter()));
-
     const features = mapRef.current.queryRenderedFeatures(e.point, {
       //   layers: allInteractiveLayerIds,
     });

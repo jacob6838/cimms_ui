@@ -84,7 +84,6 @@ class ConfigParamsApi {
       )
         .filter((c) => c.key === key)
         .at(-1);
-      console.log("CONFIG PARAM", response);
       return response as Config;
     } catch (exception_var) {
       console.error(exception_var);

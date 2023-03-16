@@ -40,7 +40,6 @@ export const ConfigParamCreateForm = (props) => {
           roadRegulatorID: -1,
           rsuID: "",
         };
-        console.log("updatedConfig: ", updatedConfig);
         await configParamApi.updateIntersectionParameter("token", values.name, updatedConfig);
         helpers.setStatus({ success: true });
         helpers.setSubmitting(false);

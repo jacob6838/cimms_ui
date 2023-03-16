@@ -88,22 +88,19 @@ export const DataSelectorEditForm = (props) => {
       //   bsmVehicleId: Yup.string(),
     }),
     onSubmit: async (values, helpers) => {
-      console.log("submitting");
       try {
         helpers.setStatus({ success: true });
         helpers.setSubmitting(false);
-        console.log(
-          onQuery({
-            type: values.type,
-            intersectionId: values.intersectionId,
-            roadRegulatorId: values.roadRegulatorId,
-            startDate: values.startDate,
-            timeRange: values.timeRange,
-            eventTypes: values.eventTypes.map((e) => e.value),
-            assessmentTypes: values.assessmentTypes.map((e) => e.value),
-            bsmVehicleId: values.bsmVehicleId,
-          })
-        );
+        onQuery({
+          type: values.type,
+          intersectionId: values.intersectionId,
+          roadRegulatorId: values.roadRegulatorId,
+          startDate: values.startDate,
+          timeRange: values.timeRange,
+          eventTypes: values.eventTypes.map((e) => e.value).filter((e) => e !== "All"),
+          assessmentTypes: values.assessmentTypes.map((e) => e.value).filter((e) => e !== "All"),
+          bsmVehicleId: values.bsmVehicleId,
+        });
       } catch (err) {
         console.error(err);
         toast.error("Something went wrong!");
@@ -242,10 +239,9 @@ export const DataSelectorEditForm = (props) => {
                     />
                   )}
                   value={formik.values.startDate}
-                  onChange={(e) => {
-                    console.log(e);
-                    return formik.setFieldValue("startDate", (e as Dayjs | null)?.toDate(), true);
-                  }}
+                  onChange={(e) =>
+                    formik.setFieldValue("startDate", (e as Dayjs | null)?.toDate(), true)
+                  }
                 />
               </LocalizationProvider>
             </Grid>

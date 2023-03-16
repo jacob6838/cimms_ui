@@ -38,10 +38,8 @@ export const ConfigParamEditForm = (props) => {
           value: values.value,
         };
         if (parameter.intersectionID) {
-          console.log("UPDATING INRERSECTION PARAMETER", parameter);
           await configParamApi.updateIntersectionParameter("token", values.name, updatedConfig);
         } else {
-          console.log("UPDATING DEFAULT PARAMETER", parameter);
           await configParamApi.updateDefaultParameter("token", values.name, updatedConfig);
         }
         helpers.setStatus({ success: true });

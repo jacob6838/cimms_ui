@@ -21,7 +21,6 @@ class EventsApi {
           latest: latest.toString(),
         },
       });
-      console.log(response);
       return response;
     } catch (exception_var) {
       console.error(exception_var);

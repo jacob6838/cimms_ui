@@ -31,9 +31,8 @@ class AuthApiHelper {
     successMessage?: string;
     failureMessage?: string;
   }): Promise<any> {
-    console.log("QUERY PARAMS", queryParams, this.formatQueryParams(queryParams));
     const url = MESSAGE_MONITOR_ENDPOINT! + path + this.formatQueryParams(queryParams);
-    console.log("MAKING REQUEST TO", url);
+    console.info("MAKING REQUEST TO", url);
 
     const localHeaders: HeadersInit = { ...headers };
     if (method === "POST" && body) {
@@ -45,7 +44,6 @@ class AuthApiHelper {
       headers: localHeaders,
       body: body ? JSON.stringify(body) : null,
     };
-    console.log(options);
 
     return await fetch(url, options).then((response: Response) => {
       if (response.ok) {
@@ -54,9 +52,7 @@ class AuthApiHelper {
         console.error(
           "Request failed with status code " + response.status + ": " + response.statusText
         );
-        // throw new Error(
-
-        // );
+        return undefined;
       }
       return response.json();
     });

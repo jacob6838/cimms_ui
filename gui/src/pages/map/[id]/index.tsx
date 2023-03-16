@@ -13,7 +13,6 @@ const Map = () => {
 
   const updateNotifications = () => {
     NotificationApi.getNotification({ token: "token", id: id as string }).then((notif) => {
-      console.log("NOTIFICATION 3", notif);
       setNotification(notif);
     });
   };

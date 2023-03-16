@@ -37,6 +37,7 @@ export const CustomerListResults = ({
 }) => {
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds: string[] = [];
+    if (notificationsCount === 0) return;
     if (event.target.checked) {
       newSelectedCustomerIds = allTabNotifications.map((customer) => customer.id);
     } else {
@@ -44,7 +45,6 @@ export const CustomerListResults = ({
     }
 
     onSelectedItemsChanged(newSelectedCustomerIds);
-    console.log(newSelectedCustomerIds);
   };
 
   const handleSelectOne = (event, notificationId) => {
@@ -64,7 +64,10 @@ export const CustomerListResults = ({
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedNotifications.length === notificationsCount}
+                    checked={
+                      selectedNotifications.length === notificationsCount &&
+                      selectedNotifications.length
+                    }
                     color="primary"
                     indeterminate={
                       selectedNotifications.length > 0 &&

@@ -13,7 +13,7 @@ export const AccountPopover = (props) => {
     onClose?.();
 
     try {
-      console.log("Signing out");
+      console.info("Signing out");
 
       // This can be call inside AuthProvider component, but we do it here for simplicity
       signOut();

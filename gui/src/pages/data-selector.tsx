@@ -36,11 +36,9 @@ const DataSelectorPage = () => {
     bsmVehicleId,
   }) => {
     setType(type);
-    console.log("QUERYING DATA");
     const endTime = new Date(startDate.getTime() + timeRange * 60 * 1000);
     switch (type) {
       case "events":
-        console.log("EVENTS");
         const events: MessageMonitor.Event[] = [];
         // iterate through each event type in a for loop and add the events to events array
         for (let i = 0; i < eventTypes.length; i++) {
@@ -53,14 +51,11 @@ const DataSelectorPage = () => {
             endTime
           );
           events.push(...event);
-          console.log(eventType, event);
         }
-        console.log(events);
         setEvents(events);
         setAssessments([]);
         return events;
       case "assessments":
-        console.log("Assessments");
         const assessments: Assessment[] = [];
         // iterate through each event type in a for loop and add the events to events array
         for (let i = 0; i < assessmentTypes.length; i++) {
@@ -72,10 +67,8 @@ const DataSelectorPage = () => {
             startDate,
             endTime
           );
-          assessments.push(...event);
-          console.log(eventType, event);
+          if (event) assessments.push(...event);
         }
-        console.log(assessments);
         setAssessments(assessments);
         setEvents([]);
         return assessments;

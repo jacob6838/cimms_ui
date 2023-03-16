@@ -22,7 +22,6 @@ class AssessmentsApi {
         token: token,
         queryParams,
       });
-      console.log(response);
       return response.pop();
     } catch (exception_var) {
       console.error(exception_var);
