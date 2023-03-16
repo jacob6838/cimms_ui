@@ -114,7 +114,7 @@ export const CustomPopup = (props) => {
       case "signalStatesGreen":
         return (
           <Box>
-            <Typography>Singal State</Typography>
+            <Typography>Signal State</Typography>
             <CustomTable
               headers={["Field", "Value"]}
               data={[
@@ -128,7 +128,7 @@ export const CustomPopup = (props) => {
       case "signalStatesYellow":
         return (
           <Box>
-            <Typography>Singal State</Typography>
+            <Typography>Signal State</Typography>
             <CustomTable
               headers={["Field", "Value"]}
               data={[
@@ -142,7 +142,7 @@ export const CustomPopup = (props) => {
       case "signalStatesRed":
         return (
           <Box>
-            <Typography>Singal State</Typography>
+            <Typography>Signal State</Typography>
             <CustomTable
               headers={["Field", "Value"]}
               data={[
