@@ -3,8 +3,8 @@ import MapRoundedIcon from "@mui/icons-material/MapRounded";
 import React from "react";
 import NextLink from "next/link";
 
-export const LaneDirectionOfTravelAssessmentCard = (props: {
-  assessment: LaneDirectionOfTravelAssessment | undefined;
+export const SignalStateEventAssessmentCard = (props: {
+  assessment: SignalStateEventAssessment | undefined;
 }) => {
   const { assessment } = props;
   return (
@@ -13,17 +13,17 @@ export const LaneDirectionOfTravelAssessmentCard = (props: {
         <Grid container spacing={3} sx={{ justifyContent: "space-between" }}>
           <Grid item>
             <Typography color="textSecondary" gutterBottom variant="overline">
-              Lane Direction of Travel Assessment
+              Signal State Assessment
             </Typography>
             {assessment === undefined
               ? ""
-              : assessment.laneDirectionOfTravelAssessmentGroup.map((group) => {
-                  const percentInvalid =
-                    group.outOfToleranceEvents /
-                    Math.min(group.inToleranceEvents + group.outOfToleranceEvents, 1);
+              : assessment.signalStateAssessmentGroup.map((group) => {
+                  const percentRed =
+                    group.redEvents /
+                    Math.min(group.greenEvents + group.yellowEvents + group.redEvents, 1);
                   return (
                     <Typography color="textPrimary" variant="h5">
-                      {`${group.segmentID}/${group.laneID}: ${percentInvalid.toFixed(2)}%`}
+                      {`${group.signalGroup}: ${percentRed.toFixed(2)}%`}
                     </Typography>
                   );
                 })}

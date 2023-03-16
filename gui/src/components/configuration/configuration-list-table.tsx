@@ -23,17 +23,52 @@ export const ConfigParamListTable = (props) => {
   const { parameters, parametersCount, onPageChange, onRowsPerPageChange, page, rowsPerPage } =
     props;
 
-  const generalRow = (param) => {
+  const readOnlyRow = (param) => {
     return (
       <TableRow hover key={param.id}>
         <TableCell>{param.key}</TableCell>
         <TableCell>{param.value.toString()}</TableCell>
-        <TableCell>{param.unit?.toString()}</TableCell>
+        <TableCell>{param.units?.toString()}</TableCell>
+        <TableCell>{param.description}</TableCell>
+        <TableCell align="right"></TableCell>
+      </TableRow>
+    );
+  };
+
+  const generalDefaultRow = (param) => {
+    return (
+      <TableRow hover key={param.id}>
+        <TableCell>{param.key}</TableCell>
+        <TableCell>{param.value.toString()}</TableCell>
+        <TableCell>{param.units?.toString()}</TableCell>
+        <TableCell>{param.description}</TableCell>
+        <TableCell align="right">
+          <NextLink href={`/configuration/${param.key}/edit`} passHref>
+            <IconButton component="a">
+              <PencilAltIcon fontSize="small" />
+            </IconButton>
+          </NextLink>
+        </TableCell>
+      </TableRow>
+    );
+  };
+
+  const generalIntersectionRow = (param) => {
+    return (
+      <TableRow hover key={param.id}>
+        <TableCell>{param.key}</TableCell>
+        <TableCell>{param.value.toString()}</TableCell>
+        <TableCell>{param.units?.toString()}</TableCell>
         <TableCell>{param.description}</TableCell>
         <TableCell align="right">
           <NextLink href={`/configuration/${param.key}/create`} passHref>
             <IconButton component="a">
               <AddIcon fontSize="small" />
+            </IconButton>
+          </NextLink>
+          <NextLink href={`/configuration/${param.key}/edit`} passHref>
+            <IconButton component="a">
+              <PencilAltIcon fontSize="small" />
             </IconButton>
           </NextLink>
         </TableCell>
@@ -98,9 +133,15 @@ export const ConfigParamListTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {(parameters as Config[]).map((param) =>
-                param.intersectionID == null ? generalRow(param) : intersectionRow(param)
-              )}
+              {(parameters as Config[]).map((param) => {
+                if (param.updateType === "READ_ONLY") return readOnlyRow(param);
+                if (param.updateType === "DEFAULT") return generalDefaultRow(param);
+                if (param.updateType === "INTERSECTION") {
+                  return param.intersectionID == null
+                    ? generalIntersectionRow(param)
+                    : intersectionRow(param);
+                }
+              })}
             </TableBody>
           </Table>
         </Box>

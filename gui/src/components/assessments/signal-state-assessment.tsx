@@ -3,7 +3,9 @@ import MapRoundedIcon from "@mui/icons-material/MapRounded";
 import React from "react";
 import NextLink from "next/link";
 
-export const SignalStateAssessmentCard = (props: { assessment: SignalStateAssessment | null }) => {
+export const SignalStateAssessmentCard = (props: {
+  assessment: SignalStateAssessment | undefined;
+}) => {
   const { assessment } = props;
   return (
     <Card sx={{ height: "100%" }}>
@@ -13,7 +15,7 @@ export const SignalStateAssessmentCard = (props: { assessment: SignalStateAssess
             <Typography color="textSecondary" gutterBottom variant="overline">
               Signal State Assessment
             </Typography>
-            {assessment == null
+            {assessment === undefined
               ? ""
               : assessment.signalStateAssessmentGroup.map((group) => {
                   const percentRed =
@@ -25,19 +27,6 @@ export const SignalStateAssessmentCard = (props: { assessment: SignalStateAssess
                     </Typography>
                   );
                 })}
-          </Grid>
-          <Grid item>
-            <NextLink href={`/map`} passHref>
-              <IconButton component="a">
-                <MapRoundedIcon
-                  sx={{
-                    height: 56,
-                    width: 56,
-                  }}
-                  fontSize="small"
-                />
-              </IconButton>
-            </NextLink>
           </Grid>
         </Grid>
       </CardContent>

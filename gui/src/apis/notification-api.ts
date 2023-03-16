@@ -40,6 +40,37 @@ class NotificationApi {
 
     return notifications;
   }
+  async getNotification({
+    token,
+    id,
+  }: {
+    token: string;
+    id: string;
+  }): Promise<MessageMonitor.Notification | undefined> {
+    const NOTIFICATIONS = [
+      "spat_broadcast_rate_notification",
+      "signal_state_conflict_notification",
+      "signal_group_alignment_notification",
+      "map_broadcast_rate_notification",
+      "lane_direction_of_travel",
+      "intersection_reference_alignment",
+      "connection_of_travel",
+    ];
+
+    const notifications: MessageMonitor.Notification[] = [];
+    for (let i = 0; i < NOTIFICATIONS.length; i++) {
+      const queryParams: Record<string, string> = {};
+
+      var response = await authApiHelper.invokeApi({
+        path: `/notifications/${NOTIFICATIONS[i]}`,
+        token: token,
+        queryParams,
+      });
+      notifications.push(...response);
+    }
+
+    return notifications.filter((notification) => notification.id === id).pop();
+  }
 }
 
 export default new NotificationApi();

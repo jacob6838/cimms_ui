@@ -5,8 +5,10 @@ import { Box, Container, Typography } from "@mui/material";
 import { configParamApi } from "../../../apis/configuration-param-api";
 import { DashboardLayout } from "../../../components/dashboard-layout";
 import { ConfigParamEditForm } from "../../../components/configuration/configuration-edit-form";
+import { useDashboardContext } from "../../../contexts/dashboard-context";
 
 const ConfigParamEdit = () => {
+  const { intersectionId: dbIntersectionId } = useDashboardContext();
   const [parameter, setParameter] = useState<Config | null>(null);
 
   const router = useRouter();
@@ -14,7 +16,12 @@ const ConfigParamEdit = () => {
 
   const getParameter = async (key: string) => {
     try {
-      const data = await configParamApi.getParameter("token", key, "-1", "12109");
+      const data = await configParamApi.getParameter(
+        "token",
+        key,
+        "-1",
+        dbIntersectionId.toString()
+      );
 
       setParameter(data);
     } catch (err) {

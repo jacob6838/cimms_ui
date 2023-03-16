@@ -8,9 +8,17 @@ const renderNavItems = ({ depth = 0, items, path }) => (
   </List>
 );
 
+const getPartialMatch = (path, itemPath) => {
+  if (path === "/" && itemPath === path) return true;
+  else if (itemPath && itemPath !== "/") {
+    return path.includes(itemPath);
+  }
+  return false;
+};
+
 const reduceChildRoutes = ({ acc, depth, item, path }) => {
   const key = `${item.title}-${depth}`;
-  const partialMatch = item.path ? path.includes(item.path) : false;
+  const partialMatch = getPartialMatch(path, item.path);
   const exactMatch = path.split("?")[0] === item.path; // We don't compare query params
 
   if (item.children) {
@@ -36,7 +44,7 @@ const reduceChildRoutes = ({ acc, depth, item, path }) => {
   } else {
     acc.push(
       <DashboardSidebarItem
-        active={exactMatch}
+        active={partialMatch}
         chip={item.chip}
         depth={depth}
         icon={item.icon}

@@ -33,14 +33,17 @@ export const ConfigParamEditForm = (props) => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        const updatedConfig: IntersectionConfig = {
+        const updatedConfig = {
           ...parameter,
           value: values.value,
-          intersectionID: 12109,
-          roadRegulatorID: -1,
-          rsuID: "",
         };
-        await configParamApi.updateIntersectionParameter("token", values.name, updatedConfig);
+        if (parameter.intersectionID) {
+          console.log("UPDATING INRERSECTION PARAMETER", parameter);
+          await configParamApi.updateIntersectionParameter("token", values.name, updatedConfig);
+        } else {
+          console.log("UPDATING DEFAULT PARAMETER", parameter);
+          await configParamApi.updateDefaultParameter("token", values.name, updatedConfig);
+        }
         helpers.setStatus({ success: true });
         helpers.setSubmitting(false);
         router

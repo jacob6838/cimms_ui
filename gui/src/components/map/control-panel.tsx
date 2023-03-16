@@ -16,12 +16,50 @@ import {
   FormControl,
   InputLabel,
   Select,
+  Typography,
   MenuItem,
   TextField,
   Button,
   InputAdornment,
 } from "@mui/material";
-import { NoMeals } from "@mui/icons-material";
+import MuiAccordion, { AccordionProps } from "@mui/material/Accordion";
+import MuiAccordionSummary, { AccordionSummaryProps } from "@mui/material/AccordionSummary";
+import MuiAccordionDetails from "@mui/material/AccordionDetails";
+import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
+import { styled } from "@mui/material/styles";
+
+const Accordion = styled((props: AccordionProps) => (
+  <MuiAccordion disableGutters elevation={0} square {...props} />
+))(({ theme }) => ({
+  //border: `1px solid ${theme.palette.divider}`,
+  // '&:not(:last-child)': {
+  //   borderBottom: 0,
+  // },
+  // '&:before': {
+  //   display: 'none',
+  // },
+}));
+
+const AccordionSummary = styled((props: AccordionSummaryProps) => (
+  <MuiAccordionSummary
+    expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: "0.8rem" }} />}
+    {...props}
+  />
+))(({ theme }) => ({
+  minHeight: 0,
+  paddingLeft: 10,
+  flexDirection: "row-reverse",
+  "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
+    transform: "rotate(90deg)",
+  },
+  "& .MuiAccordionSummary-content": {
+    marginLeft: theme.spacing(1),
+    marginTop: 0,
+    marginBottom: 0,
+  },
+}));
+
+const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({}));
 
 function ControlPanel(props) {
   const getQueryParams = ({
@@ -68,71 +106,78 @@ function ControlPanel(props) {
         padding: "20px 20px 20px 20px",
       }}
     >
-      <Box sx={{ mt: 1 }}>
-        <h3>Time Interval</h3>
-        <Box sx={{ mt: 1 }}>
-          <TextField
-            label="Time Before Event"
-            name="timeRangeBefore"
-            type="number"
-            onChange={(e) => {
-              setDateParams((prevState) => {
-                return { ...prevState, timeBefore: getNumber(e.target.value) };
-              });
-            }}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">seconds</InputAdornment>,
-            }}
-            value={dateParams.timeBefore}
-          />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateTimePicker
-              label="Event Date"
-              value={dayjs(dateParams.eventTime ?? new Date())}
-              onChange={(e) => {
-                setDateParams((prevState) => {
-                  return { ...prevState, eventTime: e?.toDate() };
-                });
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
-          <TextField
-            // fullWidth
-            label="Time After Event"
-            name="timeRangeAfter"
-            type="number"
-            onChange={(e) => {
-              setDateParams((prevState) => {
-                return { ...prevState, timeAfter: getNumber(e.target.value) };
-              });
-            }}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">seconds</InputAdornment>,
-            }}
-            value={dateParams.timeAfter}
-          />
-          <TextField
-            // fullWidth
-            label="Time Render Window"
-            name="timeRangeAfter"
-            type="number"
-            onChange={(e) => {
-              setDateParams((prevState) => {
-                return { ...prevState, timeWindowSeconds: getNumber(e.target.value) };
-              });
-            }}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">seconds</InputAdornment>,
-            }}
-            value={dateParams.timeWindowSeconds}
-          />
-        </Box>
-      </Box>
+      <Accordion disableGutters>
+        <AccordionSummary>
+          <Typography variant="h5">Time Query</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box sx={{ mt: 1 }}>
+            <Box sx={{ mt: 1 }}>
+              <TextField
+                label="Time Before Event"
+                name="timeRangeBefore"
+                type="number"
+                onChange={(e) => {
+                  setDateParams((prevState) => {
+                    return { ...prevState, timeBefore: getNumber(e.target.value) };
+                  });
+                }}
+                InputProps={{
+                  endAdornment: <InputAdornment position="end">seconds</InputAdornment>,
+                }}
+                value={dateParams.timeBefore}
+              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateTimePicker
+                  label="Event Date"
+                  value={dayjs(dateParams.eventTime ?? new Date())}
+                  onChange={(e) => {
+                    setDateParams((prevState) => {
+                      return { ...prevState, eventTime: e?.toDate() };
+                    });
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+              <TextField
+                // fullWidth
+                label="Time After Event"
+                name="timeRangeAfter"
+                type="number"
+                onChange={(e) => {
+                  setDateParams((prevState) => {
+                    return { ...prevState, timeAfter: getNumber(e.target.value) };
+                  });
+                }}
+                InputProps={{
+                  endAdornment: <InputAdornment position="end">seconds</InputAdornment>,
+                }}
+                value={dateParams.timeAfter}
+              />
+              <TextField
+                // fullWidth
+                label="Time Render Window"
+                name="timeRangeAfter"
+                type="number"
+                onChange={(e) => {
+                  setDateParams((prevState) => {
+                    return { ...prevState, timeWindowSeconds: getNumber(e.target.value) };
+                  });
+                }}
+                InputProps={{
+                  endAdornment: <InputAdornment position="end">seconds</InputAdornment>,
+                }}
+                value={dateParams.timeWindowSeconds}
+              />
+            </Box>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
+
       <div
         className="control-panel"
         style={{
-          padding: "20px 100px 0px 100px",
+          padding: "20px 50px 0px 50px",
         }}
       >
         <h3>Visualization Time</h3>
@@ -149,7 +194,7 @@ function ControlPanel(props) {
           disableSwap
         />
         <Button sx={{ m: 1 }} variant="contained" onClick={props.downloadAllData}>
-          Download
+          Download All Message Data
         </Button>
       </div>
     </div>

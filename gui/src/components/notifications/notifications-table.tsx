@@ -29,59 +29,9 @@ const tabs = [
     description: "All Notifications",
   },
   {
-    label: "SBR",
-    value: "SpatBroadcastRateNotification",
-    description: "Spat Broadcast Rate Notification",
-  },
-  {
-    label: "IRA",
-    value: "IntersectionReferenceAlignmentNotification",
-    description: "Intersection Reference Alignment Notification",
-  },
-  {
-    label: "SGA",
-    value: "SignalGroupAlignmentNotification",
-    description: "Signal Group Alignment Notification",
-  },
-  {
-    label: "SMA",
-    value: "SpatMinimumDataNotification",
-    description: "Spat Minimum Data Notification",
-  },
-  {
-    label: "MMD",
-    value: "MapMinimumDataNotification",
-    description: "Map Minimum Data Notification",
-  },
-  {
-    label: "MBR",
-    value: "MapBroadcastRateNotification",
-    description: "Map Broadcast Rate Notification",
-  },
-  {
-    label: "SSA",
-    value: "SignalStateAssessmentNotification",
-    description: "Signal State Assessment Notification",
-  },
-  {
-    label: "LDOTA",
-    value: "LaneDirectionOfTravelAssessmentNotification",
-    description: "Lane Direction of Travel Assessment Notification",
-  },
-  {
-    label: "COT",
-    value: "ConnectionOfTravelNotification",
-    description: "Connection of Travel Notification",
-  },
-  {
-    label: "SSC",
-    value: "SignalStateConflictNotification",
-    description: "Signal State Conflict Notification",
-  },
-  {
-    label: "TCD",
-    value: "TimeChangeDetailsNotification",
-    description: "Time Change Details Notification",
+    label: "Cease Broadcast",
+    value: "CeaseBaroadcast",
+    description: "Notification Requests to Cease Broadcast of associated messages",
   },
 ];
 

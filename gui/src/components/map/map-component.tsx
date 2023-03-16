@@ -11,26 +11,19 @@ import ControlPanel from "./control-panel";
 import MessageMonitorApi from "../../apis/mm-api";
 import { useDashboardContext } from "../../contexts/dashboard-context";
 import { Marker } from "mapbox-gl";
-
-const emptyFeatureCollection = {
-  type: "FeatureCollection",
-  features: [],
-};
+import { SidePanel } from "./side-panel";
 
 const allInteractiveLayerIds = [
-  "segment-polygons",
-  "segment-centerlines",
-  "vtti-segment-polygons",
-  "gates",
-  "vsl",
-  "lcs-aggregated",
-  "lcs",
-  "dms",
-  "ddms",
-  "mvd-aggregated",
-  "psm",
-  "wzdx-line",
-  "wzdx-multipoint",
+  "mapMessage",
+  "connectingLanes",
+  "connectingLanesYellow",
+  "connectingLanesInactive",
+  "connectingLanesMissing",
+  "signalStatesGreen",
+  "signalStatesYellow",
+  "signalStatesRed",
+  "bsm",
+  "invalidLaneCollection",
 ];
 
 const mapMessageLayer: LayerProps = {
@@ -130,17 +123,36 @@ const markerLayer: LayerProps = {
   type: "line",
   paint: {
     "line-width": 20,
-    "line-color": "#da2f2f",
-    "line-dasharray": [2, 1],
+    "line-color": "#d40000",
+    // "line-dasharray": [2, 1],
   },
 };
 
+const generateQueryParams = (notification: MessageMonitor.Notification | undefined) => {
+  console.log("NOTIFICATION 2", notification);
+  const startOffset = 1000 * 60 * 5;
+  const endOffset = 1000 * 60 * 1;
+  if (!notification) {
+    return {
+      startDate: new Date(Date.now() - startOffset),
+      endDate: new Date(Date.now() + endOffset),
+      eventDate: new Date(Date.now()),
+      vehicleId: undefined,
+      timeWindowSeconds: 60,
+    };
+  } else {
+    return {
+      startDate: new Date(notification.notificationGeneratedAt - startOffset),
+      endDate: new Date(notification.notificationGeneratedAt + endOffset),
+      eventDate: new Date(notification.notificationGeneratedAt),
+      vehicleId: undefined,
+      timeWindowSeconds: 60,
+    };
+  }
+};
+
 type MyProps = {
-  startDate: Date;
-  endDate: Date;
-  eventDate: Date;
-  vehicleId?: string;
-  displayText: string;
+  notification: MessageMonitor.Notification | undefined;
 };
 
 const MapTab = (props: MyProps) => {
@@ -153,7 +165,13 @@ const MapTab = (props: MyProps) => {
     eventDate: Date;
     vehicleId?: string;
     timeWindowSeconds: number;
-  }>({ ...props, timeWindowSeconds: 60 });
+  }>({
+    startDate: new Date(Date.now() - 1000 * 60),
+    endDate: new Date(Date.now() + 1000 * 60),
+    eventDate: new Date(Date.now()),
+    vehicleId: undefined,
+    timeWindowSeconds: 60,
+  });
   const [mapData, setMapData] = useState<ProcessedMap>();
   const [mapSignalGroups, setMapSignalGroups] = useState<SignalStateFeatureCollection>();
   const [signalStateData, setSignalStateData] = useState<SignalStateFeatureCollection[]>();
@@ -169,15 +187,17 @@ const MapTab = (props: MyProps) => {
     features: [],
   });
   //   const mapRef = useRef<mapboxgl.Map>();
-  const [viewState, setViewState] = React.useState({
+  const [viewState, setViewState] = useState({
     latitude: 39.587905,
     longitude: -105.0907089,
     zoom: 19,
   });
-  const [sliderValue, setSliderValue] = React.useState<number>(0);
-  const [renderTimeInterval, setRenderTimeInterval] = React.useState<number[]>([0, 0]);
+  const [sliderValue, setSliderValue] = useState<number>(0);
+  const [renderTimeInterval, setRenderTimeInterval] = useState<number[]>([0, 0]);
   const mapRef = React.useRef<any>(null);
   const { intersectionId: dbIntersectionId } = useDashboardContext();
+  const [selectedFeature, setSelectedFeature] = useState<any>(undefined);
+  const [rawData, setRawData] = useState({});
 
   const parseMapSignalGroups = (mapMessage: ProcessedMap): SignalStateFeatureCollection => {
     const features: SignalStateFeature[] = [];
@@ -211,29 +231,32 @@ const MapTab = (props: MyProps) => {
 
   const createMarkerForNotification = (
     notification: MessageMonitor.Notification,
-    connectingLanes: ConnectingLanesFeatureCollection
+    connectingLanes: MapFeatureCollection
   ) => {
-    if (!connectingLanes) return;
     const markerCollection = { type: "FeatureCollection", features: [] };
     switch (notification.notificationType) {
       case "ConnectionOfTravelNotification":
         console.log("CONNECTION OF TRAVEL");
         const notificationVal = notification as ConnectionOfTravelNotification;
         const assessmentGroups = notificationVal.assessment.connectionOfTravelAssessment;
+        console.log("ASSESSMENT GROUPS", assessmentGroups, "Notification", notificationVal);
         assessmentGroups.forEach((assessmentGroup) => {
           const ingressLocation: number[] | undefined = connectingLanes.features.find(
-            (connectingLaneFeature: ConnectingLanesFeature) => {
-              return (
-                connectingLaneFeature.properties.ingressLaneId === assessmentGroup.ingressLaneID
+            (connectingLaneFeature: MapFeature) => {
+              console.log(
+                "CONNECTING LANE",
+                connectingLaneFeature.properties,
+                assessmentGroup.ingressLaneID
               );
+              return connectingLaneFeature.properties.laneId === assessmentGroup.ingressLaneID;
             }
           )?.geometry.coordinates[0];
           const egressLocation: number[] | undefined = connectingLanes.features.find(
-            (connectingLaneFeature: ConnectingLanesFeature) => {
-              return connectingLaneFeature.properties.egressLaneId === assessmentGroup.egressLaneID;
+            (connectingLaneFeature: MapFeature) => {
+              return connectingLaneFeature.properties.laneId === assessmentGroup.egressLaneID;
             }
           )?.geometry.coordinates[0];
-          console.log("Location", location, connectingLanes);
+          console.log("Location", ingressLocation, egressLocation, connectingLanes);
           if (!ingressLocation || !egressLocation) return;
           const marker = {
             type: "Feature",
@@ -344,47 +367,44 @@ const MapTab = (props: MyProps) => {
   //   }, []);
 
   const pullInitialData = async () => {
-    console.log(queryParams);
-    const mapMessages: ProcessedMap[] = await MessageMonitorApi.getMapMessages({
+    console.log("QUERY PARAMS 372", queryParams);
+    const rawMap: ProcessedMap[] = await MessageMonitorApi.getMapMessages({
       token: "token",
       intersection_id: dbIntersectionId,
       startTime: new Date(queryParams.startDate.getTime() - 1000 * 60 * 60 * 1),
       endTime: queryParams.endDate,
       latest: true,
     });
-    console.log(mapMessages);
-    if (!mapMessages || mapMessages.length == 0) {
+    console.log(rawMap);
+    if (!rawMap || rawMap.length == 0) {
       console.log("NO MAP MESSAGES WITHIN TIME");
       return;
     }
-    const latestMapMessage: ProcessedMap = mapMessages.at(-1)!;
+    const latestMapMessage: ProcessedMap = rawMap.at(-1)!;
     const mapSignalGroupsLocal = parseMapSignalGroups(latestMapMessage);
     setMapData(latestMapMessage);
     setMapSignalGroups(mapSignalGroupsLocal);
 
     setConnectingLanes(latestMapMessage.connectingLanesFeatureCollection);
 
-    const spatSignalGroupsLocal = parseSpatSignalGroups(
-      await MessageMonitorApi.getSpatMessages({
-        token: "token",
-        intersection_id: dbIntersectionId,
-        startTime: queryParams.startDate,
-        endTime: queryParams.endDate,
-      })
-    );
+    const rawSpat = await MessageMonitorApi.getSpatMessages({
+      token: "token",
+      intersection_id: dbIntersectionId,
+      startTime: queryParams.startDate,
+      endTime: queryParams.endDate,
+    });
+
+    const spatSignalGroupsLocal = parseSpatSignalGroups(rawSpat);
 
     setSpatSignalGroups(spatSignalGroupsLocal);
 
-    setBsmData(
-      parseBsmToGeojson(
-        await MessageMonitorApi.getBsmMessages({
-          token: "token",
-          vehicleId: queryParams.vehicleId,
-          startTime: queryParams.startDate,
-          endTime: queryParams.endDate,
-        })
-      )
-    );
+    const rawBsm = await MessageMonitorApi.getBsmMessages({
+      token: "token",
+      vehicleId: queryParams.vehicleId,
+      startTime: queryParams.startDate,
+      endTime: queryParams.endDate,
+    });
+    setBsmData(parseBsmToGeojson(rawBsm));
 
     setSliderValue(
       Math.min(
@@ -392,10 +412,23 @@ const MapTab = (props: MyProps) => {
         getTimeRange(queryParams.startDate, queryParams.endDate)
       )
     );
+
+    rawData["map"] = rawMap;
+    rawData["spat"] = rawSpat;
+    rawData["bsm"] = rawBsm;
+    rawData["notification"] = props.notification;
+    setRawData(rawData);
   };
 
   useEffect(() => {
+    const query_params = generateQueryParams(props.notification);
+    console.log("QUERY PARAMS 424", query_params);
+    setQueryParams(query_params);
+  }, [props.notification]);
+
+  useEffect(() => {
     pullInitialData();
+    console.log("PULLING INITIAL DATA");
   }, [queryParams]);
 
   useEffect(() => {
@@ -454,8 +487,8 @@ const MapTab = (props: MyProps) => {
     const timeRange = getTimeRange(queryParams.startDate, queryParams.endDate);
     console.log(timeRange, sliderValue);
 
-    const filteredStartTime = startTime + sliderValue;
-    const filteredEndTime = startTime + sliderValue + queryParams.timeWindowSeconds;
+    const filteredStartTime = startTime + sliderValue - queryParams.timeWindowSeconds;
+    const filteredEndTime = startTime + sliderValue;
 
     setRenderTimeInterval([filteredStartTime, filteredEndTime]);
   }, [sliderValue, queryParams]);
@@ -472,22 +505,23 @@ const MapTab = (props: MyProps) => {
 
   const downloadJsonFile = (contents: any, name: string) => {
     const element = document.createElement("a");
-    const file = new Blob([JSON.stringify(contents)], { type: "text/plain" });
+    const file = new Blob([JSON.stringify(contents)], {
+      type: "text/plain",
+    });
     element.href = URL.createObjectURL(file);
-    element.download = `${name}.json`;
+    element.download = name;
     document.body.appendChild(element); // Required for this to work in FireFox
     element.click();
   };
 
   const downloadAllData = () => {
-    const fileName = `intersection_${dbIntersectionId}_data`;
-    const data = {
-      mapData: mapData,
-      spatSignalGroups: spatSignalGroups,
-      mapSignalGroups: mapSignalGroups,
-      bsmData: bsmData,
-    };
-    downloadJsonFile(data, fileName);
+    downloadJsonFile(rawData["map"], `intersection_${dbIntersectionId}_MAP_data.json`);
+    downloadJsonFile(rawData["spat"], `intersection_${dbIntersectionId}_SPAT_data.json`);
+    downloadJsonFile(rawData["bsm"], `intersection_${dbIntersectionId}_BSM_data.json`);
+    downloadJsonFile(
+      rawData["notification"],
+      `intersection_${dbIntersectionId}_Notification_data.json`
+    );
   };
 
   const onTimeQueryChanged = (
@@ -507,6 +541,20 @@ const MapTab = (props: MyProps) => {
     });
   };
 
+  const onClickMap = (e) => {
+    //console.log(JSON.stringify(this.myRef.current.getCenter()));
+
+    const features = mapRef.current.queryRenderedFeatures(e.point, {
+      //   layers: allInteractiveLayerIds,
+    });
+    console.log("CLICKED", features, e);
+
+    const feature = features.pop();
+    if (feature) {
+      setSelectedFeature({ clickedLocation: e.lngLat, feature });
+    }
+  };
+
   return (
     <Container fluid={true} style={{ width: "100%", height: "100%", display: "flex" }}>
       <Col className="mapContainer" style={{ overflow: "hidden" }}>
@@ -519,7 +567,7 @@ const MapTab = (props: MyProps) => {
             zIndex: 10,
             top: 0,
             left: 0,
-            width: 1500,
+            width: 1200,
             borderRadius: "4px",
             fontSize: "16px",
             maxHeight: "calc(100vh - 120px)",
@@ -561,7 +609,7 @@ const MapTab = (props: MyProps) => {
           styleDiffing
           style={{ width: "100%", height: "100%" }}
           onMove={(evt) => setViewState(evt.viewState)}
-          // onClick={this.onClickMap}
+          onClick={onClickMap}
           // onMouseDown={this.onMouseDown}
           // onMouseUp={this.onMouseUp}
           // interactiveLayerIds={interactiveLayerIds}
@@ -635,39 +683,22 @@ const MapTab = (props: MyProps) => {
               <Layer {...signalStateLayerGreen} />
             </Source>
           )}
-          {/* {connectingLanes && (
+          {mapData && props.notification && (
             <Source
               type="geojson"
-              data={createMarkerForNotification(
-                {
-                  notificationGeneratedAt: 1678491340046,
-                  assessment: {
-                    assessmentGeneratedAt: 1678491339928,
-                    assessmentType: "ConnectionOfTravel",
-                    connectionOfTravelAssessment: [
-                      {
-                        egressLaneID: 5,
-                        ingressLaneID: 3,
-                        connectionID: -1,
-                        eventCount: 1,
-                      },
-                    ],
-                    timestamp: 1678491339931,
-                  },
-                  notificationText:
-                    "Connection of Travel Notification, Unknown Lane connection between ingress lane 3and egress Lane 5.",
-                  notificationHeading: "Connection of Travel Notification",
-                  notificationType: "ConnectionOfTravelNotification",
-                },
-                connectingLanes
-              )}
+              data={createMarkerForNotification(props.notification, mapData.mapFeatureCollection)}
             >
               <Layer {...markerLayer} />
             </Source>
-          )} */}
+          )}
         </Map>
+        <SidePanel
+          laneInfo={connectingLanes}
+          signalGroups={currentSignalGroups}
+          bsms={currentBsms}
+          notification={props.notification}
+        />
       </Col>
-      <div>{}</div>
     </Container>
   );
 };

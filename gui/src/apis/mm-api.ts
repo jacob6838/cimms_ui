@@ -53,6 +53,11 @@ class MessageMonitorApi {
   }
 
   // Assessments
+  getSignalStateEventAssessment(): SignalStateAssessment {
+    return assessments.signalStateAssessment;
+  }
+
+  // Assessments
   getSignalStateAssessment(): SignalStateAssessment {
     return assessments.signalStateAssessment;
   }

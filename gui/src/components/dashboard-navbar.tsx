@@ -132,9 +132,6 @@ export const DashboardNavbar = (props: Props) => {
               </Select>
             </FormControl>
           </Tooltip>
-          <IconButton sx={{ ml: 0.5 }} onClick={() => {}}>
-            <MapRoundedIcon fontSize="large" />
-          </IconButton>
           <Box sx={{ flexGrow: 1 }} />
           <Avatar
             onClick={() => setOpenAccountPopover(true)}

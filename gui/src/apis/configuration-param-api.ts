@@ -136,11 +136,11 @@ class ConfigParamsApi {
   }
 
   async updateDefaultParameter(token: string, name: string, param: Config): Promise<Config | null> {
-    toast.success(`Successfully Update Configuration Parameter ${name}`);
-    return null;
+    // toast.success(`Successfully Update Configuration Parameter ${name}`);
+    // return null;
     try {
       var response = await authApiHelper.invokeApi({
-        path: "/config/default/" + name,
+        path: "/config/default/",
         token: token,
         method: "POST",
         headers: { "Content-Type": "application/json" },

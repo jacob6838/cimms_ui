@@ -35,6 +35,7 @@ export const ConfigParamCreateForm = (props) => {
       try {
         const updatedConfig: IntersectionConfig = {
           ...parameter,
+          value: values.value,
           intersectionID: 12109,
           roadRegulatorID: -1,
           rsuID: "",

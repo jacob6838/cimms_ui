@@ -4,7 +4,7 @@ import React from "react";
 import NextLink from "next/link";
 
 export const ConnectionOfTravelAssessmentCard = (props: {
-  assessment: ConnectionOfTravelAssessment | null;
+  assessment: ConnectionOfTravelAssessment | undefined;
   small: Boolean;
 }) => {
   const { assessment } = props;
@@ -17,7 +17,7 @@ export const ConnectionOfTravelAssessmentCard = (props: {
             <Typography color="textSecondary" gutterBottom variant="overline">
               Connection of Travel Assessment
             </Typography>
-            {assessment == null
+            {assessment === undefined
               ? ""
               : assessment.connectionOfTravelAssessmentGroups.map((group) => {
                   return (
@@ -26,19 +26,6 @@ export const ConnectionOfTravelAssessmentCard = (props: {
                     </Typography>
                   );
                 })}
-          </Grid>
-          <Grid item>
-            <NextLink href={`/map`} passHref>
-              <IconButton component="a">
-                <MapRoundedIcon
-                  sx={{
-                    height: 56,
-                    width: 56,
-                  }}
-                  fontSize="small"
-                />
-              </IconButton>
-            </NextLink>
           </Grid>
         </Grid>
       </CardContent>

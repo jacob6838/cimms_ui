@@ -36,12 +36,7 @@ export const CustomerListResults = ({
   rowsPerPage,
 }) => {
   const handleSelectAll = (event) => {
-    let newSelectedCustomerIds: uuid[] = [];
-
-    console.log(event.target.indeterminate);
-    console.log(event.target["indeterminate"]);
-    console.log(event.target["checked"]);
-
+    let newSelectedCustomerIds: string[] = [];
     if (event.target.checked) {
       newSelectedCustomerIds = allTabNotifications.map((customer) => customer.id);
     } else {
@@ -87,22 +82,18 @@ export const CustomerListResults = ({
             <TableBody>
               {customers.map((customer: MessageMonitor.Notification) => {
                 const isNotificationSelected =
-                  [...selectedNotifications].indexOf(customer.notificationGeneratedAt) !== -1;
+                  [...selectedNotifications].indexOf(customer.id) !== -1;
 
                 return (
                   <TableRow
                     hover
-                    key={customer.notificationGeneratedAt}
-                    selected={
-                      [...selectedNotifications].indexOf(customer.notificationGeneratedAt) !== -1
-                    }
+                    key={customer.id}
+                    selected={[...selectedNotifications].indexOf(customer.id) !== -1}
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
                         checked={isNotificationSelected}
-                        onChange={(event) =>
-                          handleSelectOne(event, customer.notificationGeneratedAt)
-                        }
+                        onChange={(event) => handleSelectOne(event, customer.id)}
                         value="true"
                       />
                     </TableCell>
@@ -128,12 +119,7 @@ export const CustomerListResults = ({
                           <MapRoundedIcon fontSize="medium" />
                         </IconButton>
                       </NextLink> */}
-                      <NextLink
-                        href={`/map/${customer.notificationGeneratedAt - 1000 * 60}/${
-                          customer.notificationGeneratedAt + 1000 * 60
-                        }/${customer.notificationGeneratedAt}/${customer.notificationType}`}
-                        passHref
-                      >
+                      <NextLink href={`/map/${customer.id}`} passHref>
                         <IconButton component="a">
                           <MapRoundedIcon fontSize="medium" />
                         </IconButton>

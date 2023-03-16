@@ -13,25 +13,59 @@ import { NotificationsTable } from "../components/notifications/notifications-ta
 import { ConnectionOfTravelAssessmentCard } from "../components/assessments/connection-of-travel-assessment";
 import { LaneDirectionOfTravelAssessmentCard } from "../components/assessments/lane-direction-of-travel-assessment";
 import { SignalStateAssessmentCard } from "../components/assessments/signal-state-assessment";
+import { SignalStateEventAssessmentCard } from "../components/assessments/signal-state-event-assessment";
 import React, { useEffect, useState, useRef } from "react";
-import MessageMonitorApi from "../apis/mm-api";
+import AssessmentsApi from "../apis/assessments-api";
+import { useDashboardContext } from "../contexts/dashboard-context";
 
 const Page = () => {
   const [assessment, setAssessments] = useState<Assessment[]>([]);
+  const { intersectionId: dbIntersectionId } = useDashboardContext();
 
   // create hooks, and methods for each assessment type:
-  const [signalStateAssessment, setSignalStateAssessment] = useState<SignalStateAssessment | null>(
-    null
-  );
-  const [connectionOfTravelAssessment, setConnectionOfTravelAssessment] =
-    useState<ConnectionOfTravelAssessment | null>(null);
-  const [laneDirectionOfTravelAssessment, setLaneDirectionOfTravelAssessment] =
-    useState<LaneDirectionOfTravelAssessment | null>(null);
+  const [signalStateAssessment, setSignalStateAssessment] = useState<
+    SignalStateAssessment | undefined
+  >(undefined);
+  // create hooks, and methods for each assessment type:
+  const [signalStateEventAssessment, setSignalStateEventAssessment] = useState<
+    SignalStateEventAssessment | undefined
+  >(undefined);
+  const [connectionOfTravelAssessment, setConnectionOfTravelAssessment] = useState<
+    ConnectionOfTravelAssessment | undefined
+  >(undefined);
+  const [laneDirectionOfTravelAssessment, setLaneDirectionOfTravelAssessment] = useState<
+    LaneDirectionOfTravelAssessment | undefined
+  >(undefined);
 
-  const getAssessments = () => {
-    setSignalStateAssessment(MessageMonitorApi.getSignalStateAssessment());
-    setConnectionOfTravelAssessment(MessageMonitorApi.getConnectionOfTravelAssessment());
-    setLaneDirectionOfTravelAssessment(MessageMonitorApi.getLaneDirectionOfTravelAssessment());
+  const getAssessments = async () => {
+    setSignalStateAssessment(
+      (await AssessmentsApi.getAssessment(
+        "token",
+        "signal_state_assessment",
+        dbIntersectionId
+      )) as SignalStateAssessment
+    );
+    setSignalStateEventAssessment(
+      (await AssessmentsApi.getAssessment(
+        "token",
+        "signal_state_event_assessment",
+        dbIntersectionId
+      )) as SignalStateEventAssessment
+    );
+    setConnectionOfTravelAssessment(
+      (await AssessmentsApi.getAssessment(
+        "token",
+        "conenction_of_travel",
+        dbIntersectionId
+      )) as ConnectionOfTravelAssessment
+    );
+    setLaneDirectionOfTravelAssessment(
+      (await AssessmentsApi.getAssessment(
+        "token",
+        "lane_direction_of_travel",
+        dbIntersectionId
+      )) as LaneDirectionOfTravelAssessment
+    );
   };
 
   useEffect(() => {
@@ -64,10 +98,13 @@ const Page = () => {
             <Grid item xl={3} lg={3} sm={6} xs={12}>
               <SignalStateAssessmentCard assessment={signalStateAssessment} />
             </Grid>
+            <Grid item xl={3} lg={3} sm={6} xs={12}>
+              <SignalStateEventAssessmentCard assessment={signalStateEventAssessment} />
+            </Grid>
             <Grid item lg={12} md={12} xl={12} xs={12}>
               <NotificationsTable simple={true} />
             </Grid>
-            <Grid item lg={8} md={12} xl={9} xs={12}>
+            {/* <Grid item lg={8} md={12} xl={9} xs={12}>
               <Sales />
             </Grid>
             <Grid item lg={4} md={6} xl={3} xs={12}>
@@ -78,7 +115,7 @@ const Page = () => {
             </Grid>
             <Grid item lg={8} md={12} xl={9} xs={12}>
               <LatestOrders />
-            </Grid>
+            </Grid> */}
           </Grid>
         </Container>
       </Box>

@@ -21,32 +21,38 @@ import { DashboardLayout } from "../../components/dashboard-layout";
 import { ConfigParamListTable } from "../../components/configuration/configuration-list-table";
 import { Refresh as RefreshIcon } from "../../icons/refresh";
 import { Search as SearchIcon } from "../../icons/search";
+import toast from "react-hot-toast";
 
 const tabs = [
+  {
+    label: "General",
+    value: "GENERAL",
+    description: "General configuration parameters",
+  },
+  {
+    label: "Default",
+    value: "DEFAULT",
+    description: "Broad non-intersection specific configuration parameters",
+  },
+  {
+    label: "Intersection",
+    value: "INTERSECTION",
+    description: "Intersection specific configurable configuration parameters",
+  },
+  {
+    label: "Debug",
+    value: "DEBUG",
+    description: "Signal state configuration parameters",
+  },
+  {
+    label: "Read Only",
+    value: "READ_ONLY",
+    description: "Signal state configuration parameters",
+  },
   {
     label: "All",
     value: "all",
     description: "All Configuration Parameters",
-  },
-  {
-    label: "General",
-    value: "general",
-    description: "General Configuration Parameters",
-  },
-  {
-    label: "Lane Direction of Travel",
-    value: "lane_direction_of_travel",
-    description: "Lane Direction of Travel Configuration Parameters",
-  },
-  {
-    label: "Signal State",
-    value: "signal_state",
-    description: "Signal State Configuration Parameters",
-  },
-  {
-    label: "Connection of Travel",
-    value: "connection_of_travel",
-    description: "Connection of Travel Configuration Parameters",
   },
 ];
 
@@ -54,9 +60,9 @@ const applyFilters = (parameters, filter) =>
   parameters.filter((parameter) => {
     if (filter.query) {
       let queryMatched = false;
-      const properties = ["name", "cetegory", "description"];
+      const properties = ["name", "category", "description"];
       properties.forEach((property) => {
-        if (parameter[property].toLowerCase().includes(filter.query.toLowerCase())) {
+        if (parameter[property]?.toLowerCase().includes(filter.query.toLowerCase())) {
           queryMatched = true;
         }
       });
@@ -68,9 +74,13 @@ const applyFilters = (parameters, filter) =>
 
     if (filter.tab === "all") {
       return true;
+    } else if (filter.tab === "GENERAL") {
+      return parameter["updateType"] !== "READ_ONLY" && !parameter["key"].includes("debug");
+    } else if (filter.tab === "DEBUG") {
+      return parameter["key"].includes("debug");
+    } else {
+      return parameter["updateType"] == filter.tab && !parameter["key"].includes("debug");
     }
-
-    return parameter["category"].split("-")[0] == filter.tab;
   });
 
 const applyPagination = (parameters, page, rowsPerPage) =>
@@ -78,8 +88,8 @@ const applyPagination = (parameters, page, rowsPerPage) =>
 
 const Page = () => {
   const queryRef = useRef<TextFieldProps>(null);
-  const [parameters, setParameters] = useState(Array<Config>());
-  const [currentTab, setCurrentTab] = useState("all");
+  const [parameters, setParameters] = useState<Config[]>([]);
+  const [currentTab, setCurrentTab] = useState("GENERAL");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentDescription, setCurrentDescription] = useState("");

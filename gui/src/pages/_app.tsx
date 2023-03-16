@@ -10,6 +10,7 @@ import { theme } from "../theme";
 import React, { useState } from "react";
 import { SessionProvider } from "next-auth/react";
 import type { Session } from "next-auth";
+import { Toaster } from "react-hot-toast";
 
 import "../theme/index.css";
 
@@ -40,6 +41,7 @@ const App = (props) => {
           </SessionProvider>
         </ThemeProvider>
       </LocalizationProvider>
+      <Toaster />
     </CacheProvider>
   );
 };

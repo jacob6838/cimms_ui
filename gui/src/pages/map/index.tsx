@@ -22,12 +22,7 @@ const Map = () => {
           maxWidth={false}
           style={{ padding: 0, width: "100%", height: "100%", display: "flex" }}
         >
-          <MapTab
-            startDate={currentDate}
-            endDate={currentDate}
-            eventDate={currentDate}
-            displayText={"custom"}
-          />
+          <MapTab notification={undefined} />
         </Container>
       </Box>
     </>
