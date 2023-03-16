@@ -133,58 +133,64 @@ export const SidePanel = (props) => {
             >
               {open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
             </IconButton>
-            <Typography variant="h5" sx={{ color: "white", px: 2 }}>
-              Information Panel
-            </Typography>
-            <Accordion disableGutters>
-              <AccordionSummary>
-                <Typography variant="h5">Lanes</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Box sx={{ mt: 1 }}>
-                  <CustomTable
-                    headers={["ingress", "egress", "status"]}
-                    data={
-                      laneInfo?.features?.map((lane) => [
-                        lane.properties.ingressLaneId,
-                        lane.properties.egressLaneId,
-                        signalGroups?.find(
-                          (grp) => grp.signalGroup == lane.properties.signalGroupId
-                        )?.state ?? "no data",
-                      ]) ?? []
-                    }
-                  />
-                </Box>
-              </AccordionDetails>
-            </Accordion>
-            <Accordion disableGutters>
-              <AccordionSummary>
-                <Typography variant="h5">BSMs</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Box sx={{ mt: 1 }}>
-                  <CustomTable
-                    headers={["time", "speed", "heading"]}
-                    data={
-                      bsms?.features.map((bsm) => [
-                        bsm.properties.secMark / 1000,
-                        bsm.properties.speed,
-                        bsm.properties.heading,
-                      ]) ?? []
-                    }
-                  />
-                </Box>
-              </AccordionDetails>
-            </Accordion>
-            <Accordion disableGutters>
-              <AccordionSummary>
-                <Typography variant="h5">Notification</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography variant="h6">{notification?.notificationText}</Typography>
-                <Box sx={{ mt: 1 }}>{getNotificationTable(notification)}</Box>
-              </AccordionDetails>
-            </Accordion>
+            {!open ? (
+              <Box></Box>
+            ) : (
+              <>
+                <Typography variant="h5" sx={{ px: 2 }}>
+                  Information Panel
+                </Typography>
+                <Accordion disableGutters>
+                  <AccordionSummary>
+                    <Typography variant="h5">Lanes</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Box sx={{ mt: 1 }}>
+                      <CustomTable
+                        headers={["ingress", "egress", "status"]}
+                        data={
+                          laneInfo?.features?.map((lane) => [
+                            lane.properties.ingressLaneId,
+                            lane.properties.egressLaneId,
+                            signalGroups?.find(
+                              (grp) => grp.signalGroup == lane.properties.signalGroupId
+                            )?.state ?? "no data",
+                          ]) ?? []
+                        }
+                      />
+                    </Box>
+                  </AccordionDetails>
+                </Accordion>
+                <Accordion disableGutters>
+                  <AccordionSummary>
+                    <Typography variant="h5">BSMs</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Box sx={{ mt: 1 }}>
+                      <CustomTable
+                        headers={["time", "speed", "heading"]}
+                        data={
+                          bsms?.features.map((bsm) => [
+                            bsm.properties.secMark / 1000,
+                            bsm.properties.speed,
+                            bsm.properties.heading,
+                          ]) ?? []
+                        }
+                      />
+                    </Box>
+                  </AccordionDetails>
+                </Accordion>
+                <Accordion disableGutters>
+                  <AccordionSummary>
+                    <Typography variant="h5">Notification</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography variant="h6">{notification?.notificationText}</Typography>
+                    <Box sx={{ mt: 1 }}>{getNotificationTable(notification)}</Box>
+                  </AccordionDetails>
+                </Accordion>
+              </>
+            )}
           </Box>
         </Paper>
       </Box>
