@@ -19,11 +19,11 @@ export const CustomPopup = (props) => {
             <CustomTable
               headers={["Field", "Value"]}
               data={[
-                ["id", bsm.id],
-                ["message count", bsm.msgCnt],
-                ["time", bsm.secMark / 1000],
-                ["speed", bsm.speed],
-                ["heading", bsm.heading],
+                ["Id", bsm.id],
+                ["Message Count", bsm.msgCnt],
+                ["Time", bsm.secMark / 1000],
+                ["Speed", bsm.speed],
+                ["Heading", bsm.heading],
               ]}
             />
           </Box>
@@ -33,16 +33,16 @@ export const CustomPopup = (props) => {
         let connectedObjs: any[] = [];
         console.log("Map MESSAGE", map.connectsTo);
         JSON.parse(map?.connectsTo ?? "[]")?.forEach((connectsTo) => {
-          connectedObjs.push(["connectsTo", connectsTo.lane]);
-          connectedObjs.push(["signalGroup", connectsTo.signalGroup]);
-          connectedObjs.push(["connectionID", connectsTo.connectionID]);
+          connectedObjs.push(["Connected Lane", connectsTo.connectingLane.lane]);
+          connectedObjs.push(["Signal Group", connectsTo.signalGroup]);
+          connectedObjs.push(["Connection ID", connectsTo.connectionID]);
         });
         return (
           <Box>
             <Typography>MAP Lane</Typography>
             <CustomTable
               headers={["Field", "Value"]}
-              data={[["laneId", map.laneId], ...connectedObjs]}
+              data={[["Lane Id", map.laneId], ...connectedObjs]}
             />
           </Box>
         );
@@ -56,9 +56,9 @@ export const CustomPopup = (props) => {
               data={[
                 ["State", "PROTECTED_MOVEMENT_ALLOWED"],
                 ["Color", "Green"],
-                ["ingress lane", feature.properties?.ingressLaneId],
-                ["egress lane", feature.properties?.egressLaneId],
-                ["signal Group", feature.properties?.signalGroupId],
+                ["Ingress Lane", feature.properties?.ingressLaneId],
+                ["Egress Lane", feature.properties?.egressLaneId],
+                ["Signal Group", feature.properties?.signalGroupId],
               ]}
             />
           </Box>
@@ -72,9 +72,9 @@ export const CustomPopup = (props) => {
               data={[
                 ["State", "PROTECTED_CLEARANCE"],
                 ["Color", "Yellow"],
-                ["ingress lane", feature.properties?.ingressLaneId],
-                ["egress lane", feature.properties?.egressLaneId],
-                ["signal Group", feature.properties?.signalGroupId],
+                ["Ingress Lane", feature.properties?.ingressLaneId],
+                ["Egress Lane", feature.properties?.egressLaneId],
+                ["Signal Group", feature.properties?.signalGroupId],
               ]}
             />
           </Box>
@@ -88,9 +88,9 @@ export const CustomPopup = (props) => {
               data={[
                 ["State", "STOP_AND_REMAIN"],
                 ["Color", "Red"],
-                ["ingress lane", feature.properties?.ingressLaneId],
-                ["egress lane", feature.properties?.egressLaneId],
-                ["signal Group", feature.properties?.signalGroupId],
+                ["Ingress Lane", feature.properties?.ingressLaneId],
+                ["Egress Lane", feature.properties?.egressLaneId],
+                ["Signal Group", feature.properties?.signalGroupId],
               ]}
             />
           </Box>
@@ -104,9 +104,9 @@ export const CustomPopup = (props) => {
               data={[
                 ["State", "unknown"],
                 ["Color", "unknown"],
-                ["ingress lane", feature.properties?.ingressLaneId],
-                ["egress lane", feature.properties?.egressLaneId],
-                ["signal Group", feature.properties?.signalGroupId],
+                ["Ingress Lane", feature.properties?.ingressLaneId],
+                ["Egress Lane", feature.properties?.egressLaneId],
+                ["Signal Group", feature.properties?.signalGroupId],
               ]}
             />
           </Box>
