@@ -6,9 +6,11 @@ import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.ConnectionOfT
 import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.Notification;
 
 public interface ActiveNotificationRepository{
-    Query getQuery(Integer intersectionID, Integer roadRegulatorID, String notificationType);
+    Query getQuery(Integer intersectionID, Integer roadRegulatorID, String notificationType, String key);
 
     long getQueryResultCount(Query query);
     
-    List<Notification> find(Query query);  
+    List<Notification> find(Query query);
+
+    long delete(Query query);
 }

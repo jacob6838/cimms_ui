@@ -27,7 +27,7 @@ public class ActiveNotificationsRepositoryImpl implements ActiveNotificationRepo
     private ObjectMapper mapper = DateJsonMapper.getInstance();
     private NotificationDeserializer deserializer = new NotificationDeserializer();
 
-    public Query getQuery(Integer intersectionID, Integer roadRegulatorID, String notificationType){
+    public Query getQuery(Integer intersectionID, Integer roadRegulatorID, String notificationType, String key){
         Query query = new Query();
 
         if(intersectionID != null){
@@ -40,6 +40,11 @@ public class ActiveNotificationsRepositoryImpl implements ActiveNotificationRepo
 
         if(notificationType != null){
             query.addCriteria(Criteria.where("notificationType").is(notificationType));
+        }
+
+        if(key != null){
+            System.out.println(key);
+            query.addCriteria(Criteria.where("key").is(key));
         }
 
         return query;
@@ -60,8 +65,13 @@ public class ActiveNotificationsRepositoryImpl implements ActiveNotificationRepo
             notificationList.add(notification);
         }
         return notificationList;
+    }
 
-        // return mongoTemplate.find(query, Notification.class, "CmNotification");
+    public long delete(Query query){
+        long count = getQueryResultCount(query);
+
+        mongoTemplate.findAndRemove(query, Map.class, "CmNotification");
+        return count;
     }
 
 }

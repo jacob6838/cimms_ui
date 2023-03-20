@@ -13,10 +13,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.ConnectionOfTravelNotification;
@@ -37,6 +42,8 @@ import us.dot.its.jpo.ode.api.accessors.notifications.SignalGroupAlignmentNotifi
 import us.dot.its.jpo.ode.api.accessors.notifications.SignalStateConflictNotification.SignalStateConflictNotificationRepository;
 import us.dot.its.jpo.ode.api.accessors.notifications.SpatBroadcastRateNotification.SpatBroadcastRateNotificationRepository;
 import us.dot.its.jpo.ode.mockdata.MockNotificationGenerator;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 
 @RestController
@@ -82,6 +89,7 @@ public class NotificationController {
             @RequestParam(name="intersection_id", required = false) Integer intersectionID,
             @RequestParam(name="road_regulator_id", required = false) Integer roadRegulatorID,
             @RequestParam(name="notification_type", required = false) String notificationType,
+            @RequestParam(name="key", required = false) String key,
             @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
             ) {
         if(testData){
@@ -89,7 +97,7 @@ public class NotificationController {
             list.add(MockNotificationGenerator.getConnectionOfTravelNotification());
             return ResponseEntity.ok(list);
         }else{
-            Query query = activeNotificationRepo.getQuery(intersectionID, roadRegulatorID, notificationType);
+            Query query = activeNotificationRepo.getQuery(intersectionID, roadRegulatorID, notificationType, key);
             long count = activeNotificationRepo.getQueryResultCount(query);
             if (count <= props.getMaximumResponseSize()) {
                 logger.info("Returning ProcessedMap Response with Size: " + count);
@@ -99,6 +107,19 @@ public class NotificationController {
                         "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");
             }
         }
+	}
+
+    @DeleteMapping(value = "/notifications/active")
+	public @ResponseBody ResponseEntity<String> deleteActiveNotification(@RequestBody String key) {
+            Query query = activeNotificationRepo.getQuery(null, null, null, key);
+
+            try {
+                long count = activeNotificationRepo.delete(query);
+                return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.TEXT_PLAIN).body(count + " records deleted.");
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
+                        .body(ExceptionUtils.getStackTrace(e));
+            }
 	}
 
     
