@@ -22,11 +22,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.ConnectionOfTravelNotification;
 import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.IntersectionReferenceAlignmentNotification;
 import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.LaneDirectionOfTravelNotification;
+import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.Notification;
 import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.SignalGroupAlignmentNotification;
 import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.SignalStateConflictNotification;
 import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.broadcast_rate.MapBroadcastRateNotification;
 import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.broadcast_rate.SpatBroadcastRateNotification;
 import us.dot.its.jpo.ode.api.Properties;
+import us.dot.its.jpo.ode.api.accessors.notifications.ActiveNotification.ActiveNotificationRepository;
 import us.dot.its.jpo.ode.api.accessors.notifications.ConnectionOfTravelNotification.ConnectionOfTravelNotificationRepository;
 import us.dot.its.jpo.ode.api.accessors.notifications.IntersectionReferenceAlignmentNotification.IntersectionReferenceAlignmentNotificationRepository;
 import us.dot.its.jpo.ode.api.accessors.notifications.LaneDirectionOfTravelNotificationRepo.LaneDirectionOfTravelNotificationRepository;
@@ -61,7 +63,8 @@ public class NotificationController {
     @Autowired
     ConnectionOfTravelNotificationRepository connectionOfTravelNotificationRepo;
 
-
+    @Autowired
+    ActiveNotificationRepository activeNotificationRepo;
 
     @Autowired
     Properties props;
@@ -73,6 +76,30 @@ public class NotificationController {
     public String getCurrentTime(){
         return ZonedDateTime.now().toInstant().toEpochMilli() + "";
     }
+
+    @RequestMapping(value = "/notifications/active", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<List<Notification>> findActiveNotification(
+            @RequestParam(name="intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name="road_regulator_id", required = false) Integer roadRegulatorID,
+            @RequestParam(name="notification_type", required = false) String notificationType,
+            @RequestParam(name="test", required = false, defaultValue = "false") boolean testData
+            ) {
+        if(testData){
+            List<Notification> list = new ArrayList<>();
+            list.add(MockNotificationGenerator.getConnectionOfTravelNotification());
+            return ResponseEntity.ok(list);
+        }else{
+            Query query = activeNotificationRepo.getQuery(intersectionID, roadRegulatorID, notificationType);
+            long count = activeNotificationRepo.getQueryResultCount(query);
+            if (count <= props.getMaximumResponseSize()) {
+                logger.info("Returning ProcessedMap Response with Size: " + count);
+                return ResponseEntity.ok(activeNotificationRepo.find(query));
+            } else {
+                throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE,
+                        "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");
+            }
+        }
+	}
 
     
     @RequestMapping(value = "/notifications/connection_of_travel", method = RequestMethod.GET, produces = "application/json")
