@@ -32,11 +32,11 @@ public class MockEventGenerator {
     public static ConnectionOfTravelEvent getConnectionOfTravelEvent(){
         ConnectionOfTravelEvent event = new ConnectionOfTravelEvent();
         event.setTimestamp(ZonedDateTime.now().toInstant().toEpochMilli());
-        event.setRoadRegulatorId(3);
-        event.setIntersectionId(2);
-        event.setIngressLaneId(2);
-        event.setEgressLaneId(7);
-        event.setConnectionId(3);
+        event.setRoadRegulatorID(3);
+        event.setIntersectionID(2);
+        event.setIngressLaneID(2);
+        event.setEgressLaneID(7);
+        event.setConnectionID(3);
         return event;
     }
 

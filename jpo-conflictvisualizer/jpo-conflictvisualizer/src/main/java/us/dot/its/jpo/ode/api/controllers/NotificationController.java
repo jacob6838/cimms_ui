@@ -12,21 +12,28 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.ConnectionOfTravelNotification;
 import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.IntersectionReferenceAlignmentNotification;
 import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.LaneDirectionOfTravelNotification;
+import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.Notification;
 import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.SignalGroupAlignmentNotification;
 import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.SignalStateConflictNotification;
 import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.broadcast_rate.MapBroadcastRateNotification;
 import us.dot.its.jpo.conflictmonitor.monitor.models.notifications.broadcast_rate.SpatBroadcastRateNotification;
 import us.dot.its.jpo.ode.api.Properties;
+import us.dot.its.jpo.ode.api.accessors.notifications.ActiveNotification.ActiveNotificationRepository;
 import us.dot.its.jpo.ode.api.accessors.notifications.ConnectionOfTravelNotification.ConnectionOfTravelNotificationRepository;
 import us.dot.its.jpo.ode.api.accessors.notifications.IntersectionReferenceAlignmentNotification.IntersectionReferenceAlignmentNotificationRepository;
 import us.dot.its.jpo.ode.api.accessors.notifications.LaneDirectionOfTravelNotificationRepo.LaneDirectionOfTravelNotificationRepository;
@@ -35,6 +42,8 @@ import us.dot.its.jpo.ode.api.accessors.notifications.SignalGroupAlignmentNotifi
 import us.dot.its.jpo.ode.api.accessors.notifications.SignalStateConflictNotification.SignalStateConflictNotificationRepository;
 import us.dot.its.jpo.ode.api.accessors.notifications.SpatBroadcastRateNotification.SpatBroadcastRateNotificationRepository;
 import us.dot.its.jpo.ode.mockdata.MockNotificationGenerator;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 @RestController
 public class NotificationController {
@@ -61,6 +70,8 @@ public class NotificationController {
     ConnectionOfTravelNotificationRepository connectionOfTravelNotificationRepo;
 
     @Autowired
+    ActiveNotificationRepository activeNotificationRepo;
+    @Autowired
     Properties props;
 
     private static final Logger logger = LoggerFactory.getLogger(AssessmentController.class);
@@ -69,6 +80,46 @@ public class NotificationController {
 
     public String getCurrentTime() {
         return ZonedDateTime.now().toInstant().toEpochMilli() + "";
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @RequestMapping(value = "/notifications/active", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<List<Notification>> findActiveNotification(
+            @RequestParam(name = "intersection_id", required = false) Integer intersectionID,
+            @RequestParam(name = "road_regulator_id", required = false) Integer roadRegulatorID,
+            @RequestParam(name = "notification_type", required = false) String notificationType,
+            @RequestParam(name = "key", required = false) String key,
+            @RequestParam(name = "test", required = false, defaultValue = "false") boolean testData) {
+        if (testData) {
+            List<Notification> list = new ArrayList<>();
+            list.add(MockNotificationGenerator.getConnectionOfTravelNotification());
+            return ResponseEntity.ok(list);
+        } else {
+            Query query = activeNotificationRepo.getQuery(intersectionID, roadRegulatorID, notificationType, key);
+            long count = activeNotificationRepo.getQueryResultCount(query);
+            if (count <= props.getMaximumResponseSize()) {
+                logger.info("Returning ProcessedMap Response with Size: " + count);
+                return ResponseEntity.ok(activeNotificationRepo.find(query));
+            } else {
+                throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE,
+                        "The requested query has more results than allowed by server. Please reduce the query bounds and try again.");
+            }
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @DeleteMapping(value = "/notifications/active")
+    public @ResponseBody ResponseEntity<String> deleteActiveNotification(@RequestBody String key) {
+        Query query = activeNotificationRepo.getQuery(null, null, null, key);
+
+        try {
+            long count = activeNotificationRepo.delete(query);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.TEXT_PLAIN)
+                    .body(count + " records deleted.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN)
+                    .body(ExceptionUtils.getStackTrace(e));
+        }
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
